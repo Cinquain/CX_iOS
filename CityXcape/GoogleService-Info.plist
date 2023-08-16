@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>513421668976-1f73ioetaju958apleb004e26mmbh96v.apps.googleusercontent.com</string>
+	<string>513421668976-g518d3b7ra4mjdjhqlfrjktmftnl2coe.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.513421668976-1f73ioetaju958apleb004e26mmbh96v</string>
+	<string>com.googleusercontent.apps.513421668976-g518d3b7ra4mjdjhqlfrjktmftnl2coe</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAneWtDLW-sePR65gMbI37sQVhc_Cu0lsY</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cityXcape.CityXcape</string>
+	<string>com.cityXcape.CityXcape0</string>
 	<key>PROJECT_ID</key>
 	<string>cityxcape-8888</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:513421668976:ios:e06a62e2a06b486b93fab5</string>
+	<string>1:513421668976:ios:34ec94947f88ba9693fab5</string>
 </dict>
 </plist>
