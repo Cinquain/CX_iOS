@@ -40,12 +40,14 @@ struct StartScreen: View {
                 .frame(height: 100)
                 .opacity(0.5)
 
-            Text("FIND SECRET SPOTS")
-                .font(.callout)
+            Text("FIND YOUR \(Image("pin_feed")) SPOTS \n MEET YOUR PE\(Image("dot_feed")) PLE ")
+                .font(.title3)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
                 .tracking(5)
-                .offset(y: -20)
+                .multilineTextAlignment(.center)
+            
+           
 
         }
     }
