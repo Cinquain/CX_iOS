@@ -12,6 +12,7 @@
 		21AE54FE2A8BBC4000CF1820 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 21AE54FD2A8BBC4000CF1820 /* SDWebImageSwiftUI */; };
 		21AE55022A8BBCB200CF1820 /* WorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE55012A8BBCB200CF1820 /* WorldView.swift */; };
 		21B295FB2A8D3802007CF130 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */; };
+		21B52F962A8E53E300C07CAB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B52F952A8E53E300C07CAB /* SignUpView.swift */; };
 		21B7ED022A8665DA001BEF78 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B7ED012A8665DA001BEF78 /* AnalyticsService.swift */; };
 		21BB4CA22A83BFBE00A7FAD3 /* AnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BB4CA12A83BFBE00A7FAD3 /* AnimationController.swift */; };
 		21BB4CA62A83C20E00A7FAD3 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 21BB4CA52A83C20E00A7FAD3 /* GoogleSignIn */; };
@@ -48,6 +49,7 @@
 		21AE55012A8BBCB200CF1820 /* WorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldView.swift; sourceTree = "<group>"; };
 		21B295F92A8D3674007CF130 /* CityXcape.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CityXcape.entitlements; sourceTree = "<group>"; };
 		21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		21B52F952A8E53E300C07CAB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		21B7ED012A8665DA001BEF78 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		21BB4CA12A83BFBE00A7FAD3 /* AnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationController.swift; sourceTree = "<group>"; };
 		21BB4CA32A83C1AD00A7FAD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				21CE1A752A86F616005DAD42 /* StartScreen.swift */,
 				21AE54F82A8BB0D100CF1820 /* OnboardScreen.swift */,
 				21AE54FA2A8BB46100CF1820 /* OnboardI.swift */,
+				21B52F952A8E53E300C07CAB /* SignUpView.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				21D03E342A8C034800B07162 /* BlurView.swift in Sources */,
 				21AE54FB2A8BB46100CF1820 /* OnboardI.swift in Sources */,
 				21CE1A762A86F616005DAD42 /* StartScreen.swift in Sources */,
+				21B52F962A8E53E300C07CAB /* SignUpView.swift in Sources */,
 				21CDB5F72A82A2C800A2E1FD /* HomeView.swift in Sources */,
 				21CDB5F52A82A2C800A2E1FD /* CityXcapeApp.swift in Sources */,
 				21BB4CA22A83BFBE00A7FAD3 /* AnimationController.swift in Sources */,

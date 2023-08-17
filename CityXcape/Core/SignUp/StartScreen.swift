@@ -46,9 +46,6 @@ struct StartScreen: View {
                 .fontWeight(.thin)
                 .tracking(5)
                 .multilineTextAlignment(.center)
-            
-           
-
         }
     }
     

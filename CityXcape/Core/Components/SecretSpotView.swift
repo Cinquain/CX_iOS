@@ -57,16 +57,14 @@ struct SecretSpotView: View {
             
             HStack(alignment: .center) {
                 
+                CustomButton(systemName: "plus.circle.fill", status: false, activeTint: .purple, background: .blue) {
+                    //Save location to user collection
+                }
                 
-                CustomButton(systemName: "checkmark.seal.fill", status: false, activeTint: .red, background: .green) {
+                CustomButton(systemName: "checkmark.seal.fill", status: false, activeTint: .red, background: .green.opacity(0.7)) {
                     //Checkin User
                 }
                                 
-                
-                CustomButton(systemName: "bubble.left.fill", status: false, activeTint: .purple, background: .blue) {
-                    //Leave a Comment
-                }
-                
                 CustomButton(systemName: "person.2.fill", status: false, activeTint: .orange, background: .yellow.opacity(0.8)) {
                     //View others who saved
                 }
