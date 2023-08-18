@@ -37,6 +37,13 @@ final class DataService {
         let uid = result.user.uid
         let email = result.user.email ?? ""
         
+        let data: [String: Any] = [
+            User.CodingKeys.id.rawValue: uid,
+            User.CodingKeys.email.rawValue: email
+        ]
+        
+        usersRef.document(uid).setData(data)
+        
     }
   
     

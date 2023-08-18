@@ -17,7 +17,7 @@ struct CityXcapeApp: App {
 
     var body: some Scene {
         WindowGroup {
-            StartScreen()
+            SignUpView()
         }
     }
 }

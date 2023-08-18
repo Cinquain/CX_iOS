@@ -19,7 +19,7 @@ struct OnboardI: View {
                     .foregroundColor(.white)
                     .fontWeight(.thin)
                     .tracking(8)
-                Text("A world is a community of people who  \n shares values and secret spots")
+                Text("A world is a community of people who  \n shares values and locations")
                     .font(.callout)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)

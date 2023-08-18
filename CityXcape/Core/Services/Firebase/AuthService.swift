@@ -20,6 +20,7 @@ final class AuthService: NSObject {
     
     @Published var didSignIn: Bool = false
     fileprivate var currentNonce: String?
+    @AppStorage(AppUserDefaults.uid) var userId: String?
 
     
     
@@ -32,10 +33,12 @@ final class AuthService: NSObject {
         let uid = authResult.user.uid
         if await DataService.shared.checkIfUserExist(uid: uid) {
             //User is already exist
+            UserDefaults.setValue(uid, forKey: AppUserDefaults.uid)
             print("User is brand spanking new")
         } else {
             //User does not exist
             print("User already exist")
+            DataService.shared.createUserInDB(result: authResult)
         }
     }
     
@@ -43,7 +46,15 @@ final class AuthService: NSObject {
         
        let appleResult = try await Auth.auth().signIn(with: credentials)
        let uid = appleResult.user.uid
-        
+        if await DataService.shared.checkIfUserExist(uid: uid) {
+            //User is already exist
+            UserDefaults.setValue(uid, forKey: AppUserDefaults.uid)
+            print("User is brand spanking new")
+        } else {
+            //User does not exist
+            print("User already exist")
+            DataService.shared.createUserInDB(result: appleResult)
+        }
     }
     
     
@@ -71,6 +82,12 @@ extension AuthService {
             
         let credential = GoogleAuthProvider.credential(withIDToken: idToken,
                                                            accessToken: accessToken)
+        
+        do {
+            try await signInWithGoogle(credentials: credential)
+        } catch {
+            print("Error signing with Google", error.localizedDescription)
+        }
     }
     
 

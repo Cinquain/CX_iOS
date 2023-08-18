@@ -10,6 +10,7 @@ import AsyncButton
 
 struct StartScreen: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var startOnboarding: Bool = false
 
     var body: some View {
         GeometryReader {
@@ -24,6 +25,9 @@ struct StartScreen: View {
             }
             .frame(width: size.width, height: size.height)
             .background(Background())
+            .fullScreenCover(isPresented: $startOnboarding) {
+                OnboardScreen()
+            }
             
            
             
@@ -40,7 +44,7 @@ struct StartScreen: View {
                 .frame(height: 100)
                 .opacity(0.5)
 
-            Text("FIND YOUR \(Image("pin_feed")) SPOTS \n MEET YOUR PE\(Image("dot_feed")) PLE ")
+            Text("FIND YOUR SPOTS\(Image("pin_feed")) \n MEET YOUR PE\(Image("dot_feed")) PLE ")
                 .font(.title3)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
@@ -51,10 +55,10 @@ struct StartScreen: View {
     
     @ViewBuilder
     func StartButton() -> some View {
-        AsyncButton {
-                try? await AuthService.shared.startSignInWithGoogleFlow()
+        Button {
+            startOnboarding.toggle()
         } label: {
-            Text("Choose a Community")
+            Text("Get Started")
                 .foregroundColor(.black)
                 .fontWeight(.light)
                 .background(

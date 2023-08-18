@@ -18,6 +18,10 @@ struct Server {
     
 }
 
+struct AppUserDefaults {
+    static let uid = "uid"
+}
+
 extension View {
     
     func particleEffect(systemName: String, font: Font, status: Bool, activeTint: Color, inactiveTint: Color) -> some View {
