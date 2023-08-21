@@ -19,7 +19,7 @@ final class DataService {
     private init() {}
     
     var usersRef = db.collection(Server.users)
-    var spotsRef = db.collection(Server.spots)
+    var locationsRef = db.collection(Server.locations)
     var stampsRef = db.collection(Server.stamps)
     var worldsRef = db.collection(Server.worlds)
     

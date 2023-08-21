@@ -25,9 +25,7 @@ struct StartScreen: View {
             }
             .frame(width: size.width, height: size.height)
             .background(Background())
-            .fullScreenCover(isPresented: $startOnboarding) {
-                OnboardScreen()
-            }
+           
             
            
             
@@ -38,17 +36,18 @@ struct StartScreen: View {
     @ViewBuilder
     func Logo() -> some View {
         VStack(spacing: 0) {
-            Image("Logo White")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(height: 100)
-                .opacity(0.5)
 
-            Text("FIND YOUR SPOTS\(Image("pin_feed")) \n MEET YOUR PE\(Image("dot_feed")) PLE ")
-                .font(.title3)
+            Text("CREATE A WORLD")
+                .font(.title)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
                 .tracking(5)
+                .multilineTextAlignment(.center)
+            
+            Text("A world is a group of people \n who share secret spots")
+                .font(.title3)
+                .foregroundColor(.white)
+                .fontWeight(.thin)
                 .multilineTextAlignment(.center)
         }
     }

@@ -20,9 +20,10 @@ final class AuthService: NSObject {
     
     @Published var didSignIn: Bool = false
     fileprivate var currentNonce: String?
-    @AppStorage(AppUserDefaults.uid) var userId: String?
 
-    
+    var uid: String? {
+        Auth.auth().currentUser?.uid
+    }
     
     func signOut() throws {
         try Auth.auth().signOut()

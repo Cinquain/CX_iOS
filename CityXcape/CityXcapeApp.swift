@@ -14,10 +14,11 @@ import GoogleSignIn
 struct CityXcapeApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
+    @StateObject private var vm = LocationsViewModel()
     var body: some Scene {
         WindowGroup {
-            SignUpView()
+            HomeView()
+                .environmentObject(vm)
         }
     }
 }

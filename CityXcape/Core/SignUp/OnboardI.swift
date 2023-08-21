@@ -14,28 +14,25 @@ struct OnboardI: View {
             let size = $0.size
             
             VStack {
-                Text("CHOOSE A WORLD")
+                Text("NAME YOUR WORLD")
                     .font(.title2)
                     .foregroundColor(.white)
                     .fontWeight(.thin)
                     .tracking(8)
-                Text("A world is a community of people who  \n shares values and locations")
+                    .padding(.top, 60)
+                Text("Give your world a recognizebale name")
                     .font(.callout)
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .fontWeight(.thin)
                 Spacer()
                 
-                ScrollView {
-                    ForEach(worlds) { world in
-                        /*@START_MENU_TOKEN@*/Text(world.id)/*@END_MENU_TOKEN@*/
-                    }
-                }
+              
             }
             .frame(width: size.width, height: size.height)
             .background(Background())
         }
-        .edgesIgnoringSafeArea(.bottom)
+        .edgesIgnoringSafeArea(.all)
 
     }
     

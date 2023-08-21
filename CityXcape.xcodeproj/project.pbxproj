@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21AE54F92A8BB0D100CF1820 /* OnboardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE54F82A8BB0D100CF1820 /* OnboardScreen.swift */; };
 		21AE54FB2A8BB46100CF1820 /* OnboardI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE54FA2A8BB46100CF1820 /* OnboardI.swift */; };
 		21AE54FE2A8BBC4000CF1820 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 21AE54FD2A8BBC4000CF1820 /* SDWebImageSwiftUI */; };
 		21AE55022A8BBCB200CF1820 /* WorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE55012A8BBCB200CF1820 /* WorldView.swift */; };
@@ -28,13 +27,13 @@
 		21CDB60C2A82A6C900A2E1FD /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 21CDB60B2A82A6C900A2E1FD /* FirebaseFirestore */; };
 		21CDB60E2A82A6C900A2E1FD /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 21CDB60D2A82A6C900A2E1FD /* FirebaseFirestoreSwift */; };
 		21CDB6102A82A6C900A2E1FD /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 21CDB60F2A82A6C900A2E1FD /* FirebaseStorage */; };
-		21CDB6132A82A9C500A2E1FD /* SecretSpot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CDB6122A82A9C500A2E1FD /* SecretSpot.swift */; };
+		21CDB6132A82A9C500A2E1FD /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CDB6122A82A9C500A2E1FD /* Location.swift */; };
 		21CDB6152A82A9D200A2E1FD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CDB6142A82A9D200A2E1FD /* User.swift */; };
 		21CDB6172A82A9DC00A2E1FD /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CDB6162A82A9DC00A2E1FD /* World.swift */; };
 		21CDB6192A82AA8A00A2E1FD /* Stamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CDB6182A82AA8A00A2E1FD /* Stamp.swift */; };
 		21CE1A762A86F616005DAD42 /* StartScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CE1A752A86F616005DAD42 /* StartScreen.swift */; };
 		21CE1A792A870744005DAD42 /* AsyncButton in Frameworks */ = {isa = PBXBuildFile; productRef = 21CE1A782A870744005DAD42 /* AsyncButton */; };
-		21D03E322A8C026C00B07162 /* SecretSpotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E312A8C026C00B07162 /* SecretSpotView.swift */; };
+		21D03E322A8C026C00B07162 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E312A8C026C00B07162 /* LocationView.swift */; };
 		21D03E342A8C034800B07162 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E332A8C034800B07162 /* BlurView.swift */; };
 		21D03E362A8C097100B07162 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E352A8C097100B07162 /* CustomButton.swift */; };
 		21D03E382A8C0DB100B07162 /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E372A8C0DB100B07162 /* Particle.swift */; };
@@ -42,10 +41,12 @@
 		21D467692A83E70800973AB9 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D467682A83E70800973AB9 /* Utilities.swift */; };
 		21D4676B2A83EC9800973AB9 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4676A2A83EC9800973AB9 /* Extensions.swift */; };
 		21D4676D2A83ED2700973AB9 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4676C2A83ED2700973AB9 /* DataService.swift */; };
+		21DAF7E82A93988F00AC1C28 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DAF7E72A93988F00AC1C28 /* LocationService.swift */; };
+		21DAF7EA2A939C3600AC1C28 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DAF7E92A939C3600AC1C28 /* Helpers.swift */; };
+		21DAF7ED2A93E43100AC1C28 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DAF7EC2A93E43100AC1C28 /* LocationsViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		21AE54F82A8BB0D100CF1820 /* OnboardScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardScreen.swift; sourceTree = "<group>"; };
 		21AE54FA2A8BB46100CF1820 /* OnboardI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardI.swift; sourceTree = "<group>"; };
 		21AE55012A8BBCB200CF1820 /* WorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldView.swift; sourceTree = "<group>"; };
 		21AED6862A8F150D000A1649 /* SpotThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotThumbnail.swift; sourceTree = "<group>"; };
@@ -60,12 +61,12 @@
 		21CDB5F62A82A2C800A2E1FD /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		21CDB5F82A82A2C900A2E1FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21CDB5FB2A82A2C900A2E1FD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		21CDB6122A82A9C500A2E1FD /* SecretSpot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretSpot.swift; sourceTree = "<group>"; };
+		21CDB6122A82A9C500A2E1FD /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		21CDB6142A82A9D200A2E1FD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		21CDB6162A82A9DC00A2E1FD /* World.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		21CDB6182A82AA8A00A2E1FD /* Stamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stamp.swift; sourceTree = "<group>"; };
 		21CE1A752A86F616005DAD42 /* StartScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreen.swift; sourceTree = "<group>"; };
-		21D03E312A8C026C00B07162 /* SecretSpotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretSpotView.swift; sourceTree = "<group>"; };
+		21D03E312A8C026C00B07162 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		21D03E332A8C034800B07162 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		21D03E352A8C097100B07162 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		21D03E372A8C0DB100B07162 /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
@@ -73,6 +74,9 @@
 		21D467682A83E70800973AB9 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		21D4676A2A83EC9800973AB9 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		21D4676C2A83ED2700973AB9 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		21DAF7E72A93988F00AC1C28 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		21DAF7E92A939C3600AC1C28 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		21DAF7EC2A93E43100AC1C28 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				21AE55012A8BBCB200CF1820 /* WorldView.swift */,
-				21D03E312A8C026C00B07162 /* SecretSpotView.swift */,
+				21D03E312A8C026C00B07162 /* LocationView.swift */,
 				21D03E332A8C034800B07162 /* BlurView.swift */,
 				21D03E352A8C097100B07162 /* CustomButton.swift */,
 				21AED6862A8F150D000A1649 /* SpotThumbnail.swift */,
@@ -111,9 +115,10 @@
 		21B7ED032A8666ED001BEF78 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				21DAF7EB2A93E41700AC1C28 /* ViewModels */,
 				21AE55002A8BBC9B00CF1820 /* Components */,
 				21D467642A83E0C100973AB9 /* Services */,
-				21BB4CA02A83BF9000A7FAD3 /* Extensions */,
+				21BB4CA02A83BF9000A7FAD3 /* Helpers & Extensions */,
 				21CDB6112A82A9AD00A2E1FD /* Models */,
 				21B7ED042A866930001BEF78 /* SignUp */,
 			);
@@ -124,20 +129,20 @@
 			isa = PBXGroup;
 			children = (
 				21CE1A752A86F616005DAD42 /* StartScreen.swift */,
-				21AE54F82A8BB0D100CF1820 /* OnboardScreen.swift */,
 				21AE54FA2A8BB46100CF1820 /* OnboardI.swift */,
 				21B52F952A8E53E300C07CAB /* SignUpView.swift */,
 			);
 			path = SignUp;
 			sourceTree = "<group>";
 		};
-		21BB4CA02A83BF9000A7FAD3 /* Extensions */ = {
+		21BB4CA02A83BF9000A7FAD3 /* Helpers & Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				21BB4CA12A83BFBE00A7FAD3 /* AnimationController.swift */,
 				21D4676A2A83EC9800973AB9 /* Extensions.swift */,
+				21DAF7E92A939C3600AC1C28 /* Helpers.swift */,
 			);
-			path = Extensions;
+			path = "Helpers & Extensions";
 			sourceTree = "<group>";
 		};
 		21CDB5E82A82A2C800A2E1FD = {
@@ -182,7 +187,7 @@
 		21CDB6112A82A9AD00A2E1FD /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				21CDB6122A82A9C500A2E1FD /* SecretSpot.swift */,
+				21CDB6122A82A9C500A2E1FD /* Location.swift */,
 				21CDB6142A82A9D200A2E1FD /* User.swift */,
 				21CDB6162A82A9DC00A2E1FD /* World.swift */,
 				21CDB6182A82AA8A00A2E1FD /* Stamp.swift */,
@@ -195,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				21D467682A83E70800973AB9 /* Utilities.swift */,
+				21DAF7E72A93988F00AC1C28 /* LocationService.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -216,6 +222,14 @@
 				21B7ED012A8665DA001BEF78 /* AnalyticsService.swift */,
 			);
 			path = Firebase;
+			sourceTree = "<group>";
+		};
+		21DAF7EB2A93E41700AC1C28 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				21DAF7EC2A93E43100AC1C28 /* LocationsViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -310,10 +324,10 @@
 				21CDB6152A82A9D200A2E1FD /* User.swift in Sources */,
 				21D03E382A8C0DB100B07162 /* Particle.swift in Sources */,
 				21D03E362A8C097100B07162 /* CustomButton.swift in Sources */,
-				21D03E322A8C026C00B07162 /* SecretSpotView.swift in Sources */,
-				21CDB6132A82A9C500A2E1FD /* SecretSpot.swift in Sources */,
+				21DAF7E82A93988F00AC1C28 /* LocationService.swift in Sources */,
+				21D03E322A8C026C00B07162 /* LocationView.swift in Sources */,
+				21CDB6132A82A9C500A2E1FD /* Location.swift in Sources */,
 				21B7ED022A8665DA001BEF78 /* AnalyticsService.swift in Sources */,
-				21AE54F92A8BB0D100CF1820 /* OnboardScreen.swift in Sources */,
 				21D03E342A8C034800B07162 /* BlurView.swift in Sources */,
 				21AE54FB2A8BB46100CF1820 /* OnboardI.swift in Sources */,
 				21CE1A762A86F616005DAD42 /* StartScreen.swift in Sources */,
@@ -325,6 +339,8 @@
 				21D4676D2A83ED2700973AB9 /* DataService.swift in Sources */,
 				21D4676B2A83EC9800973AB9 /* Extensions.swift in Sources */,
 				21CDB6172A82A9DC00A2E1FD /* World.swift in Sources */,
+				21DAF7EA2A939C3600AC1C28 /* Helpers.swift in Sources */,
+				21DAF7ED2A93E43100AC1C28 /* LocationsViewModel.swift in Sources */,
 				21D467692A83E70800973AB9 /* Utilities.swift in Sources */,
 				21AE55022A8BBCB200CF1820 /* WorldView.swift in Sources */,
 				21CDB6192A82AA8A00A2E1FD /* Stamp.swift in Sources */,
@@ -462,6 +478,11 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CityXcape/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "CityXcape needs access to your camera for spot image";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "CityXcape needs your location to find spots near you";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "CityXcape needs your location to find spots near you";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "CityXcape wants to save your stamps";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "CityXcape needs access to your photo library for spot images";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -493,6 +514,11 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CityXcape/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "CityXcape needs access to your camera for spot image";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "CityXcape needs your location to find spots near you";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "CityXcape needs your location to find spots near you";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "CityXcape wants to save your stamps";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "CityXcape needs access to your photo library for spot images";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

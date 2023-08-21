@@ -6,35 +6,57 @@
 //
 
 import Foundation
+import CoreLocation
 
-struct SecretSpot: Identifiable, Equatable, Codable {
+struct Location: Identifiable, Equatable, Codable {
     
     //Basic Properities
     let id: String
     let name: String
     let description: String
     let imageUrl: String
-    let extraImages: [String]
+    let extraImages: [String]?
     let longitude: Double
-    let latidue: Double
+    let latitude: Double
+    let city: String
     let address: String
     let dateCreated: Date
     
     
     //Social Component
-    let likedCount: Int
+    let savedCount: Int
     let verifiedCount: Int
     let commentCount: Int
     
     //World Component
-    let worldId: String
-    let worldName: String
-    let worldImageUrl: String
+    let worldId: String?
+    let worldName: String?
+    let worldImageUrl: String?
     
     
-    static func == (lhs: SecretSpot, rhs: SecretSpot) -> Bool {
+    static func == (lhs: Location, rhs: Location) -> Bool {
             return lhs.id == rhs.id
         }
+    
+    var distanceFromUser: String {
+            let manager = LocationService.shared.manager
+            
+            if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
+                let destination = CLLocation(latitude: latitude, longitude: longitude)
+                let userlocation = CLLocation(latitude: (manager.location?.coordinate.latitude) ?? 0, longitude: (manager.location?.coordinate.longitude) ?? 0)
+                let distance = userlocation.distance(from: destination) * 0.000621
+                if distance < 1 {
+                    return "\(distance * 3.28084) mi"
+                } else {
+                    return "\(distance) ft"
+                }
+            } else {
+                manager.requestWhenInUseAuthorization()
+                return "Permission Not Granted"
+            }
+
+        }
+    
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -44,10 +66,11 @@ struct SecretSpot: Identifiable, Equatable, Codable {
         self.imageUrl = try container.decode(String.self, forKey: .imageUrl)
         self.extraImages = try container.decode([String].self, forKey: .extraImages)
         self.longitude = try container.decode(Double.self, forKey: .longitude)
-        self.latidue = try container.decode(Double.self, forKey: .latidue)
+        self.latitude = try container.decode(Double.self, forKey: .latitude)
+        self.city = try container.decode(String.self, forKey: .city)
         self.address = try container.decode(String.self, forKey: .address)
         self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
-        self.likedCount = try container.decode(Int.self, forKey: .likedCount)
+        self.savedCount = try container.decode(Int.self, forKey: .savedCount)
         self.verifiedCount = try container.decode(Int.self, forKey: .verifiedCount)
         self.commentCount = try container.decode(Int.self, forKey: .commentCount)
         self.worldId = try container.decode(String.self, forKey: .worldId)
@@ -64,10 +87,11 @@ struct SecretSpot: Identifiable, Equatable, Codable {
         try container.encode(self.imageUrl, forKey: .imageUrl)
         try container.encode(self.extraImages, forKey: .extraImages)
         try container.encode(self.longitude, forKey: .longitude)
-        try container.encode(self.latidue, forKey: .latidue)
+        try container.encode(self.latitude, forKey: .latitude)
+        try container.encode(self.city, forKey: .city)
         try container.encode(self.address, forKey: .address)
         try container.encode(self.dateCreated, forKey: .dateCreated)
-        try container.encode(self.likedCount, forKey: .likedCount)
+        try container.encode(self.savedCount, forKey: .savedCount)
         try container.encode(self.verifiedCount, forKey: .verifiedCount)
         try container.encode(self.commentCount, forKey: .commentCount)
         try container.encode(self.worldId, forKey: .worldId)
@@ -76,7 +100,6 @@ struct SecretSpot: Identifiable, Equatable, Codable {
     }
   
     
-    
     enum CodingKeys: String, CodingKey {
         case id
         case name
@@ -84,10 +107,11 @@ struct SecretSpot: Identifiable, Equatable, Codable {
         case imageUrl
         case extraImages = "extra_images"
         case longitude
-        case latidue
+        case latitude
+        case city
         case address
         case dateCreated = "date_created"
-        case likedCount = "liked_count"
+        case savedCount = "saved_count"
         case verifiedCount = "verified_count"
         case commentCount = "comment_count"
         case worldId = "world_id"
