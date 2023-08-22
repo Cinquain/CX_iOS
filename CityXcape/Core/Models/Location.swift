@@ -19,7 +19,7 @@ struct Location: Identifiable, Equatable, Codable {
     let longitude: Double
     let latitude: Double
     let city: String
-    let address: String
+    let address: String?
     let dateCreated: Date
     
     
@@ -111,7 +111,7 @@ struct Location: Identifiable, Equatable, Codable {
         case city
         case address
         case dateCreated = "date_created"
-        case savedCount = "saved_count"
+        case savedCount = "save_count"
         case verifiedCount = "verified_count"
         case commentCount = "comment_count"
         case worldId = "world_id"

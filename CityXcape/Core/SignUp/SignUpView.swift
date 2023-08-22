@@ -10,6 +10,8 @@ import AsyncButton
 
 struct SignUpView: View {
     
+    @Environment(\.dismiss) private var dismiss
+
     
     var body: some View {
         GeometryReader {
@@ -22,6 +24,7 @@ struct SignUpView: View {
     
                     Spacer()
                     Spacer()
+                    DismissButton()
                     Spacer()
                     
                 }
@@ -76,6 +79,19 @@ struct SignUpView: View {
         }
     }
     
+    @ViewBuilder
+    func DismissButton() -> some View {
+        Button {
+            dismiss()
+        } label: {
+            Text("DISMISS")
+                .font(.caption)
+                .fontWeight(.light)
+                .foregroundColor(.black)
+                .background(Capsule().fill(.gray.opacity(0.8)).frame(width: 120, height: 40))
+                .padding(.top, 75)
+        }
+    }
    
 }
 
