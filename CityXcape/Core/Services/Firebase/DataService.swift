@@ -8,7 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseAuth
-
+import FirebaseFirestoreSwift
 
 
 let db = Firestore.firestore()
@@ -43,6 +43,23 @@ final class DataService {
         ]
         
         usersRef.document(uid).setData(data)
+        
+    }
+    
+    
+    func fetchAllLocations() async throws -> [Location] {
+        let ref = locationsRef
+        var locations: [Location] = []
+        print("Fetching all locations")
+        
+        let snapshot = try await ref.getDocuments()
+        
+         snapshot.documents.forEach {
+            let location = Location(data:  $0.data())
+            locations.append(location)
+        }
+        
+        return locations
         
     }
   

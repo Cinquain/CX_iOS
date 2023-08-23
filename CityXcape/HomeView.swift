@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var vm: LocationsViewModel
+    @State var currentSpot: Location?
     
     @State private var showDetails: Bool = false
     var body: some View {
@@ -20,20 +21,21 @@ struct HomeView: View {
                 
                 ScrollView {
                     VStack(spacing: 15) {
-                        ForEach(1..<30) { num in
+                        ForEach(vm.locations) { location in
                             GeometryReader { item in
-//                                SpotThumbnail(saves: num)
-//                                    .scaleEffect(scaleValue(mainView.frame(in: .global).minY, item.frame(in: .global).minY), anchor: .bottom)
-//                                    .opacity(Double(scaleValue(mainView.frame(in: .global).minY, item.frame(in: .global).minY)))
-//                                    .onTapGesture {
-//                                        showDetails.toggle()
-//                                    }
-                                    
+                                
+                                SpotThumbnail(spot: location)
+                                    .scaleEffect(scaleValue(mainView.frame(in: .global).minY, item.frame(in: .global).minY), anchor: .bottom)
+                                    .opacity(Double(scaleValue(mainView.frame(in: .global).minY, item.frame(in: .global).minY)))
+                                    .onTapGesture {
+                                        currentSpot = location
+                                    }
+
                                 
                             }
                             .frame(height: 100)
-                            .fullScreenCover(isPresented: $showDetails) {
-                                LocationView()
+                            .fullScreenCover(item: $currentSpot) { spot in
+                                LocationView(spot: spot)
                             }
                            
                         }
@@ -45,6 +47,13 @@ struct HomeView: View {
             }
             
             
+        }
+        .task {
+            do {
+                try await vm.getAllLocations()
+            } catch (let error) {
+                print("Error getting locations",error.localizedDescription)
+            }
         }
         .background(Color.black)
         .edgesIgnoringSafeArea(.bottom)
@@ -96,5 +105,6 @@ struct HomeView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
+            .environmentObject(LocationsViewModel())
     }
 }

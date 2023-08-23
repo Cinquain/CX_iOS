@@ -41,7 +41,7 @@ struct SpotThumbnail: View {
                             .resizable()
                             .scaledToFit()
                             .frame(height: 25)
-                        Text("\(spot.savedCount) saves")
+                        Text(getSaveText())
                             .font(.callout)
                             .foregroundColor(.white)
                             .fontWeight(.thin)
@@ -73,11 +73,15 @@ struct SpotThumbnail: View {
         }
         .background(Color.black)
     }
+    
+    func getSaveText() -> String {
+        return spot.saveCount > 1 ? "\(spot.saveCount) saves" : "\(spot.saveCount) save"
+    }
 }
 
-//struct SpotThumbnail_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SpotThumbnail(saves: 8)
-//            .previewLayout(.sizeThatFits)
-//    }
-//}
+struct SpotThumbnail_Previews: PreviewProvider {
+    static var previews: some View {
+        SpotThumbnail(spot: Location(data: Location.data))
+            .previewLayout(.sizeThatFits)
+    }
+}

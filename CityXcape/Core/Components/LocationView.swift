@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct LocationView: View {
     
     @EnvironmentObject private var vm: LocationsViewModel
     @Environment(\.dismiss) private var dismiss
 
+    let spot: Location
     
     var body: some View {
         
@@ -43,7 +45,7 @@ struct LocationView: View {
     func MainImage() -> some View {
         GeometryReader {
             let size = $0.size
-            Image("Example")
+            WebImage(url: URL(string: spot.imageUrl))
                 .resizable()
                 .scaledToFill()
                 .frame(width: size.width, height: size.height)
@@ -65,7 +67,9 @@ struct LocationView: View {
             HStack(alignment: .center) {
                 
                 Button {
-                    vm.seeMoreInfo()
+                    withAnimation(.easeIn(duration: 0.5)) {
+                        vm.seeMoreInfo()
+                    }
                 } label: {
                     Image(systemName: "info.circle.fill")
                         .font(.title2)
@@ -128,8 +132,6 @@ struct LocationView: View {
             }
             .padding(.top, 5)
             
-            
-           
                 Button {
                     vm.checkinLocation()
                 } label: {
@@ -138,8 +140,35 @@ struct LocationView: View {
                         .fontWeight(.thin)
                         .foregroundColor(.white)
                         .background(Capsule().fill(.black).frame(width: 120, height: 40))
-                        .padding(.top, 75)
+                        .padding(.top, 25)
                 }
+            
+            
+            if vm.showDetails {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(spot.description)
+                        .font(.callout)
+                        .foregroundColor(.white)
+                        .fontWeight(.light)
+                        .opacity(vm.opacity)
+                        .multilineTextAlignment(.leading)
+                        .animation(.easeIn(duration: 0.5), value: vm.opacity)
+                    
+                    Text("Address: \(spot.address ?? "")")
+                        .font(.callout)
+                        .foregroundColor(.white)
+                        .fontWeight(.light)
+                        .multilineTextAlignment(.leading)
+                        .opacity(vm.opacity)
+                        .animation(.easeIn(duration: 0.5), value: vm.opacity)
+
+
+                }
+                .padding(20)
+            }
+                
+            
+                
                             
             
             Spacer()
@@ -152,12 +181,21 @@ struct LocationView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(height: 40)
-            Text("The Magic Garden")
+            Text(spot.name)
                 .font(.system(size: 32))
                 .foregroundColor(.white)
                 .fontWeight(.thin)
             
             Spacer()
+            
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "arrow.uturn.down.circle.fill")
+                    .font(.title)
+                    .foregroundColor(.white)
+            }
+
         }
         .padding(.horizontal, 20)
     }
@@ -181,7 +219,7 @@ struct LocationView: View {
 
 struct SecretSpotView_Previews: PreviewProvider {
     static var previews: some View {
-        LocationView()
+        LocationView(spot: Location(data: Location.data))
             .environmentObject(LocationsViewModel())
     }
 }

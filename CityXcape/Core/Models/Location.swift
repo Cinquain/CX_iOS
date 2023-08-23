@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import FirebaseFirestore
 
 struct Location: Identifiable, Equatable, Codable {
     
@@ -15,7 +16,6 @@ struct Location: Identifiable, Equatable, Codable {
     let name: String
     let description: String
     let imageUrl: String
-    let extraImages: [String]?
     let longitude: Double
     let latitude: Double
     let city: String
@@ -24,14 +24,12 @@ struct Location: Identifiable, Equatable, Codable {
     
     
     //Social Component
-    let savedCount: Int
+    let saveCount: Int
     let verifiedCount: Int
     let commentCount: Int
     
     //World Component
-    let worldId: String?
-    let worldName: String?
-    let worldImageUrl: String?
+    
     
     
     static func == (lhs: Location, rhs: Location) -> Bool {
@@ -45,10 +43,13 @@ struct Location: Identifiable, Equatable, Codable {
                 let destination = CLLocation(latitude: latitude, longitude: longitude)
                 let userlocation = CLLocation(latitude: (manager.location?.coordinate.latitude) ?? 0, longitude: (manager.location?.coordinate.longitude) ?? 0)
                 let distance = userlocation.distance(from: destination) * 0.000621
-                if distance < 1 {
-                    return "\(distance * 3.28084) mi"
+                let distanceinFt = distance * 3.28084
+                let roundedDistance = String(format: "%.0f", distance)
+                let roundedDistanceInFt  = String(format: "%.0f", distanceinFt)
+                if distance > 1 {
+                    return "\(roundedDistance) mi"
                 } else {
-                    return "\(distance) ft"
+                    return "\(roundedDistanceInFt) ft"
                 }
             } else {
                 manager.requestWhenInUseAuthorization()
@@ -57,65 +58,51 @@ struct Location: Identifiable, Equatable, Codable {
 
         }
     
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(String.self, forKey: .id)
-        self.name = try container.decode(String.self, forKey: .name)
-        self.description = try container.decode(String.self, forKey: .description)
-        self.imageUrl = try container.decode(String.self, forKey: .imageUrl)
-        self.extraImages = try container.decode([String].self, forKey: .extraImages)
-        self.longitude = try container.decode(Double.self, forKey: .longitude)
-        self.latitude = try container.decode(Double.self, forKey: .latitude)
-        self.city = try container.decode(String.self, forKey: .city)
-        self.address = try container.decode(String.self, forKey: .address)
-        self.dateCreated = try container.decode(Date.self, forKey: .dateCreated)
-        self.savedCount = try container.decode(Int.self, forKey: .savedCount)
-        self.verifiedCount = try container.decode(Int.self, forKey: .verifiedCount)
-        self.commentCount = try container.decode(Int.self, forKey: .commentCount)
-        self.worldId = try container.decode(String.self, forKey: .worldId)
-        self.worldName = try container.decode(String.self, forKey: .worldName)
-        self.worldImageUrl = try container.decode(String.self, forKey: .worldImageUrl)
+    init(data: [String: Any]) {
+        self.id = data[Location.CodingKeys.id.rawValue] as? String ?? ""
+        self.name = data[Location.CodingKeys.name.rawValue] as? String ?? ""
+        self.description = data[Location.CodingKeys.description.rawValue] as? String ?? ""
+        self.imageUrl = data[Location.CodingKeys.imageUrl.rawValue] as? String ?? ""
+        self.latitude = data[Location.CodingKeys.latitude.rawValue] as? Double ?? 0
+        self.longitude = data[Location.CodingKeys.longitude.rawValue] as? Double ?? 0
+        self.city = data[Location.CodingKeys.city.rawValue] as? String ?? ""
+        self.address = data[Location.CodingKeys.address.rawValue] as? String ?? ""
+        let timestamp = data[Location.CodingKeys.dateCreated.rawValue] as? Timestamp
+        self.dateCreated = timestamp?.dateValue() ?? Date()
+        self.saveCount = data[Location.CodingKeys.saveCount.rawValue] as? Int ?? 1
+        self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Int ?? 0
+        self.verifiedCount = data[Location.CodingKeys.verifiedCount.rawValue] as? Int ?? 0
     }
-    
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.id, forKey: .id)
-        try container.encode(self.name, forKey: .name)
-        try container.encode(self.description, forKey: .description)
-        try container.encode(self.imageUrl, forKey: .imageUrl)
-        try container.encode(self.extraImages, forKey: .extraImages)
-        try container.encode(self.longitude, forKey: .longitude)
-        try container.encode(self.latitude, forKey: .latitude)
-        try container.encode(self.city, forKey: .city)
-        try container.encode(self.address, forKey: .address)
-        try container.encode(self.dateCreated, forKey: .dateCreated)
-        try container.encode(self.savedCount, forKey: .savedCount)
-        try container.encode(self.verifiedCount, forKey: .verifiedCount)
-        try container.encode(self.commentCount, forKey: .commentCount)
-        try container.encode(self.worldId, forKey: .worldId)
-        try container.encode(self.worldName, forKey: .worldName)
-        try container.encode(self.worldImageUrl, forKey: .worldImageUrl)
-    }
-  
+
     
     enum CodingKeys: String, CodingKey {
         case id
         case name
         case description
         case imageUrl
-        case extraImages = "extra_images"
         case longitude
         case latitude
         case city
         case address
         case dateCreated = "date_created"
-        case savedCount = "save_count"
+        case saveCount = "save_count"
         case verifiedCount = "verified_count"
         case commentCount = "comment_count"
-        case worldId = "world_id"
-        case worldName = "world_name"
-        case worldImageUrl = "world_imageUrl"
+  
     }
+    
+    static let data: [String: Any] = [
+        Location.CodingKeys.id.rawValue: "uFAFkCFpvl39e85Q07Ez",
+        Location.CodingKeys.name.rawValue: "Graffiti Pier",
+        Location.CodingKeys.description.rawValue: "Graffiti Pier is a landmark in the street art scene, attracting graf writers and artists from clear across the eastern seaboard, proudly exhibiting why Philadelphia is a hotspot of cultural production. It’s also a place reflective of the culture of industry and the working class roots of Port Richmond and many Philadelphians. The 6-acre site is a place of mystique, offering a sense of discovery and adventure. It’s a place known, but unknown; familiar, but found. Graffiti Pier is a place that offers unique prospect over the river and a valuable space of reflection in the midst of everyday urban life.",
+        Location.CodingKeys.imageUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Locations%2FDdRzArPrhQvEKBJfppIe%2FExample.jpg?alt=media&token=718582c2-7b49-4585-b2d0-0c78ba51253f",
+        Location.CodingKeys.city.rawValue: "Philadelphia",
+        Location.CodingKeys.address.rawValue: "Philadelphia, PA 19125",
+        Location.CodingKeys.latitude.rawValue: 39.971779951285704,
+        Location.CodingKeys.longitude.rawValue: -75.1136488197242,
+        Location.CodingKeys.dateCreated.rawValue: Date(),
+        Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.verifiedCount.rawValue: 3,
+        Location.CodingKeys.commentCount.rawValue: 4
+    ]
 }
