@@ -25,11 +25,13 @@ struct Location: Identifiable, Equatable, Codable {
     
     //Social Component
     let saveCount: Int
-    let verifiedCount: Int
+    let checkinCount: Int
     let commentCount: Int
     
     //World Component
-    
+    let worldId: String?
+    let worldName: String?
+    let worldImageUrl: String?
     
     
     static func == (lhs: Location, rhs: Location) -> Bool {
@@ -53,7 +55,7 @@ struct Location: Identifiable, Equatable, Codable {
                 }
             } else {
                 manager.requestWhenInUseAuthorization()
-                return "Permission Not Granted"
+                return "N/A"
             }
 
         }
@@ -71,7 +73,10 @@ struct Location: Identifiable, Equatable, Codable {
         self.dateCreated = timestamp?.dateValue() ?? Date()
         self.saveCount = data[Location.CodingKeys.saveCount.rawValue] as? Int ?? 1
         self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Int ?? 0
-        self.verifiedCount = data[Location.CodingKeys.verifiedCount.rawValue] as? Int ?? 0
+        self.checkinCount = data[Location.CodingKeys.checkinCount.rawValue] as? Int ?? 0
+        self.worldId = data[Location.CodingKeys.worldId.rawValue] as? String ?? nil
+        self.worldName = data[Location.CodingKeys.worldName.rawValue] as? String ?? nil
+        self.worldImageUrl = data[Location.CodingKeys.worldImageUrl.rawValue] as? String ?? nil
     }
 
     
@@ -86,8 +91,11 @@ struct Location: Identifiable, Equatable, Codable {
         case address
         case dateCreated = "date_created"
         case saveCount = "save_count"
-        case verifiedCount = "verified_count"
+        case checkinCount = "checkin_count"
         case commentCount = "comment_count"
+        case worldName = "world_name"
+        case worldId = "world_id"
+        case worldImageUrl =  "world_imageUrl"
   
     }
     
@@ -102,7 +110,7 @@ struct Location: Identifiable, Equatable, Codable {
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
         Location.CodingKeys.dateCreated.rawValue: Date(),
         Location.CodingKeys.saveCount.rawValue: 10,
-        Location.CodingKeys.verifiedCount.rawValue: 3,
+        Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4
     ]
 }

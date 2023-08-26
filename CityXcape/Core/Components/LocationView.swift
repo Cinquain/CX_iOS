@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AsyncButton
 import SDWebImageSwiftUI
 
 struct LocationView: View {
@@ -28,6 +29,11 @@ struct LocationView: View {
                         DrawerView()
                     }
                     .offset(y: vm.offset)
+                    .popover(isPresented: $vm.showCheckinList) {
+                        CheckinList(spot: spot, users: vm.users)
+                            .presentationDetents([.height(500)])
+                    }
+                    
 
                 }
                 .gesture(
@@ -99,7 +105,8 @@ struct LocationView: View {
                 Button {
                     vm.saveToBookmark()
                 } label: {
-                    Image(systemName: "bookmark.fill")
+                    Image(systemName: "heart.fill")
+                        .font(.title2)
                         .foregroundColor(vm.statuses[1] ? .red : .white)
                         .particleEffect(
                             systemName: "person.2.fill",
@@ -113,7 +120,7 @@ struct LocationView: View {
                 }
                 
                 Button {
-                    vm.viewSaveList()
+                    vm.viewCheckinList(id: spot.id)
                 } label: {
                     Image(systemName: "person.2.fill")
                         .font(.title2)
@@ -133,13 +140,13 @@ struct LocationView: View {
             .padding(.top, 5)
             
                 Button {
-                    vm.checkinLocation()
+                    vm.checkinLocation(id: spot.id)
                 } label: {
                     Text("CHECK IN")
-                        .font(.caption)
+                        .font(.subheadline)
                         .fontWeight(.thin)
                         .foregroundColor(.white)
-                        .background(Capsule().fill(.black).frame(width: 120, height: 40))
+                        .background(Capsule().fill(.black).frame(width: 150, height: 40))
                         .padding(.top, 25)
                 }
             

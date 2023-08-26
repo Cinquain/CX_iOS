@@ -23,42 +23,46 @@ struct SpotThumbnail: View {
                 
                     
                     
+                HStack {
                     Text(spot.name)
-                        .fontWeight(.semibold)
+                            .fontWeight(.semibold)
                         .foregroundColor(.white)
+                    
+                    
+                }
                  
                     
                 
-                    Text(spot.description)
-                        .font(.caption)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.leading)
-                        .fontWeight(.thin)
-                        .frame(width: 120, height: 10)
+               
                     
-                    HStack(alignment: .bottom, spacing: 3) {
+                    HStack(alignment: .center, spacing: 3) {
                         Image("dot")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 25)
-                        Text(getSaveText())
+                            .overlay {
+                                Image(systemName: "person.2.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 8)
+                                    .foregroundColor(.black)
+                            }
+                        
+                        Text(getCheckinText())
                             .font(.callout)
                             .foregroundColor(.white)
                             .fontWeight(.thin)
                         
                         Spacer()
-                        Image("Pin")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 20)
                         Text(spot.distanceFromUser)
                             .font(.callout)
                             .foregroundColor(.white)
                             .fontWeight(.thin)
                         
+                        
                     }
                     .padding(.top, 10)
-                    .padding(.trailing, 5)
+                    .padding(.trailing, 10)
                                         
                                 
             }
@@ -74,8 +78,12 @@ struct SpotThumbnail: View {
         .background(Color.black)
     }
     
-    func getSaveText() -> String {
-        return spot.saveCount > 1 ? "\(spot.saveCount) saves" : "\(spot.saveCount) save"
+    func getCheckinText() -> String {
+        if spot.checkinCount > 1{
+            return "\(spot.checkinCount) inside"
+        } else {
+            return "\(spot.checkinCount) inside"
+        }
     }
 }
 

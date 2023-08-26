@@ -23,6 +23,12 @@ extension View {
         
     }
     
+    func glow(color: Color, radius: CGFloat) -> some View {
+        self
+            .shadow(color: color, radius: radius / 3)
+            .shadow(color: color, radius: radius / 3)
+            .shadow(color: color, radius: radius / 3)
+    }    
     func hideKeyboard() {
              let resign = #selector(UIResponder.resignFirstResponder)
              UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)

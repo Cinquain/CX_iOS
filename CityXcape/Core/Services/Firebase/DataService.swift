@@ -39,7 +39,8 @@ final class DataService {
         
         let data: [String: Any] = [
             User.CodingKeys.id.rawValue: uid,
-            User.CodingKeys.email.rawValue: email
+            User.CodingKeys.email.rawValue: email,
+            User.CodingKeys.joinDate.rawValue: Timestamp()
         ]
         
         usersRef.document(uid).setData(data)
@@ -60,7 +61,32 @@ final class DataService {
         }
         
         return locations
+    }
+    
+    func fetchAllUsers() async throws -> [User] {
+        let ref = usersRef
+        var users: [User] = []
+        let snapshot = try await ref.getDocuments()
         
+        snapshot.documents.forEach {
+            let user = User(data: $0.data())
+            users.append(user)
+        }
+        return users
+    }
+    
+    func fetchUsersCheckedIn(spotId: String) async throws -> [User] {
+        var users: [User] = []
+        let ref = locationsRef
+                        .document(spotId)
+                        .collection(Server.checkIns)
+        let snapshot = try await ref.getDocuments()
+        
+        snapshot.documents.forEach {
+            let user = User(data: $0.data())
+            users.append(user)
+        }
+        return users
     }
   
     

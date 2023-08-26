@@ -18,10 +18,11 @@ class LocationsViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var alertMessage: String = ""
     @Published var showDetails: Bool = false
+    @Published var showCheckinList: Bool = false
     
     //Animation Values
     @Published var opacity: Double = 0
-    
+    @Published var users: [User] = []
     @Published private(set) var locations: [Location] = []
     
     func seeMoreInfo() {
@@ -44,7 +45,7 @@ class LocationsViewModel: ObservableObject {
         statuses[0] = false; statuses[2] = false
         showDetails = false 
         if AuthService.shared.uid == nil {
-            alertMessage = "You need an account to save this location"
+            alertMessage = "You need an account to like this location"
             showAlert.toggle()
             return
         }
@@ -52,18 +53,25 @@ class LocationsViewModel: ObservableObject {
         
     }
     
-    func viewSaveList() {
+    func viewCheckinList(id: String) {
         statuses[2].toggle()
         statuses[0] = false; statuses[1] = false
         showDetails = false
-        if AuthService.shared.uid == nil {
-            alertMessage = "You need an account to see others interested this location"
-            showAlert.toggle()
-            return
+//        if AuthService.shared.uid == nil {
+//            alertMessage = "Please check-in to see who's in this location"
+//            showAlert.toggle()
+//            return
+//        }
+        
+        Task {
+            print("fetching users")
+            self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: id)
+            showCheckinList.toggle()
+            statuses[2] = false 
         }
     }
     
-    func checkinLocation() {
+    func checkinLocation(id: String) {
         if AuthService.shared.uid == nil {
             alertMessage = "You need an account to checkin"
             showAlert.toggle()
@@ -71,6 +79,7 @@ class LocationsViewModel: ObservableObject {
         }
         //Give user a stamp, show user list of others in the spot
         
+
     }
     
     
@@ -78,7 +87,6 @@ class LocationsViewModel: ObservableObject {
         self.locations = try await DataService.shared.fetchAllLocations()
     }
     
- 
     
     
     
