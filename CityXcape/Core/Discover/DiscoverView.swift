@@ -62,7 +62,6 @@ struct DiscoverView: View {
     func scaleValue(_ mainFrame: CGFloat, _ minY: CGFloat) -> CGFloat {
         withAnimation(.easeOut) {
             let scale = (minY - 25) / mainFrame
-            print(scale, minY, mainFrame)
             if scale > 1 {
                 return 1
             } else {

@@ -118,6 +118,13 @@ fileprivate struct ParticleModifier: ViewModifier {
     }
 }
 
+extension Sequence where Iterator.Element: Hashable {
+    func unique() -> [Iterator.Element] {
+        var seen: Set<Iterator.Element> = []
+        return filter { seen.insert($0).inserted }
+    }
+}
+
 extension Double {
     /// Rounds the double to decimal places value
     func rounded(toPlaces places:Int) -> Double {

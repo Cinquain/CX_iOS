@@ -14,7 +14,8 @@ import GoogleSignIn
 struct CityXcapeApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject private var vm = LocationsViewModel()
+    @StateObject var vm = LocationsViewModel()
+    
     var body: some Scene {
         WindowGroup {
             HomeView()

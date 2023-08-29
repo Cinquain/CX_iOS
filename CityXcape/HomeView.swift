@@ -9,7 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var vm: LocationsViewModel
-    
+    @StateObject var mapVM = MapViewModel()
+
     @State var selection: Int = 0
     @State var currentSpot: Location?
     
@@ -21,21 +22,27 @@ struct HomeView: View {
                 .environmentObject(vm)
                 .tag(0)
                 .tabItem {
-                    Image(systemName: TabItem.item1Image)
-                        .foregroundColor(.white)
-                        .font(.title2)
-                    Text(TabItem.item1Label)
+                    Image(systemName: "magnifyingglass")
+                    Text(Tab.discover.title)
                 }
             
-            MapView()
+            MapView(vm: mapVM)
                 .tag(1)
                 .tabItem {
-                    Image(TabItem.item2Image)
+                    Image(Tab.post.rawValue)
                         .renderingMode(.template)
                         .foregroundColor(.white)
                         .font(.title)
-                    Text(TabItem.item2Label)
+                    Text(Tab.post.title)
                 }
+            
+            StreetPass(user: User.demo)
+                .tag(2)
+                .tabItem {
+                    Image(systemName: "person.fill")
+                    Text(Tab.profile.title)
+                }
+            
 
         }
         .colorScheme(.dark)

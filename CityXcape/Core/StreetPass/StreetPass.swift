@@ -1,33 +1,25 @@
 //
-//  PublicStreetPass.swift
+//  StreetPass.swift
 //  CityXcape
 //
-//  Created by James Allan on 8/25/23.
+//  Created by James Allan on 8/29/23.
 //
 
 import SwiftUI
 
-struct PublicStreetPass: View {
+struct StreetPass: View {
     let user: User
     var body: some View {
-        GeometryReader {
-            let size = $0.size
+        
             VStack {
                 StreetPassHeader()
                 UserDot()
                 Spacer()
-                WaveButton()
-                Spacer()
-                
             }
-            .frame(width: size.width, height: size.height)
-           
-        }
-        .background(Background())
-       
-
-
+            .background(Background())
+        
     }
+    
     
     @ViewBuilder
     func Background() -> some View {
@@ -65,28 +57,11 @@ struct PublicStreetPass: View {
         }
     }
     
-    @ViewBuilder
-    func WaveButton() -> some View {
-        Button {
-            //
-        } label: {
-            HStack(spacing: 2) {
-                Image(systemName: "hands.sparkles.fill")
-                    .foregroundColor(.white.opacity(0.8))
-                Text("Wave")
-                    .font(.subheadline)
-                    .fontWeight(.light)
-                    .foregroundColor(.white.opacity(0.8))
-            }
-            .background(Capsule()
-                .fill(.blue.opacity(0.4))
-                .frame(width: 150, height: 40))
-        }
-    }
+    
 }
 
-struct PublicStreetPass_Previews: PreviewProvider {
+struct StreetPass_Previews: PreviewProvider {
     static var previews: some View {
-        PublicStreetPass(user: User.demo)
+        StreetPass(user: User.demo)
     }
 }

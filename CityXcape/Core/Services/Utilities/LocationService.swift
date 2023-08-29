@@ -10,20 +10,23 @@ import CoreLocation
 import MapKit
 import SwiftUI
 
-class LocationService: NSObject, CLLocationManagerDelegate {
+class LocationService: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     
     static let shared = LocationService()
+    
+    let manager = CLLocationManager()
+    let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+
     private override init() {
         super.init()
         manager.delegate = self
+        manager.desiredAccuracy = kCLLocationAccuracyBest
         checkAuthorizationStatus()
     }
     
     
-    let manager = CLLocationManager()
-    var userLocation: CLLocationCoordinate2D?
-    let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+    @Published var userLocation: CLLocationCoordinate2D?
     @Published var region: MKCoordinateRegion = MKCoordinateRegion()
     
     func checkAuthorizationStatus() {
@@ -37,6 +40,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
             print("Location permission is restricted")
             break
         case .denied:
+            manager.requestWhenInUseAuthorization()
             print("Location Permission is denied")
         case .authorizedWhenInUse:
             manager.startUpdatingLocation()
@@ -47,16 +51,27 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first {
-            userLocation = location.coordinate
-            if let userLocation {
-                region = .init(center: userLocation, span: span)
-            }
-            if let city = userLocation?.getCity() {
-                let message = "Loading \(city)"
-                UserDefaults.standard.set(message, forKey: AppUserDefaults.loadMessage)
-                UserDefaults.standard.set(city, forKey: AppUserDefaults.city)
-            }
+        guard let firstLocation = locations.first else {return}
+        self.userLocation = firstLocation.coordinate
+        
+        if let userLocation {
+            self.region = .init(center: userLocation, span: span)
+        }
+        
+        if let city = userLocation?.getCity() {
+            let message = "Loading \(city)"
+            UserDefaults.standard.set(message, forKey: AppUserDefaults.loadMessage)
+            UserDefaults.standard.set(city, forKey: AppUserDefaults.city)
+        }
+    }
+
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedAlways || status == .authorizedWhenInUse {
+            manager.startUpdatingLocation()
+        }
+        if status == .restricted || status == .denied || status == .notDetermined {
+            manager.requestWhenInUseAuthorization()
         }
     }
     

@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 import FirebaseFirestore
 
-struct Location: Identifiable, Equatable, Codable {
+struct Location: Identifiable, Equatable, Codable, Hashable {
     
     //Basic Properities
     let id: String
@@ -33,6 +33,9 @@ struct Location: Identifiable, Equatable, Codable {
     let worldName: String?
     let worldImageUrl: String?
     
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
     
     static func == (lhs: Location, rhs: Location) -> Bool {
             return lhs.id == rhs.id
@@ -113,4 +116,38 @@ struct Location: Identifiable, Equatable, Codable {
         Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4
     ]
+    
+    static let data1: [String: Any] = [
+        Location.CodingKeys.id.rawValue: "uFAFkCF245pvl39e85Q07Ez",
+        Location.CodingKeys.name.rawValue: "Cobble Social",
+        Location.CodingKeys.description.rawValue: "Graffiti Pier is a landmark in the street art scene, attracting graf writers and artists from clear across the eastern seaboard, proudly exhibiting why Philadelphia is a hotspot of cultural production. It’s also a place reflective of the culture of industry and the working class roots of Port Richmond and many Philadelphians. The 6-acre site is a place of mystique, offering a sense of discovery and adventure. It’s a place known, but unknown; familiar, but found. Graffiti Pier is a place that offers unique prospect over the river and a valuable space of reflection in the midst of everyday urban life.",
+        Location.CodingKeys.imageUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Locations%2FDdRzArPrhQvEKBJfppIe%2FExample.jpg?alt=media&token=718582c2-7b49-4585-b2d0-0c78ba51253f",
+        Location.CodingKeys.city.rawValue: "Philadelphia",
+        Location.CodingKeys.address.rawValue: "Philadelphia, PA 19125",
+        Location.CodingKeys.latitude.rawValue: 39.971779951285704,
+        Location.CodingKeys.longitude.rawValue: -75.1136488197242,
+        Location.CodingKeys.dateCreated.rawValue: Date(),
+        Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.checkinCount.rawValue: 3,
+        Location.CodingKeys.commentCount.rawValue: 4
+    ]
+    
+    static let data2: [String: Any] = [
+        Location.CodingKeys.id.rawValue: "uFAFkCFpvl39e667785Q07Ez",
+        Location.CodingKeys.name.rawValue: "Parlour Bar",
+        Location.CodingKeys.description.rawValue: "Graffiti Pier is a landmark in the street art scene, attracting graf writers and artists from clear across the eastern seaboard, proudly exhibiting why Philadelphia is a hotspot of cultural production. It’s also a place reflective of the culture of industry and the working class roots of Port Richmond and many Philadelphians. The 6-acre site is a place of mystique, offering a sense of discovery and adventure. It’s a place known, but unknown; familiar, but found. Graffiti Pier is a place that offers unique prospect over the river and a valuable space of reflection in the midst of everyday urban life.",
+        Location.CodingKeys.imageUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Locations%2FDdRzArPrhQvEKBJfppIe%2FExample.jpg?alt=media&token=718582c2-7b49-4585-b2d0-0c78ba51253f",
+        Location.CodingKeys.city.rawValue: "Philadelphia",
+        Location.CodingKeys.address.rawValue: "Philadelphia, PA 19125",
+        Location.CodingKeys.latitude.rawValue: 39.971779951285704,
+        Location.CodingKeys.longitude.rawValue: -75.1136488197242,
+        Location.CodingKeys.dateCreated.rawValue: Date(),
+        Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.checkinCount.rawValue: 3,
+        Location.CodingKeys.commentCount.rawValue: 4
+    ]
+    
+    static let demo = Location(data: data)
+    static let demo1 = Location(data: data1)
+    static let demo2 = Location(data: data2)
 }

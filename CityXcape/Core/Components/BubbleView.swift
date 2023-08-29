@@ -20,15 +20,20 @@ struct BubbleView: View {
     var body: some View {
         
         ZStack {
+       
             Circle()
-                .fill(.orange.opacity(0.45))
-                .frame(width: width, height: width)
-                .scaleEffect(self.animate ? 1.08 : 0.5)
-                .animation(Animation.linear(duration: 2.2)
-                    .repeatForever(autoreverses: true), value: animate)
+              .fill(.orange.opacity(0.45))
+              .frame(width: width, height: width)
+              .scaleEffect(self.animate ? 1.08 : 0.5)
+              .animation(Animation.linear(duration: 2.2)
+                  .repeatForever(autoreverses: true), value: animate)
+              .shadow(color: .orange.opacity(0.5), radius: 10)
+
+           
             
-            Circle()
-                .fill(.orange.opacity(0.35))
+            Image("dot")
+                .resizable()
+                .scaledToFit()
                 .frame(width: width, height: width)
                 .overlay {
                     WebImage(url: URL(string: imageUrl))
@@ -36,6 +41,7 @@ struct BubbleView: View {
                         .frame(width: width * 3/4, height: width * 3/4)
                         .clipShape(Circle())
                 }
+                .shadow(color: .orange.opacity(0.5), radius: 10)
             
         }
         .onAppear {

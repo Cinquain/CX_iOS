@@ -9,20 +9,80 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
- 
+    @StateObject var vm: MapViewModel
+    
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             MapViewRepresentable()
-                .edgesIgnoringSafeArea(.top)
                 .colorScheme(.dark)
+                .edgesIgnoringSafeArea(.all)
+            
+            VStack(spacing: 12) {
+                SearchField()
+                    
+                
+                SearchResultView()
+                
+                Spacer()
+                    .frame(height: vm.keyboardHeight)
+            }
+
         }
-        .colorScheme(.dark)
+
+    }
+    
+    
+    @ViewBuilder
+    func SearchField() -> some View {
+        HStack {
+            TextField(vm.placeHolder, text: $vm.searchQuery, onCommit: {
+                UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.endEditing(true)
+            })
+                .padding()
+                .background(.ultraThinMaterial)
+                .cornerRadius(3)
+                .foregroundColor(.white)
+                .padding(.horizontal, 10)
+        }
+    }
+    
+    @ViewBuilder
+    func SearchResultView() -> some View {
+        ScrollView(.vertical) {
+            VStack(spacing: 14) {
+                ForEach(vm.mapItems, id: \.self) { mapItem in
+                    
+                    Button {
+                        vm.selectedMapItem = mapItem
+                        vm.showForm.toggle()
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(mapItem.name ?? "Unknown Location")
+                                .font(.headline)
+                            Text(mapItem.placemark.title ?? mapItem.getAddress())
+                                .lineLimit(1)
+                                .font(.caption)
+                            Text("Tap to create location")
+                        }
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.black.opacity(0.8))
+                    .cornerRadius(8)
+
+                    //End of ForEach
+                }
+                //End of VStack
+            }
+            //Scrollview
+        }
     }
        
 }
 
 struct Map_Previews: PreviewProvider {
     static var previews: some View {
-        MapView()
+        MapView(vm: MapViewModel())
     }
 }

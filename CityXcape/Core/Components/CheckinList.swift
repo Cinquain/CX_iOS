@@ -16,78 +16,110 @@ struct CheckinList: View {
     var body: some View {
             VStack {
                 
-                HStack {
-                    Image("Pin")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 30)
-                        .overlay {
-                            Text("\(users.count)")
-                                .font(.caption)
-                                .fontWeight(.thin)
-                                .foregroundColor(.white)
-                                .padding(.bottom, 2)
-                        }
-                    Text("Currently Inside \(spot.name)")
-                        .font(.headline)
-                        .fontWeight(.thin)
-                    
-                    .foregroundColor(.white)
-                    Spacer()
-                }
-                .padding(.horizontal, 10)
-                .padding(.top, 15)
-                
+                Header()
+
                 Divider()
                     .frame(height: 1)
                     .background(Color.white)
                 
-                ScrollView {
-                    ForEach(users) { user in
-                        HStack {
-                            VStack(spacing: 2) {
-                                Button {
-                                    currentUser = user
-                                } label: {
-                                    UserDot(width: 80, user: user)
-                                }
-                                .sheet(item: $currentUser) { user in
-                                    PublicStreetPass(user: user)
-                                }
-                                
-                                Text(user.username ?? "")
-                                    .fontWeight(.thin)
-                                    .font(.subheadline)
-                                    .foregroundColor(.white)
-                            }
-                            
-                          
-                            Spacer()
-                            
-                            Button {
-                                //
-                            } label: {
-                                Image(systemName: "hands.sparkles.fill")
-                                    .font(.title2)
-                                    .foregroundColor(.white)
-                                    .frame(width: 55, height: 55)
-                                    .background(.orange.opacity(0.3))
-                                    .clipShape(Circle())
-                                
-                            }
-
-                        }
-                        .padding(.horizontal, 10)
-                       
-                    }
-                }
+                UserScrollView()
+               
             }
-            .background(.black)
-            .edgesIgnoringSafeArea(.bottom)
+           
 
         
      
 
+    }
+    
+    func getTitle() -> String {
+        if users.count > 1 {
+            return "\(users.count) People Inside \(spot.name)"
+        } else {
+            return "\(users.count) Person Inside \(spot.name)"
+        }
+    }
+    
+    @ViewBuilder
+    func Header() -> some View {
+        HStack {
+            Text(getTitle())
+                .font(.headline)
+                .fontWeight(.thin)
+            
+            .foregroundColor(.white)
+            Spacer()
+        }
+        .padding(.horizontal, 10)
+        .padding(.top, 15)
+    }
+    
+    @ViewBuilder
+    func UserScrollView() -> some View {
+        
+        ScrollView {
+            ForEach(users) { user in
+                HStack {
+                    VStack(spacing: 2) {
+                        Button {
+                            currentUser = user
+                        } label: {
+                            UserDot(width: 80, user: user)
+                        }
+                        .sheet(item: $currentUser) { user in
+                            PublicStreetPass(user: user)
+                        }
+                        
+                        Text(user.username ?? "")
+                            .fontWeight(.thin)
+                            .font(.subheadline)
+                            .foregroundColor(.white)
+                    }
+                    
+                    Button {
+                        currentUser = user
+                    } label: {
+                        VStack(spacing: 2) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "heart.fill")
+                                    .foregroundColor(.white)
+                                    .frame(height: 30)
+                                
+                                Text("\(Int.random(in: 1...100)) likes in common")
+                                    .foregroundColor(.white)
+                                    .fontWeight(.thin)
+                                Spacer()
+                            }
+                            .frame(width: 220)
+                            HStack(spacing: 4) {
+                                Image("Stamp")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 20)
+                                
+                                Text("\(Int.random(in: 1...100)) spots in common")
+                                    .foregroundColor(.white)
+                                    .fontWeight(.thin)
+                                
+                                Spacer()
+                            }
+                            .frame(width: 220)
+
+                        }
+                        .padding(20)
+                    }
+
+                  
+                   
+
+                    
+                    Spacer()
+                    
+                }
+                .padding(.horizontal, 10)
+               
+            }
+        }
     }
 }
 

@@ -23,9 +23,20 @@ struct AppUserDefaults {
     static let loadMessage = "loadMessage"
 }
 
-struct TabItem {
-    static let item1Label = "Discover"
-    static let item1Image =  "dot.radiowaves.left.and.right"
-    static let item2Label = "Post"
-    static let item2Image = "tab2"
+
+enum Tab: String, CaseIterable {
+    case discover = "dot.radiowaves.left.and.right"
+    case post = "tab2"
+    case profile = "person.fill"
+    
+    var title: String {
+        switch self {
+        case .discover:
+            return "Discover"
+        case .post:
+            return "Post"
+        case .profile:
+            return "Profile"
+        }
+    }
 }

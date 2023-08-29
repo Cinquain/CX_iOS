@@ -23,17 +23,22 @@ struct LocationView: View {
                     .fullScreenCover(isPresented: $vm.showSignUp) {
                         SignUpView()
                     }
-          
+                    
+                    if vm.showStamp {
+                        StampView(spot: spot)
+                            .padding(.bottom, 20)
+                    }
+                    
                     ZStack {
                         BlurView(style: .systemMaterialDark)
                         DrawerView()
+                            .animation(.easeIn(duration: 0.3), value: vm.showCheckinList)
                     }
+                    .cornerRadius(12)
                     .offset(y: vm.offset)
-                    .popover(isPresented: $vm.showCheckinList) {
-                        CheckinList(spot: spot, users: vm.users)
-                            .presentationDetents([.height(500)])
-                    }
-                    
+                   
+                
+                        
 
                 }
                 .gesture(
@@ -43,6 +48,9 @@ struct LocationView: View {
                             vm.offset = startLocation.y + value.translation.height
                         })
                 )
+                .onDisappear {
+                    vm.showStamp = false
+                }
         
         
     }
@@ -58,6 +66,10 @@ struct LocationView: View {
                 .overlay {
                  CustomLayer(size: size)
                 }
+                .sheet(isPresented: $vm.showFavorites) {
+                    FavoritesList(spot: spot, locations: vm.myJourney)
+                        .presentationDetents([.height(500)])
+                }
         }
         .edgesIgnoringSafeArea(.all)
     }
@@ -70,86 +82,10 @@ struct LocationView: View {
                 .foregroundColor(.white)
                 .padding(.top, 7)
             
-            HStack(alignment: .center) {
-                
-                Button {
-                    withAnimation(.easeIn(duration: 0.5)) {
-                        vm.seeMoreInfo()
-                    }
-                } label: {
-                    Image(systemName: "info.circle.fill")
-                        .font(.title2)
-                        .foregroundColor(vm.statuses[0] ? .purple : .white)
-                        .particleEffect(
-                            systemName: "plus.circle.fill",
-                            font: .title2,
-                            status: vm.statuses[0],
-                            activeTint: .purple,
-                            inactiveTint: .blue)
-                        .frame(width: 55, height: 55)
-                        .background(vm.statuses[0] ? .purple.opacity(0.25) : .blue)
-                        .clipShape(Circle())
-                }
-                .alert(isPresented: $vm.showAlert) {
-                    Alert(title: Text(vm.alertMessage), primaryButton: .default(Text("Ok")) {
-                        vm.showSignUp.toggle()
-                    }, secondaryButton: .cancel {
-                        withAnimation {
-                            vm.statuses[1] = false; vm.statuses[2] = false
-                        }
-                    })
-                }
-                
-             
-                
-                Button {
-                    vm.saveToBookmark()
-                } label: {
-                    Image(systemName: "heart.fill")
-                        .font(.title2)
-                        .foregroundColor(vm.statuses[1] ? .red : .white)
-                        .particleEffect(
-                            systemName: "person.2.fill",
-                            font: .title2,
-                            status: vm.statuses[1],
-                            activeTint: .red,
-                            inactiveTint: .pink)
-                        .frame(width: 55, height: 55)
-                        .background(vm.statuses[1] ? .red.opacity(0.25) : .pink.opacity(0.75))
-                        .clipShape(Circle())
-                }
-                
-                Button {
-                    vm.viewCheckinList(id: spot.id)
-                } label: {
-                    Image(systemName: "person.2.fill")
-                        .font(.title2)
-                        .foregroundColor(vm.statuses[2] ? .orange : .white)
-                        .particleEffect(
-                            systemName: "checkmark.seal.fill",
-                            font: .title2,
-                            status: vm.statuses[2],
-                            activeTint: .orange,
-                            inactiveTint: .yellow)
-                        .frame(width: 55, height: 55)
-                        .background(vm.statuses[2] ? .orange.opacity(0.25) : .yellow.opacity(0.8))
-                        .clipShape(Circle())
-                }
-                
-            }
-            .padding(.top, 5)
+                ButtonRow()
             
-                Button {
-                    vm.checkinLocation(id: spot.id)
-                } label: {
-                    Text("CHECK IN")
-                        .font(.subheadline)
-                        .fontWeight(.thin)
-                        .foregroundColor(.white)
-                        .background(Capsule().fill(.black).frame(width: 150, height: 40))
-                        .padding(.top, 25)
-                }
-            
+               
+            CheckInButton()
             
             if vm.showDetails {
                 VStack(alignment: .leading, spacing: 10) {
@@ -173,13 +109,18 @@ struct LocationView: View {
                 }
                 .padding(20)
             }
-                
             
+            if vm.showCheckinList {
+                withAnimation {
+                    CheckinList(spot: spot, users: vm.users)
+                }
+            }
                 
                             
             
             Spacer()
         }
+
     }
     
     @ViewBuilder func TitleView() -> some View {
@@ -220,6 +161,94 @@ struct LocationView: View {
                 .padding(.top, size.height / 18)
         }
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    @ViewBuilder
+    func ButtonRow() -> some View {
+        HStack(alignment: .center) {
+            
+            Button {
+                withAnimation(.easeIn(duration: 0.5)) {
+                    vm.seeMoreInfo()
+                }
+            } label: {
+                Image(systemName: "info.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(vm.statuses[0] ? .purple : .white)
+                    .particleEffect(
+                        systemName: "plus.circle.fill",
+                        font: .title2,
+                        status: vm.statuses[0],
+                        activeTint: .purple,
+                        inactiveTint: .blue)
+                    .frame(width: 55, height: 55)
+                    .background(vm.statuses[0] ? .purple.opacity(0.25) : .blue)
+                    .clipShape(Circle())
+                    .scaleEffect(vm.statuses[0] ? 0.9 : 1)
+
+            }
+            .alert(isPresented: $vm.showAlert) {
+                Alert(title: Text(vm.alertMessage), primaryButton: .default(Text("Ok")) {
+                    vm.showSignUp.toggle()
+                }, secondaryButton: .cancel {
+                    withAnimation {
+                        vm.statuses[1] = false; vm.statuses[2] = false
+                    }
+                })
+            }
+            
+         
+            
+            Button {
+                vm.saveToBookmark(spot: spot)
+            } label: {
+                Image(systemName: "heart.fill")
+                    .font(.title2)
+                    .foregroundColor(vm.statuses[1] ? .red : .white)
+                    .particleEffect(
+                        systemName: "person.2.fill",
+                        font: .title2,
+                        status: vm.statuses[1],
+                        activeTint: .red,
+                        inactiveTint: .pink)
+                    .frame(width: 55, height: 55)
+                    .background(vm.statuses[1] ? .red.opacity(0.25) : .pink.opacity(0.75))
+                    .clipShape(Circle())
+            }
+            
+            Button {
+                vm.viewCheckinList(id: spot.id)
+            } label: {
+                Image(systemName: "person.2.fill")
+                    .font(.title2)
+                    .foregroundColor(vm.statuses[2] ? .orange : .white)
+                    .particleEffect(
+                        systemName: "checkmark.seal.fill",
+                        font: .title2,
+                        status: vm.statuses[2],
+                        activeTint: .orange,
+                        inactiveTint: .yellow)
+                    .frame(width: 55, height: 55)
+                    .background(vm.statuses[2] ? .orange.opacity(0.25) : .yellow.opacity(0.8))
+                    .clipShape(Circle())
+            }
+            
+        }
+        .padding(.top, 5)
+    }
+    
+    @ViewBuilder
+    func CheckInButton() -> some View {
+        Button {
+            vm.checkinLocation(id: spot.id)
+        } label: {
+            Text(vm.showCheckinList ? "Checked In": "CHECK IN")
+                .font(.subheadline)
+                .fontWeight(.thin)
+                .foregroundColor(.white)
+                .background(Capsule().fill(.black).frame(width: 150, height: 40))
+                .padding(.top, 25)
+        }
     }
     
 }

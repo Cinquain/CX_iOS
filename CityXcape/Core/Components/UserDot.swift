@@ -12,7 +12,7 @@ import SDWebImageSwiftUI
 struct UserDot: View {
     let width: CGFloat
     let user: User
-    let ratio: CGFloat = 1.3
+    let ratio: CGFloat = 1.5
     
     var body: some View {
         Image("dot")
