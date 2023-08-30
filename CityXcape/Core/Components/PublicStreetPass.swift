@@ -72,14 +72,15 @@ struct PublicStreetPass: View {
         } label: {
             HStack(spacing: 2) {
                 Image(systemName: "hands.sparkles.fill")
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundColor(.white.opacity(0.6))
+                
                 Text("Wave")
                     .font(.subheadline)
-                    .fontWeight(.light)
-                    .foregroundColor(.white.opacity(0.8))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white.opacity(0.6))
             }
             .background(Capsule()
-                .fill(.blue.opacity(0.4))
+                .fill(.orange.opacity(0.5))
                 .frame(width: 150, height: 40))
         }
     }

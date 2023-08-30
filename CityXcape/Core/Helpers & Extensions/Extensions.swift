@@ -12,7 +12,6 @@ import MapKit
 import CoreLocation
 
 
-
 extension View {
     
     func particleEffect(systemName: String, font: Font, status: Bool, activeTint: Color, inactiveTint: Color) -> some View {
@@ -271,5 +270,27 @@ extension Date {
             }
             return "\(quotient) \(unit)\(quotient == 1 ? "" : "s") ago"
         }
+    
 }
+
+extension Color {
+    static var cx_blue: Color {
+        return Color("CX_Blue")
+    }
+    
+    static var stamp: Color {
+        return Color("Stamp_Red")
+    }
+    
+    static var random: Color {
+        return Color(
+            red: .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue: .random(in: 0...1)
+        )
+    }
+    
+}
+
+
 

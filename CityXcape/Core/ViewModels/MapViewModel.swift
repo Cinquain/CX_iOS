@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import MapKit
 import Combine
-
+import PhotosUI
 
 
 
@@ -19,7 +19,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var searchQuery: String = ""
     
     @Published var currentLocation: CLLocationCoordinate2D?
-    @Published var mapItem: MKMapItem?
     @Published var mapItems: [MKMapItem] = []
     @Published var annotations: [MKPointAnnotation] = []
     @Published var region: MKCoordinateRegion?
@@ -36,6 +35,22 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var cancellables = Set<AnyCancellable>()
     
     var placeHolder: String = "Search a Locations"
+    
+    //Properties for Posting Form
+    
+    @Published var spotName: String = ""
+    @Published var spotDescription: String = ""
+    @Published var hashtags: String = ""
+    @Published var imageSelection: PhotosPickerItem? = nil {
+        didSet {
+            setImage(from: imageSelection)
+        }
+    }
+    @Published var selectedImage: UIImage? = nil
+    
+    
+    @Published var showSignUp: Bool = false
+    @Published var errorMessage: String = ""
     
     override init() {
         super.init()
@@ -128,11 +143,25 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
            
         }
 
-  
+    
+    
+}
 
+extension MapViewModel {
+        
     
-    
-    
-    
-    
+    private func setImage(from selection: PhotosPickerItem?) {
+        guard let selection else {return}
+        Task {
+            do {
+                let data = try await selection.loadTransferable(type: Data.self)
+                guard let data, let uiImage = UIImage(data: data) else {return}
+                selectedImage = uiImage
+            } catch (let error) {
+                errorMessage = error.localizedDescription
+                showAlert.toggle()
+                return
+            }
+        }
+    }
 }

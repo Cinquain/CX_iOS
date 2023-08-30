@@ -43,6 +43,7 @@ struct MapView: View {
                 .cornerRadius(3)
                 .foregroundColor(.white)
                 .padding(.horizontal, 10)
+                
         }
     }
     
@@ -54,6 +55,7 @@ struct MapView: View {
                     
                     Button {
                         vm.selectedMapItem = mapItem
+                        vm.spotName = mapItem.name ?? ""
                         vm.showForm.toggle()
                     } label: {
                         VStack(alignment: .leading, spacing: 4) {
@@ -70,6 +72,10 @@ struct MapView: View {
                     .padding()
                     .background(.black.opacity(0.8))
                     .cornerRadius(8)
+                    .fullScreenCover(isPresented: $vm.showForm) {
+                        PostForm(vm: vm)
+                    }
+               
 
                     //End of ForEach
                 }
