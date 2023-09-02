@@ -12,7 +12,6 @@
 		21ADEB302A98E7E1002A24CB /* CheckinList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADEB2F2A98E7E1002A24CB /* CheckinList.swift */; };
 		21ADF42C2A9A2CCB00AD2AE8 /* StampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADF42B2A9A2CCB00AD2AE8 /* StampView.swift */; };
 		21ADF42E2A9A334500AD2AE8 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADF42D2A9A334500AD2AE8 /* SoundManager.swift */; };
-		21ADF4312A9A33E400AD2AE8 /* Stamp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 21ADF4302A9A33E400AD2AE8 /* Stamp.mp3 */; };
 		21AE54FB2A8BB46100CF1820 /* OnboardI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE54FA2A8BB46100CF1820 /* OnboardI.swift */; };
 		21AE54FE2A8BBC4000CF1820 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 21AE54FD2A8BBC4000CF1820 /* SDWebImageSwiftUI */; };
 		21AE55022A8BBCB200CF1820 /* WorldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE55012A8BBCB200CF1820 /* WorldView.swift */; };
@@ -43,6 +42,9 @@
 		21CE12532A9FACAB00D0889C /* PostForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CE12522A9FACAB00D0889C /* PostForm.swift */; };
 		21CE1A762A86F616005DAD42 /* StartScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CE1A752A86F616005DAD42 /* StartScreen.swift */; };
 		21CE1A792A870744005DAD42 /* AsyncButton in Frameworks */ = {isa = PBXBuildFile; productRef = 21CE1A782A870744005DAD42 /* AsyncButton */; };
+		21CE839B2AA3411400D86F88 /* BuyWavesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CE839A2AA3411400D86F88 /* BuyWavesView.swift */; };
+		21CE839E2AA3518A00D86F88 /* Shimmer in Frameworks */ = {isa = PBXBuildFile; productRef = 21CE839D2AA3518A00D86F88 /* Shimmer */; };
+		21CE83A12AA3809D00D86F88 /* Stamp.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 21CE83A02AA3809D00D86F88 /* Stamp.mp3 */; };
 		21D03E322A8C026C00B07162 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E312A8C026C00B07162 /* LocationView.swift */; };
 		21D03E342A8C034800B07162 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E332A8C034800B07162 /* BlurView.swift */; };
 		21D03E362A8C097100B07162 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D03E352A8C097100B07162 /* CustomButton.swift */; };
@@ -51,6 +53,7 @@
 		21D467692A83E70800973AB9 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D467682A83E70800973AB9 /* Utilities.swift */; };
 		21D4676B2A83EC9800973AB9 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4676A2A83EC9800973AB9 /* Extensions.swift */; };
 		21D4676D2A83ED2700973AB9 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4676C2A83ED2700973AB9 /* DataService.swift */; };
+		21D8B3F82AA0DDF80094679C /* ImageManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8B3F72AA0DDF80094679C /* ImageManger.swift */; };
 		21DAF7E82A93988F00AC1C28 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DAF7E72A93988F00AC1C28 /* LocationService.swift */; };
 		21DAF7EA2A939C3600AC1C28 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DAF7E92A939C3600AC1C28 /* Helpers.swift */; };
 		21DAF7ED2A93E43100AC1C28 /* LocationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DAF7EC2A93E43100AC1C28 /* LocationsViewModel.swift */; };
@@ -66,7 +69,6 @@
 		21ADEB2F2A98E7E1002A24CB /* CheckinList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckinList.swift; sourceTree = "<group>"; };
 		21ADF42B2A9A2CCB00AD2AE8 /* StampView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampView.swift; sourceTree = "<group>"; };
 		21ADF42D2A9A334500AD2AE8 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
-		21ADF4302A9A33E400AD2AE8 /* Stamp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Stamp.mp3; sourceTree = "<group>"; };
 		21AE54FA2A8BB46100CF1820 /* OnboardI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardI.swift; sourceTree = "<group>"; };
 		21AE55012A8BBCB200CF1820 /* WorldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldView.swift; sourceTree = "<group>"; };
 		21AED6862A8F150D000A1649 /* SpotThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotThumbnail.swift; sourceTree = "<group>"; };
@@ -90,6 +92,9 @@
 		21CDB6182A82AA8A00A2E1FD /* Stamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stamp.swift; sourceTree = "<group>"; };
 		21CE12522A9FACAB00D0889C /* PostForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostForm.swift; sourceTree = "<group>"; };
 		21CE1A752A86F616005DAD42 /* StartScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreen.swift; sourceTree = "<group>"; };
+		21CE839A2AA3411400D86F88 /* BuyWavesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyWavesView.swift; sourceTree = "<group>"; };
+		21CE839F2AA35FED00D86F88 /* times new roman.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "times new roman.ttf"; sourceTree = "<group>"; };
+		21CE83A02AA3809D00D86F88 /* Stamp.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Stamp.mp3; sourceTree = "<group>"; };
 		21D03E312A8C026C00B07162 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		21D03E332A8C034800B07162 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		21D03E352A8C097100B07162 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -98,6 +103,7 @@
 		21D467682A83E70800973AB9 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		21D4676A2A83EC9800973AB9 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		21D4676C2A83ED2700973AB9 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		21D8B3F72AA0DDF80094679C /* ImageManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManger.swift; sourceTree = "<group>"; };
 		21DAF7E72A93988F00AC1C28 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		21DAF7E92A939C3600AC1C28 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		21DAF7EC2A93E43100AC1C28 /* LocationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsViewModel.swift; sourceTree = "<group>"; };
@@ -122,6 +128,7 @@
 				21CDB6102A82A6C900A2E1FD /* FirebaseStorage in Frameworks */,
 				21CE1A792A870744005DAD42 /* AsyncButton in Frameworks */,
 				21BB4CA62A83C20E00A7FAD3 /* GoogleSignIn in Frameworks */,
+				21CE839E2AA3518A00D86F88 /* Shimmer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,7 +138,7 @@
 		21ADF42F2A9A33C100AD2AE8 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				21ADF4302A9A33E400AD2AE8 /* Stamp.mp3 */,
+				21CE83A02AA3809D00D86F88 /* Stamp.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -150,6 +157,7 @@
 				21B5FF372A998428005DA658 /* PublicStreetPass.swift */,
 				21ADF42B2A9A2CCB00AD2AE8 /* StampView.swift */,
 				21DFA3792A9BA71200773700 /* FavoritesList.swift */,
+				21CE839A2AA3411400D86F88 /* BuyWavesView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -225,6 +233,7 @@
 				21CDB5F82A82A2C900A2E1FD /* Assets.xcassets */,
 				21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */,
 				21BB4CA32A83C1AD00A7FAD3 /* Info.plist */,
+				21CE839F2AA35FED00D86F88 /* times new roman.ttf */,
 				21CDB5FA2A82A2C900A2E1FD /* Preview Content */,
 			);
 			path = CityXcape;
@@ -275,6 +284,7 @@
 				21D467662A83E0E300973AB9 /* AuthService.swift */,
 				21D4676C2A83ED2700973AB9 /* DataService.swift */,
 				21B7ED012A8665DA001BEF78 /* AnalyticsService.swift */,
+				21D8B3F72AA0DDF80094679C /* ImageManger.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -333,6 +343,7 @@
 				21BB4CA72A83C20E00A7FAD3 /* GoogleSignInSwift */,
 				21CE1A782A870744005DAD42 /* AsyncButton */,
 				21AE54FD2A8BBC4000CF1820 /* SDWebImageSwiftUI */,
+				21CE839D2AA3518A00D86F88 /* Shimmer */,
 			);
 			productName = CityXcape;
 			productReference = 21CDB5F12A82A2C800A2E1FD /* CityXcape.app */;
@@ -367,6 +378,7 @@
 				21BB4CA42A83C20E00A7FAD3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				21CE1A772A870744005DAD42 /* XCRemoteSwiftPackageReference "swiftui-async-button" */,
 				21AE54FC2A8BBC4000CF1820 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				21CE839C2AA3518A00D86F88 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */,
 			);
 			productRefGroup = 21CDB5F22A82A2C800A2E1FD /* Products */;
 			projectDirPath = "";
@@ -382,7 +394,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21ADF4312A9A33E400AD2AE8 /* Stamp.mp3 in Resources */,
+				21CE83A12AA3809D00D86F88 /* Stamp.mp3 in Resources */,
 				21CDB5FC2A82A2C900A2E1FD /* Preview Assets.xcassets in Resources */,
 				21CDB5F92A82A2C900A2E1FD /* Assets.xcassets in Resources */,
 				21B295FB2A8D3802007CF130 /* GoogleService-Info.plist in Resources */,
@@ -397,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21B5FF362A997BCA005DA658 /* BubbleView.swift in Sources */,
+				21D8B3F82AA0DDF80094679C /* ImageManger.swift in Sources */,
 				21CDB6152A82A9D200A2E1FD /* User.swift in Sources */,
 				21D03E382A8C0DB100B07162 /* Particle.swift in Sources */,
 				21DDCEE92A978D960028235C /* MapView.swift in Sources */,
@@ -404,6 +417,7 @@
 				21DAF7E82A93988F00AC1C28 /* LocationService.swift in Sources */,
 				21ADEB302A98E7E1002A24CB /* CheckinList.swift in Sources */,
 				21D03E322A8C026C00B07162 /* LocationView.swift in Sources */,
+				21CE839B2AA3411400D86F88 /* BuyWavesView.swift in Sources */,
 				21CE12532A9FACAB00D0889C /* PostForm.swift in Sources */,
 				21CDB6132A82A9C500A2E1FD /* Location.swift in Sources */,
 				21B7ED022A8665DA001BEF78 /* AnalyticsService.swift in Sources */,
@@ -681,6 +695,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		21CE839C2AA3518A00D86F88 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markiv/SwiftUI-Shimmer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -733,6 +755,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 21CE1A772A870744005DAD42 /* XCRemoteSwiftPackageReference "swiftui-async-button" */;
 			productName = AsyncButton;
+		};
+		21CE839D2AA3518A00D86F88 /* Shimmer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 21CE839C2AA3518A00D86F88 /* XCRemoteSwiftPackageReference "SwiftUI-Shimmer" */;
+			productName = Shimmer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

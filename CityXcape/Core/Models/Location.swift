@@ -21,7 +21,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let city: String
     let address: String?
     let dateCreated: Date
-    
+    let ownerId: String
     
     //Social Component
     let saveCount: Int
@@ -80,6 +80,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.worldId = data[Location.CodingKeys.worldId.rawValue] as? String ?? nil
         self.worldName = data[Location.CodingKeys.worldName.rawValue] as? String ?? nil
         self.worldImageUrl = data[Location.CodingKeys.worldImageUrl.rawValue] as? String ?? nil
+        self.ownerId = data[Location.CodingKeys.ownerId.rawValue] as? String ?? ""
     }
 
     
@@ -92,6 +93,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case latitude
         case city
         case address
+        case ownerId = "owner_id"
         case dateCreated = "date_created"
         case saveCount = "save_count"
         case checkinCount = "checkin_count"

@@ -79,6 +79,7 @@ struct PostForm: View {
                 Spacer()
             }
             .foregroundColor(.cx_blue)
+            .disabled(vm.isPosting)
         })
 
     }

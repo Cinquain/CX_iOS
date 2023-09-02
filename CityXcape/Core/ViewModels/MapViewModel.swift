@@ -36,19 +36,17 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     var placeHolder: String = "Search a Locations"
     
-    //Properties for Posting Form
-    
+    //MARK: PROPERTIES FOR POSTING
     @Published var spotName: String = ""
     @Published var spotDescription: String = ""
     @Published var hashtags: String = ""
+    @Published var isPosting: Bool = false
     @Published var imageSelection: PhotosPickerItem? = nil {
         didSet {
             setImage(from: imageSelection)
         }
     }
     @Published var selectedImage: UIImage? = nil
-    
-    
     @Published var showSignUp: Bool = false
     @Published var errorMessage: String = ""
     
@@ -163,5 +161,29 @@ extension MapViewModel {
                 return
             }
         }
+    }
+    
+    func submitLocation(mapItem: MKMapItem) {
+        isPosting = true 
+        if spotName.count < 4 {
+            alertMessage = "Name needs at least four characters"
+            showAlert.toggle()
+            return
+        }
+        
+        if description.count < 10 {
+            alertMessage = "Description needs to be at least 10 characters long"
+            showAlert.toggle()
+            return
+        }
+        
+        if selectedImage == nil {
+            alertMessage = "Please add an image to your location"
+            showAlert.toggle()
+            return
+        }
+        
+        guard let image = selectedImage else {return}
+        
     }
 }

@@ -39,4 +39,9 @@ enum Tab: String, CaseIterable {
             return "Profile"
         }
     }
+    
+}
+
+enum MyError: Error {
+    case failedCompression(String)
 }

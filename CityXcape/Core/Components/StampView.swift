@@ -22,7 +22,7 @@ struct StampView: View {
             .overlay(timeStamp())
             .rotationEffect(animate ? Angle(degrees: 0) : Angle(degrees: -35))
             .scaleEffect(animate ? 4 : 1)
-            .animation(.easeIn(duration: 0.45), value: animate)
+            .animation(.easeIn(duration: 0.25), value: animate)
             .animation(.spring(), value: animate)
             .onAppear {
                 SoundManager.shared.playStamp()

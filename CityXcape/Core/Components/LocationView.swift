@@ -50,6 +50,8 @@ struct LocationView: View {
                 )
                 .onDisappear {
                     vm.showStamp = false
+                    vm.statuses[2] = false
+                    vm.showCheckinList = false 
                 }
         
         
@@ -113,6 +115,7 @@ struct LocationView: View {
             if vm.showCheckinList {
                 withAnimation {
                     CheckinList(spot: spot, users: vm.users)
+                   
                 }
             }
                 
@@ -231,6 +234,8 @@ struct LocationView: View {
                     .frame(width: 55, height: 55)
                     .background(vm.statuses[2] ? .orange.opacity(0.25) : .yellow.opacity(0.8))
                     .clipShape(Circle())
+                    .scaleEffect(vm.statuses[2] ? 0.9 : 1)
+
             }
             
         }
@@ -246,7 +251,9 @@ struct LocationView: View {
                 .font(.subheadline)
                 .fontWeight(.thin)
                 .foregroundColor(.white)
-                .background(Capsule().fill(.black).frame(width: 150, height: 40))
+                .background(Capsule()
+                    .fill(vm.showCheckinList ? .purple : .black)
+                    .frame(width: 150, height: 40))
                 .padding(.top, 25)
         }
     }

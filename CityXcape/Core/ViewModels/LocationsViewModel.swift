@@ -89,11 +89,11 @@ class LocationsViewModel: ObservableObject {
     }
     
     func checkinLocation(id: String) {
-        if AuthService.shared.uid == nil {
-            alertMessage = "You need an account to checkin"
-            showAlert.toggle()
-            return
-        }
+//        if AuthService.shared.uid == nil {
+//            alertMessage = "You need an account to checkin"
+//            showAlert.toggle()
+//            return
+//        }
         
         //Check if user distance is at location
         
@@ -106,7 +106,19 @@ class LocationsViewModel: ObservableObject {
         
         //Give user a stamp, show user list of others in the spot
         showStamp.toggle()
+        Task {
+            self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: id)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                self.showCheckinList.toggle()
+                self.statuses[2] = true
+                self.offset = 100
+            })
+         
+
+        }
         
+        
+
 
     }
     

@@ -17,5 +17,9 @@
 	</array>
 	<key>GIDClientID</key>
 	<string>513421668976-g518d3b7ra4mjdjhqlfrjktmftnl2coe.apps.googleusercontent.com</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>times new roman.ttf</string>
+	</array>
 </dict>
 </plist>

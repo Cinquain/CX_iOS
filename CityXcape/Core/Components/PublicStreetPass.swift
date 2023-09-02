@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PublicStreetPass: View {
+    @State private var showMenu: Bool = false
+    
     let user: User
     var body: some View {
         GeometryReader {
@@ -49,6 +51,11 @@ struct PublicStreetPass: View {
                 .foregroundColor(.white)
                 .tracking(4)
                 .opacity(0.5)
+                .padding(.top, 5)
+                .popover(isPresented: $showMenu) {
+                    BuyWavesView()
+                        .presentationDetents([.height(380)])
+                }
             Spacer()
         }
         .padding(.horizontal, 25)
@@ -68,16 +75,16 @@ struct PublicStreetPass: View {
     @ViewBuilder
     func WaveButton() -> some View {
         Button {
-            //
+            showMenu.toggle()
         } label: {
             HStack(spacing: 2) {
                 Image(systemName: "hands.sparkles.fill")
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(.white)
                 
                 Text("Wave")
                     .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white.opacity(0.6))
+                    .fontWeight(.medium)
+                    .foregroundColor(.white)
             }
             .background(Capsule()
                 .fill(.orange.opacity(0.5))

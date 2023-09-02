@@ -5,11 +5,11 @@
 //  Created by James Allan on 8/9/23.
 //
 
-import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 import FirebaseFirestoreSwift
-
+import MapKit
+import SwiftUI
 
 let db = Firestore.firestore()
 
@@ -47,7 +47,7 @@ final class DataService {
         
     }
     
-    
+    //MARK: LOCATION FUNCTIONS
     func fetchAllLocations() async throws -> [Location] {
         let ref = locationsRef
         var locations: [Location] = []
@@ -63,6 +63,45 @@ final class DataService {
         return locations
     }
     
+    func createLocation(name: String, description: String, image: UIImage, mapItem: MKMapItem) async throws -> Bool {
+        let ref = locationsRef.document()
+        let spotId = ref.documentID
+        
+        let address = mapItem.getAddress()
+        let longitude = mapItem.placemark.coordinate.longitude
+        let latitude = mapItem.placemark.coordinate.latitude
+        let city = mapItem.getCity()
+        let userId = Auth.auth().currentUser?.uid ?? ""
+        
+   
+        do {
+            let imageURL = try await ImageManager.shared.uploadLocationImaeg(id: spotId, image: image)
+            let data: [String: Any] = [
+                Location.CodingKeys.id.rawValue: spotId,
+                Location.CodingKeys.name.rawValue: name,
+                Location.CodingKeys.description.rawValue: description,
+                Location.CodingKeys.imageUrl.rawValue : imageURL,
+                Location.CodingKeys.longitude.rawValue: longitude,
+                Location.CodingKeys.latitude.rawValue: latitude,
+                Location.CodingKeys.address.rawValue: address,
+                Location.CodingKeys.city.rawValue: city,
+                Location.CodingKeys.ownerId.rawValue: userId
+            ]
+            try await ref.setData(data)
+            return true
+        } catch (let error) {
+            throw error
+        }
+                    
+        //End of creating location function
+    }
+    
+    
+    
+    
+    
+    
+    //MARK: USER FUNCTIONS
     func fetchAllUsers() async throws -> [User] {
         let ref = usersRef
         var users: [User] = []
