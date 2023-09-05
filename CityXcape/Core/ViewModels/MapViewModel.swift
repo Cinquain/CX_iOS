@@ -30,6 +30,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @Published var showAlert: Bool = false
     @Published var alertMessage: String = ""
+    @Published var completeForm: Bool = false
     
     @ObservedObject var manager = LocationService.shared
     private var cancellables = Set<AnyCancellable>()
@@ -146,7 +147,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 }
 
 extension MapViewModel {
-        
     
     private func setImage(from selection: PhotosPickerItem?) {
         guard let selection else {return}
@@ -155,7 +155,7 @@ extension MapViewModel {
                 let data = try await selection.loadTransferable(type: Data.self)
                 guard let data, let uiImage = UIImage(data: data) else {return}
                 selectedImage = uiImage
-            } catch (let error) {
+            } catch {
                 errorMessage = error.localizedDescription
                 showAlert.toggle()
                 return
@@ -183,7 +183,31 @@ extension MapViewModel {
             return
         }
         
+        if hashtags.count > 3 {
+            alertMessage = "Please add a hashtag at least 3 characters long"
+            showAlert.toggle()
+            return
+        }
+        
         guard let image = selectedImage else {return}
+        Task {
+            do {
+                let result = try await  DataService
+                                        .shared
+                                        .createLocation(name: spotName,
+                                                        description: description,
+                                                        hashtag: hashtags,
+                                                        image: image, mapItem: mapItem)
+                if result {completeForm.toggle()}
+            } catch {
+                errorMessage = error.localizedDescription
+                showAlert.toggle()
+                return
+            }
+           
+        }
         
     }
 }
+
+

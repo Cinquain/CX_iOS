@@ -35,9 +35,10 @@ struct PublicStreetPass: View {
     func Background() -> some View {
         ZStack {
             Color.black
-            Image("street-paths")
+            Image("orange-paths")
                 .resizable()
                 .scaledToFill()
+                .opacity(0.8)
         }
         .edgesIgnoringSafeArea(.all)
     }
@@ -50,7 +51,6 @@ struct PublicStreetPass: View {
                 .fontWeight(.thin)
                 .foregroundColor(.white)
                 .tracking(4)
-                .opacity(0.5)
                 .padding(.top, 5)
                 .popover(isPresented: $showMenu) {
                     BuyWavesView()

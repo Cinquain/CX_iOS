@@ -22,7 +22,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let address: String?
     let dateCreated: Date
     let ownerId: String
-    
+    let hashtags: String
     //Social Component
     let saveCount: Int
     let checkinCount: Int
@@ -68,6 +68,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.name = data[Location.CodingKeys.name.rawValue] as? String ?? ""
         self.description = data[Location.CodingKeys.description.rawValue] as? String ?? ""
         self.imageUrl = data[Location.CodingKeys.imageUrl.rawValue] as? String ?? ""
+        self.hashtags = data[Location.CodingKeys.hashtags.rawValue] as? String ?? ""
         self.latitude = data[Location.CodingKeys.latitude.rawValue] as? Double ?? 0
         self.longitude = data[Location.CodingKeys.longitude.rawValue] as? Double ?? 0
         self.city = data[Location.CodingKeys.city.rawValue] as? String ?? ""
@@ -93,6 +94,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case latitude
         case city
         case address
+        case hashtags
         case ownerId = "owner_id"
         case dateCreated = "date_created"
         case saveCount = "save_count"
@@ -115,6 +117,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
         Location.CodingKeys.dateCreated.rawValue: Date(),
         Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.hashtags.rawValue: "Street Art",
         Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4
     ]
@@ -130,6 +133,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
         Location.CodingKeys.dateCreated.rawValue: Date(),
         Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.hashtags.rawValue: "Nightlife",
         Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4
     ]
@@ -145,6 +149,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
         Location.CodingKeys.dateCreated.rawValue: Date(),
         Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.hashtags.rawValue: "Foodie",
         Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4
     ]

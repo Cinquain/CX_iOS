@@ -6,14 +6,21 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct StreetPass: View {
+    
     let user: User
+    @StateObject var vm = StreetPassViewModel()
+    
     var body: some View {
         
             VStack {
                 StreetPassHeader()
                 UserDot()
+                Spacer()
+                    .frame(height: 70)
+                MyJourney()
                 Spacer()
             }
             .background(Background())
@@ -48,13 +55,39 @@ struct StreetPass: View {
     
     @ViewBuilder
     func UserDot() -> some View {
-        VStack(spacing: 3) {
-            BubbleView(width: 300, imageUrl: user.imageUrl ?? "")
-            Text(user.username ?? "")
-                .font(.title)
-                .foregroundColor(.white)
-                .fontWeight(.thin)
+        
+        PhotosPicker(selection: $vm.selectedItem, matching: .images) {
+            VStack(spacing: 3) {
+                BubbleView(width: 300, imageUrl: vm.profileUrl)
+                Text(user.username ?? "")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .fontWeight(.thin)
+            }
         }
+        
+    }
+    
+    @ViewBuilder
+    func MyJourney() -> some View {
+  
+        Button {
+            //TBD
+        } label: {
+            HStack {
+                Image("Journey")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                
+                Text("My Journey")
+                    .font(.title3)
+                    .foregroundColor(.white)
+                    .fontWeight(.thin)
+            }
+            
+        }
+        
     }
     
     

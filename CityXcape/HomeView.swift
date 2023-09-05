@@ -18,28 +18,38 @@ struct HomeView: View {
     @State private var showDetails: Bool = false
     var body: some View {
         TabView(selection: $selection) {
-            DiscoverView()
+            LocationsView()
                 .environmentObject(vm)
                 .tag(0)
                 .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text(Tab.discover.title)
+                    Image(Tab.locations.rawValue)
+                        .renderingMode(.template)
+                        .foregroundColor(.white)
+                        .font(.title)
+                    Text(Tab.locations.title)
                 }
+            
             
             MapView(vm: mapVM)
                 .tag(1)
                 .tabItem {
-                    Image(Tab.post.rawValue)
-                        .renderingMode(.template)
-                        .foregroundColor(.white)
-                        .font(.title)
+                    Image(systemName: Tab.post.rawValue)
                     Text(Tab.post.title)
                 }
             
-            StreetPass(user: User.demo)
+            
+            MessagesView()
                 .tag(2)
                 .tabItem {
-                    Image(systemName: "person.fill")
+                    Image(systemName: Tab.connections.rawValue)
+                    Text(Tab.connections.title)
+                }
+            
+           
+            StreetPass(user: User.demo)
+                .tag(3)
+                .tabItem {
+                    Image(systemName: Tab.profile.rawValue)
                     Text(Tab.profile.title)
                 }
             

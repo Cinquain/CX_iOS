@@ -63,7 +63,7 @@ final class DataService {
         return locations
     }
     
-    func createLocation(name: String, description: String, image: UIImage, mapItem: MKMapItem) async throws -> Bool {
+    func createLocation(name: String, description: String, hashtag: String, image: UIImage, mapItem: MKMapItem) async throws -> Bool {
         let ref = locationsRef.document()
         let spotId = ref.documentID
         
@@ -80,6 +80,7 @@ final class DataService {
                 Location.CodingKeys.id.rawValue: spotId,
                 Location.CodingKeys.name.rawValue: name,
                 Location.CodingKeys.description.rawValue: description,
+                Location.CodingKeys.hashtags.rawValue: hashtag,
                 Location.CodingKeys.imageUrl.rawValue : imageURL,
                 Location.CodingKeys.longitude.rawValue: longitude,
                 Location.CodingKeys.latitude.rawValue: latitude,
@@ -89,7 +90,7 @@ final class DataService {
             ]
             try await ref.setData(data)
             return true
-        } catch (let error) {
+        } catch  {
             throw error
         }
                     

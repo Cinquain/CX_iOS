@@ -17,17 +17,27 @@ class ImageManager: NSObject {
     private var storageRef = Storage.storage()
     
     
-    
-    func uploadLocationImaeg(id: String, image: UIImage) async throws -> String {
+    //MARK: USER PROFILE IMAGE FUNCTIONS
+    func uploadProfileImage(uid: String, image: UIImage) async throws -> String {
+        let path = getProfileImagePath(uid: uid)
         do {
-            let path = getLocationMainImagePath(spotId: id)
+            let url = try await uploadImage(path: path, image: image)
+            return url
+        } catch {
+            throw error
+        }
+    }
+    
+    //MARK: LOCATION IMAGE FUNCTIONS
+    func uploadLocationImaeg(id: String, image: UIImage) async throws -> String {
+        let path = getLocationMainImagePath(spotId: id)
+        do {
             let url = try await uploadImage(path: path, image: image)
             return url
         } catch (let error) {
             throw error
         }
     }
-    
     
     //MARK: STORAGE PATHS
     fileprivate func getProfileImagePath(uid: String) -> StorageReference {

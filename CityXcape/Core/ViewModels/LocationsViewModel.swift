@@ -83,7 +83,6 @@ class LocationsViewModel: ObservableObject {
             print("fetching users")
             self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: id)
             showCheckinList.toggle()
-            statuses[2] = false
             self.offset = 100
         }
     }

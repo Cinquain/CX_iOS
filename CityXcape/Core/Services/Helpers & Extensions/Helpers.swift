@@ -25,19 +25,23 @@ struct AppUserDefaults {
 
 
 enum Tab: String, CaseIterable {
-    case discover = "dot.radiowaves.left.and.right"
-    case post = "tab2"
+    case locations = "tab2"
+    case post = "mappin.square.fill"
     case profile = "person.fill"
+    case connections = "message.fill"
     
     var title: String {
         switch self {
-        case .discover:
-            return "Discover"
+        case .locations:
+            return "Locations"
         case .post:
             return "Post"
         case .profile:
             return "Profile"
+        case .connections:
+        return "Connections"
         }
+       
     }
     
 }

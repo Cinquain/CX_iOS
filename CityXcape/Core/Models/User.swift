@@ -86,5 +86,32 @@ struct User: Identifiable, Equatable, Codable {
         User.CodingKeys.username.rawValue: "Amanda"
     ]
     
+    static let data2: [String: Any] =  [
+        User.CodingKeys.id.rawValue: "oVbr47547757DAccXS0aqwHtWXvCYfGv62",
+        User.CodingKeys.imageUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2Foyda5lEqnnt4dqqUr8oV%2F5-min.jpg?alt=media&token=781a7ed9-c9ff-4b89-94f9-ee1f52254f8c",
+        User.CodingKeys.joinDate.rawValue: Timestamp(),
+        User.CodingKeys.username.rawValue: "Chris"
+    ]
+    
+    static let data3: [String: Any] =  [
+        User.CodingKeys.id.rawValue: "r884775857757DAccXS0aqwHtWXvCYfGv62",
+        User.CodingKeys.imageUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FyI176yL3l9bTrWgAVzyj3z6ML1E3%2Fpexels-marlon-schmeiski-3115708-min.jpg?alt=media&token=7a735586-6e9e-4d05-90eb-a5baee8d40a3",
+        User.CodingKeys.joinDate.rawValue: Timestamp(),
+        User.CodingKeys.username.rawValue: "Jannette"
+    ]
+    
+    
+    static let data4: [String: Any] =  [
+        User.CodingKeys.id.rawValue: "r8847t0t009y9y0y95047757DAccXS0aqwHtWXvCYfGv62",
+        User.CodingKeys.imageUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FW6EUJxka1OihhJ0Iyest%2F2-min.jpg?alt=media&token=1930940d-704f-42b1-aa2b-cd8c919b0161",
+        User.CodingKeys.joinDate.rawValue: Timestamp(),
+        User.CodingKeys.username.rawValue: "Cinquain"
+    ]
+    
+    
     static let demo = User(data: data)
+    static let demo2 = User(data: data2)
+    static let demo3 = User(data: data3)
+    static let demo4 = User(data: data4)
+
 }
