@@ -11,7 +11,6 @@ import SwiftUI
 
 class LocationsViewModel: ObservableObject {
     
-    
     @Published var offset: CGFloat = 550
     @Published var showSignUp: Bool = false
     @Published var statuses: [Bool] = [false, false, false]
@@ -21,10 +20,11 @@ class LocationsViewModel: ObservableObject {
     @Published var showCheckinList: Bool = false
     @Published var showFavorites: Bool = false 
     @Published var showStamp: Bool = false
-    //Animation Values
+    
     @Published var opacity: Double = 0
     @Published var users: [User] = []
-    @Published var basicAlert: Bool = false 
+    @Published var basicAlert: Bool = false
+    
     @Published private(set) var locations: [Location] = []
     @Published var myJourney: [Location] = [Location.demo2, Location.demo1]
 
@@ -36,12 +36,7 @@ class LocationsViewModel: ObservableObject {
         showDetails.toggle()
         
         //Animation the view
-        if showDetails {
-            opacity = 1
-        } else {
-            opacity = 0
-        }
-        
+        self.opacity = showDetails ? 1 : 0
     }
     
     func saveToBookmark(spot: Location) {
@@ -87,38 +82,35 @@ class LocationsViewModel: ObservableObject {
         }
     }
     
-    func checkinLocation(id: String) {
-//        if AuthService.shared.uid == nil {
-//            alertMessage = "You need an account to checkin"
-//            showAlert.toggle()
-//            return
-//        }
-        
-        //Check if user distance is at location
-        
-        //Increment the spot checkin count by 1
-        
-        //Increment the user footrail
-        
-        //Save the stamp to user stamp archives
-        
-        
-        //Give user a stamp, show user list of others in the spot
-        showStamp.toggle()
-        Task {
-            self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: id)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                self.showCheckinList.toggle()
-                self.statuses[2] = true
-                self.offset = 100
-            })
-         
-
+    func checkinLocation(spot: Location) {
+        if AuthService.shared.uid == nil {
+            alertMessage = "You need an account to checkin"
+            showAlert.toggle()
+            return
         }
         
+        //Check if user distance is at location
+            //Give User a Stamp
+            showStamp.toggle()
+
+            
+            
+            
+
+            Task {
+                self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: spot.id)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                    //Show user list of others in the spot
+                    self.showCheckinList.toggle()
+                    self.statuses[2] = true
+                    self.offset = 100
+                })
+            }
         
-
-
+//            alertMessage = "You Need to be Inside to Checkin"
+//            showAlert.toggle()
+            return
+        
     }
     
     

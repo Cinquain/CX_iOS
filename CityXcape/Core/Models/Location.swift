@@ -41,7 +41,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
             return lhs.id == rhs.id
         }
     
-    var distanceFromUser: String {
+    var distanceString: String {
             let manager = LocationService.shared.manager
             
             if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
@@ -62,6 +62,22 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
             }
 
         }
+    
+    var distanceFromUser: Double {
+        let manager = LocationService.shared.manager
+        
+        if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
+            let destination = CLLocation(latitude: latitude, longitude: longitude)
+            let userlocation = CLLocation(latitude: (manager.location?.coordinate.latitude) ?? 0, longitude: (manager.location?.coordinate.longitude) ?? 0)
+            let distance = userlocation.distance(from: destination) * 0.000621
+            let distanceinFt = distance * 3.28084
+            return distanceinFt
+        } else {
+            manager.requestWhenInUseAuthorization()
+            return 1000
+        }
+    }
+    
     
     init(data: [String: Any]) {
         self.id = data[Location.CodingKeys.id.rawValue] as? String ?? ""

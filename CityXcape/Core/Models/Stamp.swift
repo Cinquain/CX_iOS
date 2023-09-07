@@ -18,6 +18,7 @@ struct Stamp: Identifiable, Equatable, Codable {
     let latitude: Double
     let stampImageUrl: String
     let likeCount: Int
+    let ownerId: String
  
     
     static func == (lhs: Stamp, rhs: Stamp) -> Bool {
@@ -32,6 +33,7 @@ struct Stamp: Identifiable, Equatable, Codable {
         self.latitude = data[Stamp.CodingKeys.latitude.rawValue] as? Double ?? 0
         self.stampImageUrl = data[Stamp.CodingKeys.stampImageUrl.rawValue] as? String ?? ""
         self.likeCount = data[Stamp.CodingKeys.likeCount.rawValue] as? Int ?? 0
+        self.ownerId = data[Stamp.CodingKeys.ownerId.rawValue] as? String ?? ""
         let timestamp =  data[Stamp.CodingKeys.dateCreated.rawValue] as? Timestamp
         self.dateCreated = timestamp?.dateValue() ?? Date()
     }
@@ -45,5 +47,6 @@ struct Stamp: Identifiable, Equatable, Codable {
         case latitude
         case stampImageUrl = "stamp_imageUrl"
         case likeCount = "like_count"
+        case ownerId = "owner_id"
     }
 }

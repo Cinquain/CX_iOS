@@ -20,12 +20,35 @@ struct CongratsView: View {
                 .scaledToFit()
                 .frame(height: 200)
                 .rotationEffect(Angle(degrees: angle))
-                .animation(.easeOut(duration: 1.5), value: angle)
+                .animation(.easeOut(duration: 1), value: angle)
             
             Text("You Earned 1 StreetCred")
                 .font(.title2)
                 .fontWeight(.thin)
                 .foregroundColor(.white)
+            
+            Text("You will earn additional StreetCred when \n someone checks in at your location")
+                .font(.callout)
+                .foregroundColor(.white)
+                .fontWeight(.thin)
+                .multilineTextAlignment(.center)
+            
+            Spacer().frame(height: 50)
+            
+            Button {
+                dismiss()
+            } label: {
+                Text("Got it!")
+                    .padding()
+                    .foregroundColor(.white)
+                    .fontWeight(.thin)
+                    .frame(width: 150, height: 40)
+                    .background(.yellow.opacity(0.4))
+                    .cornerRadius(34)
+            }
+
+            
+            
             HStack{Spacer()}
             Spacer()
         }

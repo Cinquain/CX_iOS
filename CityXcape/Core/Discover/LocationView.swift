@@ -245,7 +245,7 @@ struct LocationView: View {
     @ViewBuilder
     func CheckInButton() -> some View {
         Button {
-            vm.checkinLocation(id: spot.id)
+            vm.checkinLocation(spot: spot)
         } label: {
             Text(vm.showCheckinList ? "Checked In": "CHECK IN")
                 .font(.subheadline)

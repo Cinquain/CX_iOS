@@ -22,6 +22,7 @@ struct LocationsView: View {
                 ScrollView {
                     VStack(spacing: 15) {
                         ForEach(vm.locations) { location in
+             
                             GeometryReader { item in
                                 
                                 SpotThumbnail(spot: location)

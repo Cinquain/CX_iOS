@@ -13,8 +13,11 @@ struct Server {
     static let users = "users"
     static let worlds = "worlds"
     static let locations = "locations"
-    static let stamps = "stamps"
+    static let privates = "users_private"
     static let checkIns = "checkins"
+    static let saves = "saves"
+    static let messages = "messages"
+    static let stamps = "stamps"
 }
 
 struct AppUserDefaults {

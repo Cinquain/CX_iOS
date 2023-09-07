@@ -19,7 +19,7 @@ struct MapView: View {
             
             VStack(spacing: 12) {
                 SearchField()
-                    
+                  
                 
                 SearchResultView()
                 

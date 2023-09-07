@@ -20,24 +20,16 @@ struct PostForm: View {
                 TextField(vm.selectedMapItem?.name ?? "Location Name", text: $vm.spotName)
                 TextField("Describe this location", text: $vm.spotDescription)
                     .frame(height: 40)
+                    .alert(isPresented: $vm.showAlert) {
+                        return Alert(title: Text(vm.alertMessage))
+                    }
+                
                 TextField("#hashtag", text: $vm.hashtags)
                 
                 Section("\(Image(systemName: "photo")) Location Image (Portrait)") {
-                    
+                
                     PhotosPicker(selection: $vm.imageSelection, matching: .images) {
-                            if let image = vm.selectedImage {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: .infinity)
-                                    .cornerRadius(12)
-                                    .clipped()
-                            } else {
-                                Image("spot_image")
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: .infinity)
-                            }
+                        PickerLabel()
                     }
                     .listRowInsets(EdgeInsets())
                     
@@ -45,12 +37,16 @@ struct PostForm: View {
                 
                 Section("Address") {
                     locationView()
+                        .fullScreenCover(isPresented: $vm.showCongrats, onDismiss: {
+                            dismiss()
+                        }) {
+                            CongratsView(vm: vm)
+                        }
                 }
                 
                 Section("Finish") {
                     finishButton()
                 }
-                
             }
             .navigationBarTitle("Create Location", displayMode: .inline)
             .navigationBarItems(trailing: closeButton)
@@ -64,7 +60,7 @@ struct PostForm: View {
     @ViewBuilder
     func finishButton() -> some View {
         Button(action: {
-            //
+            vm.submitLocation()
         }, label: {
                 
             HStack {
@@ -112,6 +108,28 @@ struct PostForm: View {
                  Spacer()
               }
               .foregroundColor(.white)
+    }
+    
+    @ViewBuilder func PickerLabel() -> some View {
+        ZStack {
+            if let image = vm.selectedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(12)
+                    .clipped()
+            } else {
+                    Image("spot_image")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: .infinity)
+                
+            }
+            ProgressView()
+                .opacity(vm.isPosting ? 1 : 0)
+                .scaleEffect(3)
+        }
     }
     
 }
