@@ -82,6 +82,7 @@ final class DataService {
     }
     
     func saveLocation(spot: Location) async throws {
+        //Update match capability of user
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let spotSaveData: [String: Any] = [
             User.CodingKeys.id.rawValue: uid,
@@ -106,16 +107,18 @@ final class DataService {
                                 .document(spot.id)
         let spotsRef = locationsRef.document(spot.id)
         do {
+            //Save user to likes collection of Location
             try await spotSavesRef.setData(spotSaveData)
+            //Save Location to saves collection of User
             try await userSavesRef.setData(userSaveData)
+            //Increment likeCount of location
             try await spotsRef.updateData(spotIncrementData)
         } catch {
             throw error
         }
-
     }
     
-    func checkinLocation(spot: Location) {
+    func checkinLocation(spot: Location, completion: @escaping (Result<Bool, Error>) -> Void) {
         let spotRef = locationsRef.document(spot.id)
         guard let uid = Auth.auth().currentUser?.uid else {return}
        
@@ -134,31 +137,36 @@ final class DataService {
             Stamp.CodingKeys.dateCreated.rawValue: Timestamp(),
             Stamp.CodingKeys.stampImageUrl.rawValue: spot.imageUrl
         ]
-        userStampsCollectionRef.setData(data)
-        
-        //Save user to checkin collection of spot
-        let spotData: [String: Any] = [
-            User.CodingKeys.id.rawValue: uid,
-            Stamp.CodingKeys.dateCreated.rawValue: Timestamp()
-        ]
-        let spotSavesCollectionRef = spotRef.collection(Server.checkIns).document(uid)
-        spotSavesCollectionRef.setData(spotData)
-        
-        //Increment the spot checkin count by 1
-        let increment: Double = 1
-        let incrementData: [String: Any] = [
-            Location.CodingKeys.checkinCount.rawValue: FieldValue.increment(increment)
-        ]
-        spotRef.updateData(incrementData)
-        
-        
-        //Increment the user streetcred
-        let streetcredIncrement: Double = 2
-        let streetCredData: [String: Any] = [
-            User.CodingKeys.StreetCred.rawValue: FieldValue.increment(streetcredIncrement)
-        ]
-        usersRef.document(uid).updateData(streetCredData)
-        
+        userStampsCollectionRef.setData(data) { [weak self] error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            //Save user to checkin collection of spot
+            let spotData: [String: Any] = [
+                User.CodingKeys.id.rawValue: uid,
+                Stamp.CodingKeys.dateCreated.rawValue: Timestamp()
+            ]
+            let spotCheckinsRef = spotRef.collection(Server.checkIns).document(uid)
+            spotCheckinsRef.setData(spotData)
+            
+            //Increment the spot checkin count by 1
+            let increment: Double = 1
+            let incrementData: [String: Any] = [
+                Location.CodingKeys.checkinCount.rawValue: FieldValue.increment(increment)
+            ]
+            spotRef.updateData(incrementData)
+            
+            
+            //Increment the user streetcred
+            let streetcredIncrement: Double = 2
+            let streetCredData: [String: Any] = [
+                User.CodingKeys.StreetCred.rawValue: FieldValue.increment(streetcredIncrement)
+            ]
+            self?.usersRef.document(uid).updateData(streetCredData)
+            completion(.success(true))
+            return
+        }
     }
     
     

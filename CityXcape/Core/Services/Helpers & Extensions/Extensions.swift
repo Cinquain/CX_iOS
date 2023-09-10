@@ -282,6 +282,14 @@ extension Color {
         return Color("Stamp_Red")
     }
     
+    static var vintage: Color {
+        return Color("CX_Cream")
+    }
+    
+    static var cx_green: Color {
+        return Color("CX_Green")
+    }
+    
     static var random: Color {
         return Color(
             red: .random(in: 0...1),

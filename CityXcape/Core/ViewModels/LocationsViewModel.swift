@@ -40,36 +40,38 @@ class LocationsViewModel: ObservableObject {
     }
     
     func saveToBookmark(spot: Location) {
+        if AuthService.shared.uid == nil {
+            alertMessage = "You need an account to like this location"
+            showAlert.toggle()
+            return
+        }
+        
         statuses[1].toggle()
         statuses[0] = false; statuses[2] = false
-        showDetails = false 
-//        if AuthService.shared.uid == nil {
-//            alertMessage = "You need an account to like this location"
-//            showAlert.toggle()
-//            return
-//        }
-        //Save Location to saves collection of User
+        showDetails = false
         
-        //Save user to likes collection of Location
-        
-        //Update location dictionary of user,
-        //then show a pop showing the list of saved locations
-        //place most recent saves at the top
-        
-        //Update match capability of user
-        
-        //Show user save list
-        myJourney.append(spot)
-        self.myJourney = myJourney.unique()
-        showFavorites.toggle()
+        Task {
+            try await  DataService.shared.saveLocation(spot: spot)
+            //Show user save list
+            myJourney.append(spot)
+            self.myJourney = myJourney.unique()
+            showFavorites.toggle()
+            
+        }
     }
     
     func viewCheckinList(id: String) {
         statuses[2].toggle()
         statuses[0] = false; statuses[1] = false
         showDetails = false
-//        if AuthService.shared.uid == nil {
-//            alertMessage = "Please check-in to see who's in this location"
+        if AuthService.shared.uid == nil {
+            alertMessage = "Please sign to see who's in this location"
+            showAlert.toggle()
+            return
+        }
+//        
+//        if showCheckinList == false {
+//            alertMessage = "Please sign to see who's in this location"
 //            showAlert.toggle()
 //            return
 //        }
@@ -90,27 +92,33 @@ class LocationsViewModel: ObservableObject {
         }
         
         //Check if user distance is at location
-            //Give User a Stamp
-            showStamp.toggle()
-
-            
-            
-            
-
-            Task {
-                self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: spot.id)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                    //Show user list of others in the spot
-                    self.showCheckinList.toggle()
-                    self.statuses[2] = true
-                    self.offset = 100
-                })
-            }
-        
+//        guard spot.distanceFromUser < 100 else {
 //            alertMessage = "You Need to be Inside to Checkin"
 //            showAlert.toggle()
-            return
+//            return
+//        }
         
+        //Give User a Stamp
+        DataService.shared.checkinLocation(spot: spot, completion: { [weak self] result in
+            guard let self = self else {return}
+            switch result {
+            case .success(let result):
+                self.showStamp = result
+            case .failure(let error):
+                self.alertMessage = error.localizedDescription
+                self.showAlert.toggle()
+            }
+        })
+        
+        Task {
+            self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: spot.id)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                //Show user list of others in the spot
+                self.showCheckinList = true
+                self.statuses[2] = true
+                self.offset = 100
+            })
+        }
     }
     
     

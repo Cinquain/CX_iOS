@@ -26,11 +26,16 @@ struct AppUserDefaults {
     static let loadMessage = "loadMessage"
 }
 
+enum StreetPasType {
+    case stranger
+    case personal
+}
+
 
 enum Tab: String, CaseIterable {
     case locations = "tab2"
     case post = "mappin.square.fill"
-    case profile = "person.fill"
+    case profile = "person.text.rectangle.fill"
     case connections = "message.fill"
     
     var title: String {

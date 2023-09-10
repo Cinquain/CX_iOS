@@ -64,7 +64,9 @@ struct PublicStreetPass: View {
     @ViewBuilder
     func UserDot() -> some View {
         VStack(spacing: 3) {
-            BubbleView(width: 300, imageUrl: user.imageUrl ?? "")
+            BubbleView(width: 300,
+                       imageUrl: user.imageUrl ?? "",
+                     type: .stranger)
             Text(user.username ?? "")
                 .font(.title)
                 .foregroundColor(.white)

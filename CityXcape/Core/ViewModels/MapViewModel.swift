@@ -217,8 +217,6 @@ extension MapViewModel {
             isPosting.toggle()
             return
         }
-        
-        
         guard let image = selectedImage, let mapitem = selectedMapItem else {return}
         Task {
             do {
