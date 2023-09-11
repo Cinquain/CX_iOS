@@ -11,7 +11,7 @@ import PhotosUI
 struct StreetPass: View {
     
     let user: User
-    @StateObject var vm = StreetPassViewModel()
+    @StateObject var vm: StreetPassViewModel
     
     var body: some View {
         
@@ -75,10 +75,12 @@ struct StreetPass: View {
         PhotosPicker(selection: $vm.selectedItem, matching: .images) {
             VStack(spacing: 3) {
                 BubbleView(width: 300, imageUrl: vm.profileUrl, type: .personal)
-                Text(user.username ?? "")
-                    .font(.title)
+                
+                Text(user.username ?? "Create Username")
+                    .font(.title2)
                     .foregroundColor(.white)
                     .fontWeight(.thin)
+                  
             }
         }
         
@@ -125,6 +127,6 @@ struct StreetPass: View {
 
 struct StreetPass_Previews: PreviewProvider {
     static var previews: some View {
-        StreetPass(user: User.demo)
+        StreetPass(user: User.demo, vm: StreetPassViewModel())
     }
 }

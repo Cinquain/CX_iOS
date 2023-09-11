@@ -220,13 +220,13 @@ extension MapViewModel {
         guard let image = selectedImage, let mapitem = selectedMapItem else {return}
         Task {
             do {
-                let result = try await  DataService.shared
-                                        .createLocation(name: spotName,
-                                                        description: description,
-                                                        hashtag: hashtags,
-                                                        image: image, mapItem: mapitem)
-                isPosting = false
-                if result {completeForm.toggle()}
+                try await  DataService.shared
+                                    .createLocation(name: spotName,
+                                                    description: description,
+                                                    hashtag: hashtags,
+                                                    image: image, mapItem: mapitem)
+               isPosting = false
+               completeForm = true
             } catch {
                 errorMessage = error.localizedDescription
                 showAlert.toggle()

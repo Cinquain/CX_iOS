@@ -40,7 +40,7 @@ final class DataService {
         return locations
     }
     
-    func createLocation(name: String, description: String, hashtag: String, image: UIImage, mapItem: MKMapItem) async throws -> Bool {
+    func createLocation(name: String, description: String, hashtag: String, image: UIImage, mapItem: MKMapItem) async throws {
         let ref = locationsRef.document()
         let spotId = ref.documentID
         let increment: Double = 1
@@ -74,7 +74,6 @@ final class DataService {
             ]
             try await ref.setData(data)
             try await userRef.updateData(streetcredData)
-            return true
         } catch  {
             throw error
         }
@@ -118,13 +117,14 @@ final class DataService {
         }
     }
     
-    func checkinLocation(spot: Location, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func checkinLocation(spot: Location) async throws {
         let spotRef = locationsRef.document(spot.id)
         guard let uid = Auth.auth().currentUser?.uid else {return}
        
         let userStampsCollectionRef = privatesRef.document(uid).collection(Server.stamps).document()
+        let spotCheckinsRef = spotRef.collection(Server.checkIns).document(uid)
         let stampId = userStampsCollectionRef.documentID
-
+        let userRef = usersRef.document(uid)
         //Save the stamp to user stamp archives
         let data: [String: Any] = [
             Stamp.CodingKeys.id.rawValue: stampId,
@@ -137,36 +137,29 @@ final class DataService {
             Stamp.CodingKeys.dateCreated.rawValue: Timestamp(),
             Stamp.CodingKeys.stampImageUrl.rawValue: spot.imageUrl
         ]
-        userStampsCollectionRef.setData(data) { [weak self] error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            //Save user to checkin collection of spot
-            let spotData: [String: Any] = [
-                User.CodingKeys.id.rawValue: uid,
-                Stamp.CodingKeys.dateCreated.rawValue: Timestamp()
-            ]
-            let spotCheckinsRef = spotRef.collection(Server.checkIns).document(uid)
-            spotCheckinsRef.setData(spotData)
+        
+        let spotData: [String: Any] = [
+            User.CodingKeys.id.rawValue: uid,
+            Stamp.CodingKeys.dateCreated.rawValue: Timestamp(),
             
-            //Increment the spot checkin count by 1
-            let increment: Double = 1
-            let incrementData: [String: Any] = [
-                Location.CodingKeys.checkinCount.rawValue: FieldValue.increment(increment)
-            ]
-            spotRef.updateData(incrementData)
-            
-            
-            //Increment the user streetcred
-            let streetcredIncrement: Double = 2
-            let streetCredData: [String: Any] = [
-                User.CodingKeys.StreetCred.rawValue: FieldValue.increment(streetcredIncrement)
-            ]
-            self?.usersRef.document(uid).updateData(streetCredData)
-            completion(.success(true))
-            return
-        }
+        ]
+        
+        //Increment the spot checkin count by 1
+        let increment: Double = 1
+        let incrementData: [String: Any] = [
+            Location.CodingKeys.checkinCount.rawValue: FieldValue.increment(increment)
+        ]
+        
+        let streetcredIncrement: Double = 2
+        let streetCredData: [String: Any] = [
+            User.CodingKeys.StreetCred.rawValue: FieldValue.increment(streetcredIncrement)
+        ]
+        
+        try await userStampsCollectionRef.setData(data)
+        try await spotCheckinsRef.setData(spotData)
+        try await spotRef.updateData(incrementData)
+        try await userRef.updateData(streetCredData)
+
     }
     
     
@@ -220,6 +213,16 @@ final class DataService {
         return users
     }
     
+    func uploadStreetPass(imageUrl: String, username: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let ref = usersRef.document(uid)
+        
+        let data: [String: Any] = [
+            User.CodingKeys.imageUrl.rawValue: imageUrl,
+            User.CodingKeys.username.rawValue: username
+        ]
+        try await ref.setData(data)
+    }
     
     
     //MARK: MESSAGING FUNCTIONS

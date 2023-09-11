@@ -67,16 +67,16 @@ struct WaveRequestView: View {
                     }, label: {
                         HStack(spacing: 2) {
                             Text("Nah")
-                                .foregroundColor(Color.stamp.opacity(0.7))
+                                .foregroundColor(Color.red.opacity(0.7))
                             Image(systemName: "scissors")
-                                .foregroundColor(Color.stamp.opacity(0.7))
+                                .foregroundColor(Color.red.opacity(0.7))
                                 .font(.callout)
                         }
                         .padding(.vertical)
                         .frame(width: 150)
                         .background(
                             Capsule()
-                                .stroke(Color.stamp.opacity(0.7), lineWidth: 2)
+                                .stroke(Color.red.opacity(0.7), lineWidth: 2)
                         )
                         .shadow(radius: 6)
                         
@@ -94,7 +94,7 @@ struct WaveRequestView: View {
                         }
                         .padding(.vertical)
                         .frame(width: 150)
-                        .background(Color.cx_green.opacity(0.7))
+                        .background(Color.green.opacity(0.7))
                         .clipShape(Capsule())
                         .shadow(radius: 6)
                     })

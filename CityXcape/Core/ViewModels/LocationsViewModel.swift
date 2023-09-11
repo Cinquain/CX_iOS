@@ -99,25 +99,21 @@ class LocationsViewModel: ObservableObject {
 //        }
         
         //Give User a Stamp
-        DataService.shared.checkinLocation(spot: spot, completion: { [weak self] result in
-            guard let self = self else {return}
-            switch result {
-            case .success(let result):
-                self.showStamp = result
-            case .failure(let error):
-                self.alertMessage = error.localizedDescription
-                self.showAlert.toggle()
-            }
-        })
-        
         Task {
-            self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: spot.id)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                //Show user list of others in the spot
-                self.showCheckinList = true
-                self.statuses[2] = true
-                self.offset = 100
-            })
+            do {
+                try await DataService.shared.checkinLocation(spot: spot)
+                self.showStamp = true
+                self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: spot.id)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+                    //Show user list of others in the spot
+                    self.showCheckinList = true
+                    self.statuses[2] = true
+                    self.offset = 100
+                })
+            } catch {
+                alertMessage = error.localizedDescription
+                self.showAlert = true
+            }
         }
     }
     

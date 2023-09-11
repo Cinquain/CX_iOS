@@ -75,10 +75,11 @@ struct LocationsView: View {
     func HeaderView() -> some View {
         VStack(spacing: 0) {
             HStack {
-                    Image("Logo White")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 60)
+                    Text("\(Image("pin_feed")) Locations Nearby")
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .fontWeight(.thin)
+                    
                 
                 Spacer()
                 

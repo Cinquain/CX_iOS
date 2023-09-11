@@ -13,6 +13,8 @@ struct LocationView: View {
     
     @EnvironmentObject private var vm: LocationsViewModel
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var spM: StreetPassViewModel
+
 
     let spot: Location
     

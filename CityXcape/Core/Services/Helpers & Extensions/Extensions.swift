@@ -287,7 +287,7 @@ extension Color {
     }
     
     static var cx_green: Color {
-        return Color("CX_Green")
+        return Color("CX_Gree")
     }
     
     static var random: Color {

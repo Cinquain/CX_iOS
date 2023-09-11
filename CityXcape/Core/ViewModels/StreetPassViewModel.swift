@@ -20,12 +20,13 @@ class StreetPassViewModel: NSObject, ObservableObject {
     }
     
     @Published var profileImage: UIImage?
-    @Published var errorMessage: String = ""
+    @Published var alertMessage: String = ""
     @Published var showAlert: Bool = false
-    @Published var profileUrl: String = "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2Fpexels-mahdi-chaghari-13634600.jpg?alt=media&token=81e87218-43fa-4cd7-80ea-c556cde704d8"
-    
+    @Published var isUploading: Bool = false
   
-    
+    @Published var username: String = ""
+    @Published var profileUrl: String = ""
+    @Published var success: Bool = false
     
 }
 
@@ -42,11 +43,40 @@ extension StreetPassViewModel {
                     self.profileUrl = imageUrl
                 })
             } catch {
-                errorMessage = error.localizedDescription
+                alertMessage = error.localizedDescription
                 showAlert.toggle()
                 return
             }
         }
+    }
+    
+    func createStreetPass() {
+        isUploading = true
+        if profileImage == nil {
+            alertMessage = "Please upload a picture for your street id card"
+            showAlert.toggle()
+            isUploading = false
+            return
+        }
+        
+        if username.count < 3 {
+            alertMessage = "Username needs to be at least 3 characters long"
+            showAlert.toggle()
+            isUploading = false
+            return
+        }
+        
+        Task {
+            do {
+                try await DataService.shared.uploadStreetPass(imageUrl: profileUrl, username: username)
+                self.success = true 
+            } catch {
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
+      
+        
     }
     
     

@@ -11,6 +11,10 @@ import AsyncButton
 struct SignUpView: View {
     
     @Environment(\.dismiss) private var dismiss
+    @State private var createStreetPass: Bool = false
+    @State private var showError: Bool = false
+    @State private var errorMessage: String = ""
+    @EnvironmentObject private var spM: StreetPassViewModel
 
     
     var body: some View {
@@ -44,6 +48,9 @@ struct SignUpView: View {
                 .frame(width: 300)
                 .clipShape(Circle())
                 .shadow(color: .orange, radius:10)
+                .fullScreenCover(isPresented: $createStreetPass) {
+                    SignUpViewII(vm: spM)
+                }
                 
             Text("SIGN IN WITH")
                 .foregroundColor(.white)
@@ -57,7 +64,14 @@ struct SignUpView: View {
     func SignInButtons() -> some View {
         HStack {
             AsyncButton {
-                    try? await AuthService.shared.startSignInWithGoogleFlow()
+                do {
+                    try await AuthService.shared.startSignInWithGoogleFlow()
+                    createStreetPass = true
+                } catch {
+                    errorMessage = error.localizedDescription
+                    showError.toggle()
+                }
+                 
             } label: {
                 Image("Google-Symbol")
                     .resizable()
@@ -68,6 +82,7 @@ struct SignUpView: View {
             
             Button {
                     AuthService.shared.startSignInWithAppleFlow()
+                    createStreetPass = true
             } label: {
                 Image("apple-emblem")
                     .resizable()

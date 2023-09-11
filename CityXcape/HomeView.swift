@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject private var vm: LocationsViewModel
     @StateObject var mapVM = MapViewModel()
+    @StateObject var spVM = StreetPassViewModel()
 
     @State var selection: Int = 0
     @State var currentSpot: Location?
@@ -20,6 +21,7 @@ struct HomeView: View {
         TabView(selection: $selection) {
             LocationsView()
                 .environmentObject(vm)
+                .environmentObject(spVM)
                 .tag(0)
                 .tabItem {
                     Image(Tab.locations.rawValue)
@@ -46,7 +48,7 @@ struct HomeView: View {
                 }
             
            
-            StreetPass(user: User.demo)
+            StreetPass(user: User.demo, vm: spVM)
                 .tag(3)
                 .tabItem {
                     Image(systemName: Tab.profile.rawValue)

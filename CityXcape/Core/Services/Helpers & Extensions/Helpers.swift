@@ -47,7 +47,7 @@ enum Tab: String, CaseIterable {
         case .profile:
             return "Profile"
         case .connections:
-        return "Connections"
+        return "Messages"
         }
        
     }
