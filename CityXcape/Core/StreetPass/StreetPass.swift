@@ -48,7 +48,7 @@ struct StreetPass: View {
                 .fontWeight(.thin)
                 .foregroundColor(.white)
                 .tracking(4)
-                .opacity(0.5)
+                .opacity(0.7)
             Spacer()
             Menu {
                 //Sign out user

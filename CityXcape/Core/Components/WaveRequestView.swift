@@ -9,11 +9,17 @@ import SwiftUI
 import UserNotifications
 
 struct WaveRequestView: View {
-    @State private var start = false
     @State private var to: CGFloat = 0
     @State private var count: Int = 60
     @State private var timer = Timer.publish(every: 1, on: .main, in:.common)
                                     .autoconnect()
+    
+    @State private var minutes: Int = 15
+    @State private var seconds: Int = 0
+    @State private var isStarted: Bool = false
+    @State private var timerString: String = ""
+    @State private var totalSeconds: Int = 0
+    @State private var staticTotalSeconds: Int = 0
     
     var body: some View {
         ZStack {
@@ -43,20 +49,20 @@ struct WaveRequestView: View {
                     Circle()
                         .trim(from: 0, to: 1)
                         .stroke(Color.gray.opacity(0.2), style: StrokeStyle(lineWidth: 15, lineCap: .round))
-                        .frame(width: 80, height: 80)
+                        .frame(width: 90, height: 90)
                     
                     
                     Circle()
                         .trim(from: 0, to: to)
-                        .stroke(Color.orange, style: StrokeStyle(lineWidth: 15, lineCap: .round))
-                        .frame(width: 80, height: 80)
+                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 15, lineCap: .round))
+                        .frame(width: 90, height: 90)
                         .rotationEffect(.init(degrees: -90))
 
                     VStack {
-                        Text("\(count)")
+                        Text(timerString)
                             .font(.title2)
                             .fontWeight(.thin)
-                            .foregroundColor(.orange)
+                            .foregroundColor(.blue)
                     }
                 }
                
@@ -103,23 +109,13 @@ struct WaveRequestView: View {
             }
         }
         .onAppear {
-            self.start.toggle()
+            startTimer()
             UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert]) { _, _ in
                 //
             }
         }
         .onReceive(self.timer, perform: { (_) in
-            if self.start {
-                if self.count != 0 {
-                    self.count -= 1
-                    withAnimation {
-                        self.to = CGFloat(count) / 60
-                    }
-                } else {
-                    timer.upstream.connect().cancel()
-                    self.notify()
-                }
-            }
+           updateTimer()
         })
     }
     
@@ -127,7 +123,7 @@ struct WaveRequestView: View {
         let content = UNMutableNotificationContent()
         content.title = "Wave has Expired"
         content.body = "Cinquain's request to connect with you has run out of time!"
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(staticTotalSeconds), repeats: false)
         let request = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
         
@@ -142,6 +138,41 @@ struct WaveRequestView: View {
                 .opacity(0.35)
         }
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    func startTimer() {
+        withAnimation(.easeInOut(duration: 0.3)) {isStarted = true}
+        timerString = "\(minutes >= 10 ? "\(minutes):" :"0\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
+        totalSeconds = (minutes * 60) + seconds
+        staticTotalSeconds = totalSeconds
+        notify()
+    }
+    
+    func updateTimer() {
+        totalSeconds -= 1
+        to = CGFloat(totalSeconds) / CGFloat(staticTotalSeconds)
+        to = to < 0 ? 0 : to
+        minutes = (totalSeconds / 60)
+        seconds = (totalSeconds % 60)
+        timerString = "\(minutes >= 10 ? "\(minutes):" :"0\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
+        if minutes == 0 && seconds == 0 {
+            isStarted = false
+            stopTimer()
+            print("Timer Finished")
+        }
+    }
+    
+    func stopTimer() {
+        withAnimation {
+            isStarted = false
+            minutes = 0
+            seconds = 0
+            to = 1
+        }
+        totalSeconds = 0
+        staticTotalSeconds = 0
+        timerString = "00:00"
+        timer.upstream.connect().cancel()
     }
 }
 

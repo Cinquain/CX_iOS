@@ -46,7 +46,7 @@ struct SignUpViewII: View {
                 vm.createStreetPass()
                 if vm.success {dismiss()}
             } label: {
-                Text("Create Streetpass")
+                Text("Get My StreetPass")
                     .fontWeight(.thin)
                     .foregroundColor(.black)
                     .frame(width: 220, height:40)
@@ -79,7 +79,7 @@ struct SignUpViewII: View {
     func StreetPassHeader() -> some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("Get Your STREETPASS")
+                Text("Create Street ID Card")
                     .font(.title2)
                     .fontWeight(.light)
                     .foregroundColor(.white)
@@ -88,7 +88,7 @@ struct SignUpViewII: View {
                 Spacer()
 
             }
-            Text("A StreetPass is a key to the city \(Image("key_feed"))")
+            Text("The StreetPass is your key to the city \(Image("key_feed"))")
                 .foregroundColor(.white)
                 .font(.callout)
                 .fontWeight(.thin)

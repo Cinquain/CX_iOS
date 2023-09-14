@@ -54,6 +54,10 @@ enum Tab: String, CaseIterable {
     
 }
 
+enum Keys: String {
+    case proxy
+}
+
 enum MyError: Error {
     case failedCompression(String)
 }

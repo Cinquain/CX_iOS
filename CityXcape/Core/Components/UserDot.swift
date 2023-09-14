@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 
 struct UserDot: View {
     let width: CGFloat
-    let user: User
+    let imageUrl: String
     let ratio: CGFloat = 1.5
     
     var body: some View {
@@ -20,7 +20,7 @@ struct UserDot: View {
             .scaledToFit()
             .frame(width: width, height: width)
             .overlay(
-                WebImage(url: URL(string: user.imageUrl ?? ""))
+                WebImage(url: URL(string: imageUrl))
                     .resizable()
                     .frame(width: width / ratio, height: width / ratio)
                     .clipShape(Circle())
@@ -30,7 +30,7 @@ struct UserDot: View {
 
 struct UserDot_Previews: PreviewProvider {
     static var previews: some View {
-        UserDot(width: 400, user: User.demo)
+        UserDot(width: 400, imageUrl: User.demo.imageUrl ?? "")
             .previewLayout(.sizeThatFits)
     }
 }

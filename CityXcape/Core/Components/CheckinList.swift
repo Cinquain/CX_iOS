@@ -64,7 +64,7 @@ struct CheckinList: View {
                         Button {
                             currentUser = user
                         } label: {
-                            UserDot(width: 80, user: user)
+                            UserDot(width: 80, imageUrl: user.imageUrl ?? "")
                         }
                         .sheet(item: $currentUser) { user in
                             PublicStreetPass(user: user)

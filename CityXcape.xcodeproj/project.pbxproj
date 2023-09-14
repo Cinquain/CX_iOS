@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		21AB5D642A9CCBD10037FB73 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */; };
 		21ABFC712AAC9A1F00E02285 /* WaveRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ABFC702AAC9A1F00E02285 /* WaveRequestView.swift */; };
+		21ACA93C2AB341EB00B62C16 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ACA93B2AB341EB00B62C16 /* ChatView.swift */; };
 		21ADEB2E2A98D73D002A24CB /* UserDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADEB2D2A98D73D002A24CB /* UserDot.swift */; };
 		21ADEB302A98E7E1002A24CB /* CheckinList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADEB2F2A98E7E1002A24CB /* CheckinList.swift */; };
 		21ADF42C2A9A2CCB00AD2AE8 /* StampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADF42B2A9A2CCB00AD2AE8 /* StampView.swift */; };
@@ -75,6 +76,7 @@
 /* Begin PBXFileReference section */
 		21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		21ABFC702AAC9A1F00E02285 /* WaveRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveRequestView.swift; sourceTree = "<group>"; };
+		21ACA93B2AB341EB00B62C16 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		21ADEB2D2A98D73D002A24CB /* UserDot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDot.swift; sourceTree = "<group>"; };
 		21ADEB2F2A98E7E1002A24CB /* CheckinList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckinList.swift; sourceTree = "<group>"; };
 		21ADF42B2A9A2CCB00AD2AE8 /* StampView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampView.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				21AE60792AA7343E0001BB48 /* MessagePreview.swift */,
 				21AE607B2AA738600001BB48 /* MessagesView.swift */,
 				21AE60812AA7462C0001BB48 /* MessageBubble.swift */,
+				21ACA93B2AB341EB00B62C16 /* ChatView.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -454,6 +457,7 @@
 				21ADEB302A98E7E1002A24CB /* CheckinList.swift in Sources */,
 				21D03E322A8C026C00B07162 /* LocationView.swift in Sources */,
 				21CE839B2AA3411400D86F88 /* BuyWavesView.swift in Sources */,
+				21ACA93C2AB341EB00B62C16 /* ChatView.swift in Sources */,
 				21CE12532A9FACAB00D0889C /* PostForm.swift in Sources */,
 				21AE60802AA7430C0001BB48 /* Message.swift in Sources */,
 				21CDB6132A82A9C500A2E1FD /* Location.swift in Sources */,

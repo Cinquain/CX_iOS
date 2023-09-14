@@ -53,14 +53,14 @@ extension StreetPassViewModel {
     func createStreetPass() {
         isUploading = true
         if profileImage == nil {
-            alertMessage = "Please upload a picture for your street id card"
+            alertMessage = "Upload a photo for your Street ID Card"
             showAlert.toggle()
             isUploading = false
             return
         }
         
         if username.count < 3 {
-            alertMessage = "Username needs to be at least 3 characters long"
+            alertMessage = "Username should be at least 3 characters 😤"
             showAlert.toggle()
             isUploading = false
             return

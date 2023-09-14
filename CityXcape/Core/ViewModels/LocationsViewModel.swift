@@ -120,6 +120,7 @@ class LocationsViewModel: ObservableObject {
     
     func getAllLocations() async throws {
         self.locations = try await DataService.shared.fetchAllLocations()
+        self.locations.sort(by: {$0.distanceFromUser < $1.distanceFromUser})
     }
     
     

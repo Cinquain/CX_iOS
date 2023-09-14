@@ -12,25 +12,25 @@ struct MessageBubble: View {
     var message: Message
     
     var body: some View {
-        if message.fromId == Auth.auth().currentUser?.uid ?? "" {
+        if message.fromId == Auth.auth().currentUser?.uid ?? "oVbS9qDAccXS0aqwHtWXvCYfGv62" {
             HStack {
                 Spacer()
                 HStack {
                     Text(message.content)
-                        .foregroundColor(.orange)
+                        .foregroundColor(.blue)
                 }
                 .padding()
-                .background(.gray)
+                .background(Color.white)
                 .cornerRadius(8)
             }
         } else {
             HStack {
                 HStack {
                     Text(message.content)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                 }
                 .padding()
-                .background(.orange)
+                .background(.blue)
                 .cornerRadius(8)
                 Spacer()
             }

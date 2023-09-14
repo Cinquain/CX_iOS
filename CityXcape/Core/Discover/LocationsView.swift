@@ -75,7 +75,7 @@ struct LocationsView: View {
     func HeaderView() -> some View {
         VStack(spacing: 0) {
             HStack {
-                    Text("\(Image("pin_feed")) Locations Nearby")
+                    Text("\(Image("pin_feed")) Spots Nearby")
                     .font(.title2)
                     .foregroundColor(.white)
                     .fontWeight(.thin)

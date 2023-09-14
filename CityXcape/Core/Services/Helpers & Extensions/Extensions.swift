@@ -290,6 +290,10 @@ extension Color {
         return Color("CX_Gree")
     }
     
+    static var dark_grey: Color {
+        return Color("Dark_Grey")
+    }
+    
     static var random: Color {
         return Color(
             red: .random(in: 0...1),

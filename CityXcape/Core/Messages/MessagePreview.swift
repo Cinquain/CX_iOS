@@ -15,7 +15,7 @@ struct MessagePreview: View {
     var body: some View {
         VStack {
             HStack(spacing: 16) {
-                UserDot(width: 60, user: user)
+                UserDot(width: 60, imageUrl: user.imageUrl ?? "")
 
                 VStack(alignment: .leading) {
                     Text(user.username ?? "")
