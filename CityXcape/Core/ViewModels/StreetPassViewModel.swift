@@ -79,6 +79,27 @@ extension StreetPassViewModel {
         
     }
     
+    func signOut() {
+        //Sign out & clear user defaults
+        do {
+            try AuthService.shared.signOut()
+        } catch {
+            alertMessage = error.localizedDescription
+            showAlert.toggle()
+        }
+    }
+    
+    func deleteAccount() {
+        Task {
+            do {
+                try await DataService.shared.deleteUser()
+            } catch {
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
+    }
+    
     
     
 }

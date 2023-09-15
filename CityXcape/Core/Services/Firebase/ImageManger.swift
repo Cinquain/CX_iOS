@@ -60,16 +60,16 @@ class ImageManager: NSObject {
     }
     
     //MARK: DELETE FUNCTIONS
-    func deleteUserProfile(uid: String) async {
+    func deleteUserProfile(uid: String) async throws {
         let userPath = "users/\(uid)"
         let path = storageRef.reference(withPath: userPath)
-        try? await path.delete()
+        try await path.delete()
     }
     
-    func deleteSpotImage(spotId: String) async {
+    func deleteSpotImage(spotId: String) async throws {
         let locationPath = "posts/\(spotId)"
         let path = storageRef.reference(withPath: locationPath)
-        try? await path.delete()
+        try await path.delete()
     }
     
     fileprivate func uploadImage(path: StorageReference, image: UIImage) async throws -> String {

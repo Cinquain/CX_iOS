@@ -18,6 +18,7 @@ struct Server {
     static let saves = "saves"
     static let messages = "messages"
     static let stamps = "stamps"
+    static let recentMessages = "recentMessage"
 }
 
 struct AppUserDefaults {

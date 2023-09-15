@@ -52,11 +52,11 @@ struct StreetPass: View {
             Spacer()
             Menu {
                 //Sign out user
-                Button(action: signOut) {
+                Button(action: vm.signOut) {
                        Label("Signout", systemImage: "point.filled.topleft.down.curvedto.point.bottomright.up")
                    }
                 
-                Button(action: signOut) {
+                Button(action: vm.deleteAccount) {
                        Label("Delete Account", systemImage: "power.circle")
                    }
             } label: {
@@ -108,19 +108,7 @@ struct StreetPass: View {
         
     }
     
-    func signOut() {
-        //Sign out & clear user defaults
-    }
-    
-    func deleteAccount() {
-        //Delete auth
-        
-        //Delete Firestorage photos
-        
-        //Delete Firestore database
-        
-        //Delete all location user posted
-    }
+
     
     
 }

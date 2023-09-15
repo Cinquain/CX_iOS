@@ -13,7 +13,7 @@ struct Stamp: Identifiable, Equatable, Codable {
     let id: String
     let spotName: String
     let spotId: String
-    let dateCreated: Date
+    let timestamp: Date
     let longitude: Double
     let latitude: Double
     let stampImageUrl: String
@@ -34,15 +34,15 @@ struct Stamp: Identifiable, Equatable, Codable {
         self.stampImageUrl = data[Stamp.CodingKeys.stampImageUrl.rawValue] as? String ?? ""
         self.likeCount = data[Stamp.CodingKeys.likeCount.rawValue] as? Int ?? 0
         self.ownerId = data[Stamp.CodingKeys.ownerId.rawValue] as? String ?? ""
-        let timestamp =  data[Stamp.CodingKeys.dateCreated.rawValue] as? Timestamp
-        self.dateCreated = timestamp?.dateValue() ?? Date()
+        let timestamp =  data[Stamp.CodingKeys.timestamp.rawValue] as? Timestamp
+        self.timestamp = timestamp?.dateValue() ?? Date()
     }
     
     enum CodingKeys: String, CodingKey {
         case id
         case spotName
         case spotId
-        case dateCreated = "date_created"
+        case timestamp
         case longitude
         case latitude
         case stampImageUrl = "stamp_imageUrl"

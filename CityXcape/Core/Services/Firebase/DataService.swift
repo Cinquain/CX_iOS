@@ -22,7 +22,9 @@ final class DataService {
     var locationsRef = DB.collection(Server.locations)
     var worldsRef = DB.collection(Server.worlds)
     var privatesRef = DB.collection(Server.privates)
+    var messageRef = DB.collection(Server.messages)
     var chatListener: ListenerRegistration?
+    var recentMessageListener: ListenerRegistration?
     
     //MARK: LOCATION FUNCTIONS
     func fetchAllLocations() async throws -> [Location] {
@@ -134,13 +136,13 @@ final class DataService {
             Stamp.CodingKeys.latitude.rawValue: spot.latitude,
             Stamp.CodingKeys.longitude.rawValue: spot.longitude,
             Stamp.CodingKeys.likeCount.rawValue: 0,
-            Stamp.CodingKeys.dateCreated.rawValue: Timestamp(),
+            Stamp.CodingKeys.timestamp.rawValue: Timestamp(),
             Stamp.CodingKeys.stampImageUrl.rawValue: spot.imageUrl
         ]
         
         let spotData: [String: Any] = [
             User.CodingKeys.id.rawValue: uid,
-            Stamp.CodingKeys.dateCreated.rawValue: Timestamp(),
+            Stamp.CodingKeys.timestamp.rawValue: Timestamp(),
             
         ]
         
@@ -224,57 +226,113 @@ final class DataService {
         try await ref.setData(data)
     }
     
+    func deleteUser() async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        try await ImageManager.shared.deleteUserProfile(uid: uid)
+        try await usersRef.document(uid).delete()
+        try await Auth.auth().currentUser?.delete()
+    }
+    
     
     //MARK: MESSAGING FUNCTIONS
     func getMessages(userId: String, completion: @escaping(Result<[Message], Error>) -> ()) {
         guard let uid  = Auth.auth().currentUser?.uid else {return}
         var messages: [Message] = []
-        chatListener = privatesRef
-            .document(uid)
-            .collection(userId)
-            .addSnapshotListener({ snapshot, error in
-                if let error = error {
-                    print("Error fetching messages for user")
-                    completion(.failure(error))
-                }
-                
-                snapshot?.documentChanges.forEach({ change in
-                    if change.type == .added {
-                        let data = change.document.data()
-                        let message = Message(data: data)
-                        messages.append(message)
+        chatListener = messageRef
+                .document(uid)
+                .collection(userId)
+                .addSnapshotListener({ snapshot, error in
+                    if let error = error {
+                        print("Error fetching messages for user")
+                        completion(.failure(error))
+                    }
+                    
+                    snapshot?.documentChanges.forEach({ change in
+                        if change.type == .added {
+                            let data = change.document.data()
+                            let message = Message(data: data)
+                            messages.append(message)
+                        }
+                    })
+                    DispatchQueue.main.async {
+                        completion(.success(messages))
                     }
                 })
-                DispatchQueue.main.async {
-                    completion(.success(messages))
-                }
-            })
     }
     
     func sendMessage(user: User, content: String) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
-        let fromReference = privatesRef.document(Server.messages).collection(uid).document()
-        let toFeference = privatesRef.document(Server.messages).collection(user.id).document(fromReference.documentID)
+        let fromReference = messageRef.document(uid).collection(user.id).document()
+        let toFeference = messageRef.document(user.id).collection(uid).document()
         
         let data: [String: Any] = [
             Message.CodingKeys.id.rawValue: fromReference.documentID,
             Message.CodingKeys.fromId.rawValue: uid,
             Message.CodingKeys.toId.rawValue: user.id,
             Message.CodingKeys.content.rawValue: content,
-            Message.CodingKeys.date.rawValue: Timestamp()
+            Message.CodingKeys.timestamp.rawValue: Timestamp()
         ]
         
         do {
             try await toFeference.setData(data)
             try await fromReference.setData(data)
+            try await persistRecentMessage(id: user.id, data: data)
         }catch {
             throw error
         }
+    }
+    
+    func persistRecentMessage(id: String, data: [String: Any]) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let recentRef = privatesRef
+                            .document(Server.recentMessages)
+                            .collection(id).document(uid)
+        
+        try await recentRef.setData(data)
     }
     
     func removeChatListener() {
         chatListener?.remove()
         print("Removing chat listner")
     }
+    
+    func fetchRecentMessages(completion: @escaping (Result<[RecentMessage], Error>) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        var messages: [RecentMessage] = []
+        
+        recentMessageListener = privatesRef
+                .document(Server.recentMessages)
+                .collection(uid)
+                .addSnapshotListener({ querySnapshot, error in
+                    if let error = error {
+                        print("Error fetching recent messages", error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                    
+                    guard let snapshot = querySnapshot else {return}
+                    
+                    snapshot.documentChanges.forEach { change in
+                        if change.type == .added {
+                            let data = change.document.data()
+                            let message = RecentMessage(data: data)
+                            messages.insert(message, at: 0)
+                        }
+                    }
+                    completion(.success(messages))
+                })
+    }
+    
+    
+    func deleteRecentMessage(userId: String) {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        privatesRef
+            .document(uid)
+            .collection(Server.recentMessages)
+            .document(userId)
+            .delete()
+    }
+    
+    
     
 }
