@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChatView: View {
-    let recent: RecentMessage
+    let user: User
     @StateObject var vm: MessageViewModel
     
     var body: some View {
@@ -20,6 +20,7 @@ struct ChatView: View {
                 chatBottomBar()
             }
         }
+        .toolbar(.hidden, for: .tabBar)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -27,8 +28,8 @@ struct ChatView: View {
             }
         }
         .onAppear {
-            vm.fetchMessages(uid: recent.fromId)
-            vm.deleteRecentMessage(uid: recent.fromId)
+            vm.fetchMessages(uid: user.id)
+            vm.deleteRecentMessage(uid: user.id)
         }
         .onDisappear {
             vm.removeListener()
@@ -78,7 +79,7 @@ struct ChatView: View {
                 .clipShape(Capsule())
             
             Button {
-                vm.sendMessage(uid: recent.fromId)
+                vm.sendMessage(uid: user.id)
             } label: {
                 Text("Send")
                     .foregroundColor(.white)
@@ -97,8 +98,8 @@ struct ChatView: View {
     @ViewBuilder
     func header() -> some View {
         HStack(spacing: 2) {
-            UserDot(width: 35, imageUrl: recent.profileUrl)
-            Text(recent.displayName)
+            UserDot(width: 35, imageUrl: user.imageUrl)
+            Text(user.username)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
         }
@@ -111,7 +112,7 @@ struct ChatView: View {
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ChatView(recent: RecentMessage.demo, vm: MessageViewModel())
+            ChatView(user: User.demo, vm: MessageViewModel())
         }
     }
 }

@@ -36,17 +36,15 @@ struct SpotThumbnail: View {
                         .foregroundColor(.gray)
                         .font(.callout)
                     
-                    Image("Honeycomb")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 17)
+                    Image(systemName: "person.2.fill")
+                        .font(.callout)
+                        .foregroundColor(.gray)
                         .padding(.leading, 5)
                     
                     Text("\(spot.checkinCount)")
                         .font(.callout)
                         .foregroundColor(.white)
                         .fontWeight(.thin)
-                        .padding(.leading, 3)
 
                     
                     

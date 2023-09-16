@@ -56,7 +56,7 @@ final class DataService {
 
 
         let streetcredData: [String: Any] = [
-            User.CodingKeys.StreetCred.rawValue: FieldValue.increment(increment)
+            User.CodingKeys.streetCred.rawValue: FieldValue.increment(increment)
         ]
               
    
@@ -154,7 +154,7 @@ final class DataService {
         
         let streetcredIncrement: Double = 2
         let streetCredData: [String: Any] = [
-            User.CodingKeys.StreetCred.rawValue: FieldValue.increment(streetcredIncrement)
+            User.CodingKeys.streetCred.rawValue: FieldValue.increment(streetcredIncrement)
         ]
         
         try await userStampsCollectionRef.setData(data)

@@ -22,15 +22,23 @@ struct MessagesView: View {
                     .frame(height: 40)
                 
                 ScrollView {
-                    ForEach(vm.connections) {
-                        MessagePreview(user: $0)
+                    ForEach(vm.recentMessages) { message in
+                        NavigationLink {
+                            ChatView(user: User(message: message), vm: vm)
+                        } label: {
+                            MessagePreview(message: message)
+                        }
                     }
                 }
+                
+                newMessageButton()
+
             }
             .navigationBarHidden(true)
             
         }
         .colorScheme(.dark)
+      
         //End of some view
     }
     
@@ -42,7 +50,7 @@ struct MessagesView: View {
                 .resizable()
                 .scaledToFit()
             .frame(height: 20)
-            Text("\(vm.connections.count) Connections")
+            Text("\(vm.recentMessages.count) Pending Connections")
                 .fontWeight(.thin)
             Spacer()
             Button {
@@ -53,6 +61,29 @@ struct MessagesView: View {
             }
         }
         .padding(.horizontal, 10)
+    }
+    
+    @ViewBuilder
+    func newMessageButton() -> some View {
+        
+        HStack {
+            Spacer()
+            NavigationLink {
+                ConnectionsView(vm: vm)
+            } label: {
+                
+            Image(systemName: "message.fill")
+                .frame(width: 60, height: 60)
+                .font(.title2)
+                .foregroundColor(.black)
+                .background(.orange)
+                .cornerRadius(42)
+                .padding(.horizontal)
+
+            }
+        }
+
+
     }
     
 

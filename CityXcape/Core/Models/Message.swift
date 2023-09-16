@@ -138,7 +138,8 @@ struct RecentMessage: Identifiable, Hashable, Codable {
         RecentMessage.CodingKeys.content.rawValue: "When we leaving to the lounge",
         RecentMessage.CodingKeys.timestamp.rawValue: Date(),
         RecentMessage.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FwHlDbRkHtUnlbX5g6PgN%2F7-min.jpg?alt=media&token=6ddfed73-025a-4d76-b0b7-ea6f458a2fd0",
-        RecentMessage.CodingKeys.displayName.rawValue: "Amanda"
+        RecentMessage.CodingKeys.displayName.rawValue: "Amanda",
+        RecentMessage.CodingKeys.isWave.rawValue: true
     ]
     
     static let demo = RecentMessage(data: data)

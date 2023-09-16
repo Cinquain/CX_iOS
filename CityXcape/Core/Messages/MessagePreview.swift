@@ -10,20 +10,20 @@ import SwiftUI
 struct MessagePreview: View {
     
     //User for now, Message Model Later
-    var user: User
+    var message: RecentMessage
     
     var body: some View {
         VStack {
             HStack(spacing: 16) {
-                UserDot(width: 60, imageUrl: user.imageUrl ?? "")
+                UserDot(width: 60, imageUrl: message.profileUrl)
 
                 VStack(alignment: .leading) {
-                    Text(user.username ?? "")
+                    Text(message.displayName)
                         .font(.callout)
                         .foregroundColor(.white)
                         .fontWeight(.medium)
                     
-                    Text("When are you coming over")
+                    Text(message.content)
                         .fontWeight(.thin)
                         .foregroundColor(.white)
                         .lineLimit(1)
@@ -32,7 +32,7 @@ struct MessagePreview: View {
                 
                 Spacer()
                 
-                Text(user.joinDate.timeAgo())
+                Text(message.timestamp.timeAgo())
                     .font(.system(size: 14, weight: .semibold))
                     .fontWeight(.light)
                     .foregroundColor(.white)
@@ -56,6 +56,6 @@ struct MessagePreview: View {
 
 struct MessagePreview_Previews: PreviewProvider {
     static var previews: some View {
-        MessagePreview(user: User.demo)
+        MessagePreview(message: RecentMessage.demo)
     }
 }

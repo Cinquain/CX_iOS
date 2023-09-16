@@ -11,22 +11,17 @@ import FirebaseFirestore
 struct User: Identifiable, Equatable, Codable {
     
     let id: String
-    let username: String?
-    let imageUrl: String?
+    let username: String
+    let imageUrl: String
+    
     let bio: String?
     let fcmToken: String?
     
     //World Information
-    let worldName: String?
-    let worldImageUrl: String?
-    let joinDate: Date
+    let joinDate: Date?
     
     //User Profile
-    let age: Int?
-    let gender: String?
-    let StreetCred: Int?
-    let rank: String?
-    let worldId: String?
+    let streetCred: Int?
     let footprint: [String: Int]?
     let saves: [String: Int]?
 //
@@ -40,24 +35,34 @@ struct User: Identifiable, Equatable, Codable {
     
     init(data: [String: Any]) {
         self.id = data[User.CodingKeys.id.rawValue] as? String ?? ""
-        self.username = data[User.CodingKeys.username.rawValue] as? String ?? nil
-        self.imageUrl = data[User.CodingKeys.imageUrl.rawValue] as? String ?? nil
+        self.username = data[User.CodingKeys.username.rawValue] as? String ?? ""
+        self.imageUrl = data[User.CodingKeys.imageUrl.rawValue] as? String ?? ""
         self.bio = data[User.CodingKeys.bio.rawValue] as? String ?? nil
         self.fcmToken = data[User.CodingKeys.fcmToken.rawValue] as? String ?? nil
-        self.worldName = data[User.CodingKeys.worldName.rawValue] as? String ?? nil
-        self.worldImageUrl = data[User.CodingKeys.worldImageUrl.rawValue] as? String ?? nil
         let timestamp = data[User.CodingKeys.joinDate.rawValue] as? Timestamp
         self.joinDate = timestamp?.dateValue() ?? Date()
-        self.age = data[User.CodingKeys.age.rawValue] as? Int ?? nil
-        self.gender = data[User.CodingKeys.gender.rawValue] as? String ?? nil
-        self.StreetCred = data[User.CodingKeys.StreetCred.rawValue] as? Int ?? nil
-        self.rank = data[User.CodingKeys.rank.rawValue] as? String ?? nil
-        self.worldId = data[User.CodingKeys.worldId.rawValue] as? String ?? nil
+        self.streetCred = data[User.CodingKeys.streetCred.rawValue] as? Int ?? nil
         self.footprint = data[User.CodingKeys.footprint.rawValue] as? [String: Int] ?? nil
         self.saves = data[User.CodingKeys.saves.rawValue] as? [String: Int] ?? nil
         self.email = data[User.CodingKeys.email.rawValue] as? String ?? nil
         self.phone = data[User.CodingKeys.phone.rawValue] as? String ?? nil
     }
+    
+    init(message: RecentMessage) {
+        self.id = message.fromId
+        self.imageUrl = message.profileUrl
+        self.username = message.displayName
+        self.bio = nil
+        self.fcmToken = nil
+        self.streetCred = nil
+        self.joinDate = nil
+        self.email = nil
+        self.phone = nil
+        self.footprint = nil
+        self.saves = nil
+    }
+    
+    
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -65,14 +70,8 @@ struct User: Identifiable, Equatable, Codable {
         case imageUrl
         case bio
         case fcmToken
-        case worldName = "world_name"
-        case worldImageUrl = "world_ImageUrl"
         case joinDate
-        case age
-        case gender
-        case StreetCred
-        case rank
-        case worldId
+        case streetCred
         case footprint
         case saves
         case email

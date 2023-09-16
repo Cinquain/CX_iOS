@@ -18,6 +18,7 @@ class MessageViewModel: ObservableObject {
     @Published var message: String = ""
     @Published var errorMessage: String = ""
     @Published var showAlert: Bool = false
+    @Published var showConnections: Bool = false 
     
     
     func sendMessage(uid: String) {
