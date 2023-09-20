@@ -20,7 +20,6 @@ struct ChatView: View {
                 chatBottomBar()
             }
         }
-        .toolbar(.hidden, for: .tabBar)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {

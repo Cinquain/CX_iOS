@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MessagePreview: View {
+struct WavePreview: View {
     
     //User for now, Message Model Later
     var message: RecentMessage
@@ -24,20 +24,22 @@ struct MessagePreview: View {
                         .fontWeight(.medium)
                     
                     Text(message.content)
-                        .fontWeight(.thin)
                         .foregroundColor(.white)
+                        .fontWeight(.thin)
                         .lineLimit(1)
                     
                 }
                 
                 Spacer()
-                
+
                 Text(message.timestamp.timeAgo())
                     .font(.system(size: 14, weight: .semibold))
                     .fontWeight(.light)
+                    .frame(width: 70)
                     .foregroundColor(.white)
-                    .frame(width: 60)
                     .lineLimit(1)
+                
+                
             
             }
             
@@ -56,6 +58,6 @@ struct MessagePreview: View {
 
 struct MessagePreview_Previews: PreviewProvider {
     static var previews: some View {
-        MessagePreview(message: RecentMessage.demo)
+        WavePreview(message: RecentMessage.demo)
     }
 }

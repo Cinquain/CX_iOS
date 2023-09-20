@@ -11,7 +11,8 @@ import PhotosUI
 struct StreetPass: View {
     
     let user: User
-    @StateObject var vm: StreetPassViewModel
+    @EnvironmentObject private var vm: StreetPassViewModel
+
     
     var body: some View {
         
@@ -115,6 +116,7 @@ struct StreetPass: View {
 
 struct StreetPass_Previews: PreviewProvider {
     static var previews: some View {
-        StreetPass(user: User.demo, vm: StreetPassViewModel())
+        StreetPass(user: User.demo)
+            .environmentObject(StreetPassViewModel())
     }
 }

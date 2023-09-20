@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 
 
@@ -37,7 +38,8 @@ enum Tab: String, CaseIterable {
     case locations = "tab2"
     case post = "mappin.square.fill"
     case profile = "person.text.rectangle.fill"
-    case connections = "message.fill"
+    case messages = "message.fill"
+    case waves = "hands.sparkles.fill"
     
     var title: String {
         switch self {
@@ -47,12 +49,56 @@ enum Tab: String, CaseIterable {
             return "Post"
         case .profile:
             return "Profile"
-        case .connections:
+        case .messages:
         return "Messages"
+        case .waves:
+            return "Waves"
         }
        
     }
     
+}
+
+struct swipeModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(.white)
+            .font(.system(size: 128))
+            .shadow(color: Color(UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)), radius: 12, x: 0, y: 0)
+    }
+}
+
+enum DragState {
+    case inactive
+    case pressing
+    case dragging(translation: CGSize)
+    
+    var translation: CGSize {
+        switch self {
+        case .inactive, .pressing:
+            return .zero
+        case .dragging(let translation):
+            return translation
+        }
+    }
+    
+    var isDragging: Bool {
+        switch self {
+        case .pressing, .inactive:
+            return false
+        case .dragging:
+            return true
+        }
+    }
+    
+    var isPressing: Bool {
+        switch self {
+        case .inactive:
+            return false
+        case .pressing, .dragging:
+            return true
+        }
+    }
 }
 
 enum Keys: String {

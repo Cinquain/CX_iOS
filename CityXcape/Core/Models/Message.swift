@@ -85,7 +85,8 @@ struct Message: Identifiable, Hashable, Codable {
 }
 
 
-struct RecentMessage: Identifiable, Hashable, Codable {
+final class  RecentMessage: Identifiable, Hashable, Codable {
+  
     let id: String
     let fromId: String
     let toId: String
@@ -93,7 +94,7 @@ struct RecentMessage: Identifiable, Hashable, Codable {
     let content: String
     let profileUrl: String
     let displayName: String
-    let isWave: Bool
+    var read: Bool
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -103,12 +104,17 @@ struct RecentMessage: Identifiable, Hashable, Codable {
         case timestamp
         case profileUrl = "profile_url"
         case displayName = "display_Name"
-        case isWave
+        case read
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+    
+    static func == (lhs: RecentMessage, rhs: RecentMessage) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     
     init(data: [String: Any]) {
         self.id = data[RecentMessage.CodingKeys.id.rawValue] as? String ?? ""
@@ -119,30 +125,49 @@ struct RecentMessage: Identifiable, Hashable, Codable {
         self.timestamp = time?.dateValue() ?? Date()
         self.profileUrl = data[RecentMessage.CodingKeys.profileUrl.rawValue] as? String ?? ""
         self.displayName = data[RecentMessage.CodingKeys.displayName.rawValue] as? String ?? ""
-        self.isWave = data[RecentMessage.CodingKeys.isWave.rawValue] as? Bool ?? false
+        self.read = data[RecentMessage.CodingKeys.read.rawValue] as? Bool ?? false
        }
     
     
     static let data: [String: Any] = [
-        RecentMessage.CodingKeys.id.rawValue: "eifjoifjoiejoijefoijfeos",
+        RecentMessage.CodingKeys.id.rawValue: "eifjoifjoiejo797744ijefoijfeos",
         RecentMessage.CodingKeys.fromId.rawValue: "oyda5lEqnnt4dqqUr8oV",
-        RecentMessage.CodingKeys.content.rawValue: "When can I come over?",
-        RecentMessage.CodingKeys.timestamp.rawValue: Date(),
+        RecentMessage.CodingKeys.content.rawValue: "Hey how you doing",
+        RecentMessage.CodingKeys.timestamp.rawValue: Date(timeIntervalSinceNow: 100000),
         RecentMessage.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2Foyda5lEqnnt4dqqUr8oV%2F5-min.jpg?alt=media&token=781a7ed9-c9ff-4b89-94f9-ee1f52254f8c",
-        RecentMessage.CodingKeys.displayName.rawValue: "Cinquain"
+        RecentMessage.CodingKeys.displayName.rawValue: "Josh"
     ]
     
     static let data2: [String: Any] = [
-        RecentMessage.CodingKeys.id.rawValue: "oyda5lEqnnt4dqqUr8oV",
-        RecentMessage.CodingKeys.fromId.rawValue: "wHlDbRkHtUnlbX5g6PgN",
+        RecentMessage.CodingKeys.id.rawValue: "oyda5lEqnnt4dqqUr9799979779978oV",
+        RecentMessage.CodingKeys.fromId.rawValue: "wHlDbRkHtU9888998988nlbX5g6PgN",
         RecentMessage.CodingKeys.content.rawValue: "When we leaving to the lounge",
         RecentMessage.CodingKeys.timestamp.rawValue: Date(),
         RecentMessage.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FwHlDbRkHtUnlbX5g6PgN%2F7-min.jpg?alt=media&token=6ddfed73-025a-4d76-b0b7-ea6f458a2fd0",
-        RecentMessage.CodingKeys.displayName.rawValue: "Amanda",
-        RecentMessage.CodingKeys.isWave.rawValue: true
+        RecentMessage.CodingKeys.displayName.rawValue: "Crystal",
+    ]
+    
+    static let data3: [String: Any] = [
+        RecentMessage.CodingKeys.id.rawValue: "eifjoi00598u085085fjoiej99y98y9898oijefoijfeos",
+        RecentMessage.CodingKeys.fromId.rawValue: "oyda5lE9789777878qnnt4dqqUr8oV",
+        RecentMessage.CodingKeys.content.rawValue: "I'm on my way right now",
+        RecentMessage.CodingKeys.timestamp.rawValue: Date(timeIntervalSinceNow: 100000),
+        RecentMessage.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2Fpexels-mahdi-chaghari-13634600.jpg?alt=media&token=81e87218-43fa-4cd7-80ea-c556cde704d8",
+        RecentMessage.CodingKeys.displayName.rawValue: "Amanda"
+    ]
+    
+    static let data4: [String: Any] = [
+        RecentMessage.CodingKeys.id.rawValue: "eifjoifjoie-8850985899809u509joijefoijfeos",
+        RecentMessage.CodingKeys.fromId.rawValue: "oyda5l87878787Eqnnt4dqqUr8oV",
+        RecentMessage.CodingKeys.content.rawValue: "I'm still at work",
+        RecentMessage.CodingKeys.timestamp.rawValue: Date(timeIntervalSinceNow: 100000),
+        RecentMessage.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FW6EUJxka1OihhJ0Iyest%2F2-min.jpg?alt=media&token=1930940d-704f-42b1-aa2b-cd8c919b0161",
+        RecentMessage.CodingKeys.displayName.rawValue: "Cinquain"
     ]
     
     static let demo = RecentMessage(data: data)
     static let demo2 = RecentMessage(data: data2)
+    static let demo3 = RecentMessage(data: data3)
+    static let demo4 = RecentMessage(data: data4)
 
 }

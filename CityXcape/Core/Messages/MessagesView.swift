@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct MessagesView: View {
-    
-    @StateObject var vm = MessageViewModel()
-    
+
+    @EnvironmentObject var vm: MessageViewModel
+
     var body: some View {
         
         NavigationView {
@@ -26,7 +26,7 @@ struct MessagesView: View {
                         NavigationLink {
                             ChatView(user: User(message: message), vm: vm)
                         } label: {
-                            MessagePreview(message: message)
+                            WavePreview(message: message)
                         }
                     }
                 }
@@ -35,6 +35,7 @@ struct MessagesView: View {
 
             }
             .navigationBarHidden(true)
+
             
         }
         .colorScheme(.dark)
@@ -44,21 +45,16 @@ struct MessagesView: View {
     
     @ViewBuilder
     func Header() -> some View {
-        HStack{
+        HStack(spacing: 2){
             Spacer()
             Image("dot")
                 .resizable()
                 .scaledToFit()
             .frame(height: 20)
-            Text("\(vm.recentMessages.count) Pending Connections")
+            Text(vm.connectionText())
                 .fontWeight(.thin)
             Spacer()
-            Button {
-                //New Message Box
-            } label: {
-                Image(systemName: "square.and.pencil")
-                    .font(.title2)
-            }
+         
         }
         .padding(.horizontal, 10)
     }
@@ -87,10 +83,13 @@ struct MessagesView: View {
     }
     
 
+    
+
 }
 
 struct MessagesView_Previews: PreviewProvider {
     static var previews: some View {
         MessagesView()
+            .environmentObject(MessageViewModel())
     }
 }

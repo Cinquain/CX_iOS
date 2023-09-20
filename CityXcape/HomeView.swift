@@ -11,6 +11,7 @@ struct HomeView: View {
     @EnvironmentObject private var vm: LocationsViewModel
     @StateObject var mapVM = MapViewModel()
     @StateObject var spVM = StreetPassViewModel()
+    @StateObject var mesVM = MessageViewModel()
 
     @State var selection: Int = 0
     @State var currentSpot: Location?
@@ -39,17 +40,28 @@ struct HomeView: View {
                     Text(Tab.post.title)
                 }
             
+            WavesView()
+                .tag(2)
+                .badge(3)
+                .tabItem {
+                    Image(systemName: Tab.waves.rawValue)
+                    Text(Tab.waves.title)
+                }
+            
             
             MessagesView()
-                .tag(2)
+                .tag(3)
+                .badge(mesVM.recentMessages.count)
+                .environmentObject(mesVM)
                 .tabItem {
-                    Image(systemName: Tab.connections.rawValue)
-                    Text(Tab.connections.title)
+                    Image(systemName: Tab.messages.rawValue)
+                    Text(Tab.messages.title)
                 }
             
            
-            StreetPass(user: User.demo, vm: spVM)
-                .tag(3)
+            StreetPass(user: User.demo)
+                .tag(4)
+                .environmentObject(spVM)
                 .tabItem {
                     Image(systemName: Tab.profile.rawValue)
                     Text(Tab.profile.title)
