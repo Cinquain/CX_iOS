@@ -44,7 +44,11 @@ struct HomeView: View {
                 .tag(2)
                 .badge(3)
                 .tabItem {
-                    Image(systemName: Tab.waves.rawValue)
+                    Image(Tab.waves.rawValue)
+                        .renderingMode(.template)
+                        .foregroundColor(.white)
+                        
+                        
                     Text(Tab.waves.title)
                 }
             

@@ -39,7 +39,7 @@ enum Tab: String, CaseIterable {
     case post = "mappin.square.fill"
     case profile = "person.text.rectangle.fill"
     case messages = "message.fill"
-    case waves = "hands.sparkles.fill"
+    case waves = "hive_feed"
     
     var title: String {
         switch self {
@@ -52,7 +52,7 @@ enum Tab: String, CaseIterable {
         case .messages:
         return "Messages"
         case .waves:
-            return "Waves"
+            return "Connect"
         }
        
     }

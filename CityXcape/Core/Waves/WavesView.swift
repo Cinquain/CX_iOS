@@ -17,7 +17,7 @@ struct WavesView: View {
         VStack {
             header()
             Divider()
-                .background(Color.white)
+                .background(Color.orange)
                 .frame(height: 0.5)
             
             Spacer()
@@ -37,21 +37,22 @@ struct WavesView: View {
             
          
         }
-        .background(background())
+        .background(AnimationView().edgesIgnoringSafeArea(.all))
     }
     
     
     @ViewBuilder
     func header() -> some View {
         HStack {
-            Image("hive")
+            Image(systemName: "hands.sparkles.fill")
                 .resizable()
+                .foregroundColor(.orange)
                 .scaledToFit()
                 .frame(height: 30)
             
-            Text("Pending Connections")
+            Text("Waves Pending")
                 .font(.title3)
-                .foregroundColor(.white)
+                .foregroundColor(.orange)
                 .fontWeight(.thin)
             Spacer()
         }.padding(.horizontal)

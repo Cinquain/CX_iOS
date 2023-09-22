@@ -19,16 +19,15 @@ struct CardView: View, Identifiable {
     
     var body: some View {
             VStack {
-                header()
 
                 userBubble()
                
                 Spacer()
-                
+                waveMessage()
                 HStack {
-                    location()
                     Spacer()
                     timerView()
+                    Spacer()
                 }
                 .padding(.bottom)
                 .padding(.horizontal)
@@ -37,7 +36,7 @@ struct CardView: View, Identifiable {
             .frame(width: 370, height: 600)
             .overlay(
                    RoundedRectangle(cornerRadius: 12)
-                    .stroke(.white.opacity(0.7), lineWidth: 2)
+                    .stroke(.orange.opacity(0.7), lineWidth: 2)
                )
             .cornerRadius(12)
             .padding(.horizontal)
@@ -88,21 +87,24 @@ struct CardView: View, Identifiable {
     }
     
     @ViewBuilder
-    func header() -> some View {
-        HStack(spacing: 3){
-            Image(systemName: "hands.sparkles.fill")
-                .foregroundColor(.white)
-                .opacity(0.8)
+    func waveMessage() -> some View {
+        
             
+        VStack {
+            Spacer()
             Text("How are you liking this place?")
-                .font(.title3)
-                .foregroundColor(.white)
-                .fontWeight(.thin)
-       
+                    .font(.callout)
+                    .foregroundColor(.black)
+                    .fontWeight(.medium)
+                    .padding()
+                    .background(.orange)
+                    .clipShape(Capsule())
+                    .fontWeight(.thin)
+
             Spacer()
         }
-        .padding(.horizontal)
-        .padding(.top)
+       
+        
     }
     
     @ViewBuilder
@@ -121,12 +123,12 @@ struct CardView: View, Identifiable {
     func background() -> some View {
         ZStack {
             Color.black
-            Image("network")
+            Image("black-paths")
                  .resizable()
                  .scaledToFill()
                  .rotationEffect(Angle(degrees: 180))
-                 .opacity(0.5)
-            LinearGradient(colors: [.black, .clear], startPoint: .top, endPoint: .bottom)
+            
+          
 
         }
         .edgesIgnoringSafeArea(.all)
@@ -148,7 +150,7 @@ struct CardView: View, Identifiable {
                         
                         Circle()
                             .trim(from: 0, to: vm.to)
-                            .stroke(Color.green, style: StrokeStyle(lineWidth: 15, lineCap: .round))
+                            .stroke(Color.orange, style: StrokeStyle(lineWidth: 15, lineCap: .round))
                             .frame(width: 90, height: 90)
                             .rotationEffect(.init(degrees: -90))
 
@@ -159,12 +161,12 @@ struct CardView: View, Identifiable {
                          
                             
                         }
-                        .foregroundColor(.green)
+                        .foregroundColor(.white)
 
                     }
                     Text("CONNECT")
                         .font(.callout)
-                        .foregroundColor(.green)
+                        .foregroundColor(.white)
                         .fontWeight(.thin)
                         .tracking(3)
                 }
