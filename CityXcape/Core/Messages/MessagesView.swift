@@ -31,7 +31,6 @@ struct MessagesView: View {
                     }
                 }
                 
-                newMessageButton()
 
             }
             .navigationBarHidden(true)
@@ -51,36 +50,22 @@ struct MessagesView: View {
                 .resizable()
                 .scaledToFit()
             .frame(height: 20)
-            Text(vm.connectionText())
+            Text("Messages")
                 .fontWeight(.thin)
             Spacer()
+            Button {
+                //Show connections view
+            } label: {
+                Image(systemName: "square.and.pencil")
+                    .font(.title3)
+            }
+
          
         }
         .padding(.horizontal, 10)
     }
     
-    @ViewBuilder
-    func newMessageButton() -> some View {
-        
-        HStack {
-            Spacer()
-            NavigationLink {
-                ConnectionsView(vm: vm)
-            } label: {
-                
-            Image(systemName: "message.fill")
-                .frame(width: 60, height: 60)
-                .font(.title2)
-                .foregroundColor(.black)
-                .background(.orange)
-                .cornerRadius(42)
-                .padding(.horizontal)
 
-            }
-        }
-
-
-    }
     
 
     

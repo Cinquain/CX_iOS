@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21A55A972AC0E18D00ED822B /* MatchAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A55A962AC0E18D00ED822B /* MatchAnimation.swift */; };
 		21AB5D642A9CCBD10037FB73 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */; };
 		21ACA93C2AB341EB00B62C16 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ACA93B2AB341EB00B62C16 /* ChatView.swift */; };
 		21ADEB2E2A98D73D002A24CB /* UserDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADEB2D2A98D73D002A24CB /* UserDot.swift */; };
@@ -78,6 +79,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21A55A962AC0E18D00ED822B /* MatchAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchAnimation.swift; sourceTree = "<group>"; };
 		21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		21ACA93B2AB341EB00B62C16 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		21ADEB2D2A98D73D002A24CB /* UserDot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDot.swift; sourceTree = "<group>"; };
@@ -335,6 +337,7 @@
 				21D730DC2AB8AD6A00D50358 /* CardView.swift */,
 				21D730DE2AB8B3CE00D50358 /* WavesView.swift */,
 				21CE839A2AA3411400D86F88 /* BuyWavesView.swift */,
+				21A55A962AC0E18D00ED822B /* MatchAnimation.swift */,
 			);
 			path = Waves;
 			sourceTree = "<group>";
@@ -472,6 +475,7 @@
 				21D03E382A8C0DB100B07162 /* Particle.swift in Sources */,
 				21DDCEE92A978D960028235C /* MapView.swift in Sources */,
 				21D03E362A8C097100B07162 /* CustomButton.swift in Sources */,
+				21A55A972AC0E18D00ED822B /* MatchAnimation.swift in Sources */,
 				21CF24FA2AA5FDBA009BAF90 /* StreetPassViewModel.swift in Sources */,
 				21DAF7E82A93988F00AC1C28 /* LocationService.swift in Sources */,
 				21ADEB302A98E7E1002A24CB /* CheckinList.swift in Sources */,

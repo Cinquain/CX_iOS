@@ -123,6 +123,7 @@ struct CardView: View, Identifiable {
     func background() -> some View {
         ZStack {
             Color.black
+                .opacity(0.9)
             Image("black-paths")
                  .resizable()
                  .scaledToFill()

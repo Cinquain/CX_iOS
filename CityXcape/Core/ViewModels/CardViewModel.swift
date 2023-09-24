@@ -37,7 +37,7 @@ class CardViewModel: ObservableObject {
     
     func startTimer() {
         isStarted = true
-        timerString = "\(minutes >= 10 ? "\(minutes):" :"0\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
+        timerString = "\(minutes >= 10 ? "\(minutes):" :"\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
         totalSeconds = (minutes * 60) + seconds
         staticTotalSeconds = totalSeconds
         notify()
@@ -50,7 +50,7 @@ class CardViewModel: ObservableObject {
         minutes = (totalSeconds / 60)
         seconds = (totalSeconds % 60)
        
-        timerString = "\(minutes >= 10 ? "\(minutes):" :"0\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
+        timerString = "\(minutes >= 10 ? "\(minutes):" :"\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
         
         if minutes == 0 && seconds == 0 {
             isStarted = false
@@ -67,7 +67,7 @@ class CardViewModel: ObservableObject {
         
         totalSeconds = 0
         staticTotalSeconds = 0
-        timerString = "00:00"
+        timerString = "0:00"
         timer.upstream.connect().cancel()
     }
     

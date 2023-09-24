@@ -20,6 +20,7 @@ class LocationsViewModel: ObservableObject {
     @Published var showCheckinList: Bool = false
     @Published var showFavorites: Bool = false 
     @Published var showStamp: Bool = false
+    @Published var isCheckedIn: Bool = false 
     
     @Published var opacity: Double = 0
     @Published var users: [User] = []
@@ -30,6 +31,12 @@ class LocationsViewModel: ObservableObject {
 
     
     func seeMoreInfo() {
+        
+        if isCheckedIn {
+            alertMessage = "Please checkout to interact with location"
+            showAlert.toggle()
+            return
+        }
         
         statuses[0].toggle()
         statuses[1] = false; statuses[2] = false
@@ -42,6 +49,12 @@ class LocationsViewModel: ObservableObject {
     func saveToBookmark(spot: Location) {
         if AuthService.shared.uid == nil {
             alertMessage = "You need an account to like this location"
+            showAlert.toggle()
+            return
+        }
+        
+        if isCheckedIn {
+            alertMessage = "Please checkout to interact with location"
             showAlert.toggle()
             return
         }
@@ -99,6 +112,7 @@ class LocationsViewModel: ObservableObject {
 //        }
         
         //Give User a Stamp
+        //Increment Wave Count On User Object
         Task {
             do {
                 try await DataService.shared.checkinLocation(spot: spot)
@@ -109,6 +123,7 @@ class LocationsViewModel: ObservableObject {
                     self.showCheckinList = true
                     self.statuses[2] = true
                     self.offset = 100
+                    self.isCheckedIn = true
                 })
             } catch {
                 alertMessage = error.localizedDescription
@@ -123,7 +138,17 @@ class LocationsViewModel: ObservableObject {
         self.locations.sort(by: {$0.distanceFromUser < $1.distanceFromUser})
     }
     
+    func checkOut() {
+        isCheckedIn = false
+        //Make network call to remove user from checkin list
+        showCheckinList = false
+        statuses[2] = false; statuses[0] = false; statuses[1] = false
+    }
     
+    func showCheckOutAlert() {
+        alertMessage = "Please check out before closing location"
+        showAlert.toggle()
+    }
     
     
     

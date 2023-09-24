@@ -142,7 +142,7 @@ struct LocationView: View {
             Spacer()
             
             Button {
-                dismiss()
+                vm.isCheckedIn ? vm.showCheckOutAlert() : dismiss()
             } label: {
                 Image(systemName: "arrow.uturn.down.circle.fill")
                     .font(.title)
@@ -193,6 +193,7 @@ struct LocationView: View {
 
             }
             .alert(isPresented: $vm.showAlert) {
+                vm.isCheckedIn ? Alert(title: Text(vm.alertMessage)) :
                 Alert(title: Text(vm.alertMessage), primaryButton: .default(Text("Ok")) {
                     vm.showSignUp.toggle()
                 }, secondaryButton: .cancel {
@@ -247,9 +248,10 @@ struct LocationView: View {
     @ViewBuilder
     func CheckInButton() -> some View {
         Button {
+            vm.isCheckedIn ? vm.checkOut() :
             vm.checkinLocation(spot: spot)
         } label: {
-            Text(vm.showCheckinList ? "Checked In": "CHECK IN")
+            Text(vm.isCheckedIn ? "Check Out": "CHECK IN")
                 .font(.subheadline)
                 .fontWeight(.thin)
                 .foregroundColor(.white)

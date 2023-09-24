@@ -12,6 +12,7 @@ struct HomeView: View {
     @StateObject var mapVM = MapViewModel()
     @StateObject var spVM = StreetPassViewModel()
     @StateObject var mesVM = MessageViewModel()
+    @StateObject var waveVM = WaveViewModel()
 
     @State var selection: Int = 0
     @State var currentSpot: Location?
@@ -40,14 +41,13 @@ struct HomeView: View {
                     Text(Tab.post.title)
                 }
             
-            WavesView()
+            WavesView(tabIndex: $selection, vm: waveVM)
                 .tag(2)
-                .badge(3)
+                .badge(waveVM.waveCount)
                 .tabItem {
                     Image(Tab.waves.rawValue)
                         .renderingMode(.template)
                         .foregroundColor(.white)
-                        
                         
                     Text(Tab.waves.title)
                 }

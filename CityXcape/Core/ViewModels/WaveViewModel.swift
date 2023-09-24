@@ -11,12 +11,19 @@ import Foundation
 
 class WaveViewModel: ObservableObject {
     
-    @Published var cardViews: [CardView] = [CardView(message: RecentMessage.demo), CardView(message: RecentMessage.demo2)]
+    @Published var cardView: CardView? = CardView(message: RecentMessage.demo)
 
+    @Published var lastCardIndex: Int = 1
+    @Published var waveCount: Int = 1
+    @Published var showMatch: Bool = false
+    func moveCard() {
+        
+        
+    }
     
+    func match() {
+        showMatch.toggle()
+        
     
-    func isTopCard(cardView: CardView) -> Bool {
-            guard let index = cardViews.firstIndex(where: {$0.id == cardView.id}) else {return false}
-            return index == 0
     }
 }
