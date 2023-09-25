@@ -20,19 +20,22 @@ struct Server {
     static let messages = "messages"
     static let stamps = "stamps"
     static let recentMessages = "recentMessage"
+    static let waves = "waves"
 }
 
 struct AppUserDefaults {
     static let uid = "uid"
     static let city = "city"
     static let loadMessage = "loadMessage"
+    static let profileUrl = "profileUrl"
+    static let username = "username"
+    static let waveCount = "waveCount"
 }
 
-enum StreetPasType {
+enum PassType {
     case stranger
     case personal
 }
-
 
 enum Tab: String, CaseIterable {
     case locations = "tab2"

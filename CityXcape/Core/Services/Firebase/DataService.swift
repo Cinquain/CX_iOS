@@ -15,9 +15,16 @@ let DB = Firestore.firestore()
 
 final class DataService {
     
+    //MARK: USER DEFAULTS
+    @AppStorage(AppUserDefaults.waveCount) var wavecount: Double?
+    @AppStorage(AppUserDefaults.username) var username: String?
+    @AppStorage(AppUserDefaults.uid) var uid: String?
+    @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
+
     static let shared = DataService()
     private init() {}
     
+    //MARK: DATABASE REFERENCES
     var usersRef = DB.collection(Server.users)
     var locationsRef = DB.collection(Server.locations)
     var worldsRef = DB.collection(Server.worlds)
@@ -25,6 +32,7 @@ final class DataService {
     var messageRef = DB.collection(Server.messages)
     var chatListener: ListenerRegistration?
     var recentMessageListener: ListenerRegistration?
+    
     
     //MARK: LOCATION FUNCTIONS
     func fetchAllLocations() async throws -> [Location] {
@@ -161,7 +169,7 @@ final class DataService {
         try await spotCheckinsRef.setData(spotData)
         try await spotRef.updateData(incrementData)
         try await userRef.updateData(streetCredData)
-
+        try await updateWaveCount(counter: 1)
     }
     
     
@@ -201,6 +209,7 @@ final class DataService {
         return users
     }
     
+    
     func fetchUsersCheckedIn(spotId: String) async throws -> [User] {
         var users: [User] = []
         let ref = locationsRef
@@ -218,7 +227,7 @@ final class DataService {
     func uploadStreetPass(imageUrl: String, username: String) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let ref = usersRef.document(uid)
-        
+        UserDefaults.standard.set(username, forKey: AppUserDefaults.username)
         let data: [String: Any] = [
             User.CodingKeys.imageUrl.rawValue: imageUrl,
             User.CodingKeys.username.rawValue: username
@@ -226,11 +235,27 @@ final class DataService {
         try await ref.setData(data)
     }
     
+    func updateWaveCount(counter: Double) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let ref = usersRef.document(uid)
+        let increment: Double = counter
+        let data: [String: Any] = [
+            AppUserDefaults.waveCount: FieldValue.increment(counter)
+        ]
+        var wavecount: Double = wavecount ?? 0
+        wavecount += counter
+        UserDefaults.standard.set(wavecount, forKey: AppUserDefaults.waveCount)
+        try await ref.updateData(data)
+    }
+    
     func deleteUser() async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         try await ImageManager.shared.deleteUserProfile(uid: uid)
         try await usersRef.document(uid).delete()
         try await Auth.auth().currentUser?.delete()
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.uid)
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.username)
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.profileUrl)
     }
     
     
@@ -273,13 +298,22 @@ final class DataService {
             Message.CodingKeys.timestamp.rawValue: Timestamp()
         ]
         
-        do {
-            try await toFeference.setData(data)
-            try await fromReference.setData(data)
-            try await persistRecentMessage(id: user.id, data: data)
-        }catch {
-            throw error
-        }
+        try await toFeference.setData(data)
+        try await fromReference.setData(data)
+        try await persistRecentMessage(id: user.id, data: data)
+    }
+    
+    func sendWave(userId: String, message: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid, let imageUrl = profileUrl else {return}
+        let data: [String: Any] = [
+            Wave.CodingKeys.id.rawValue : uid,
+            Wave.CodingKeys.message.rawValue: message,
+            Wave.CodingKeys.timestamp.rawValue: Timestamp(),
+            Wave.CodingKeys.profileUrl.rawValue: imageUrl
+        ]
+        let ref = privatesRef.document(userId).collection(Server.waves).document(uid)
+        try await ref.setData(data)
+        try await updateWaveCount(counter: -1)
     }
     
     func persistRecentMessage(id: String, data: [String: Any]) async throws {

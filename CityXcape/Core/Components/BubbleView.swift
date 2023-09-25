@@ -15,7 +15,7 @@ struct BubbleView: View {
     
     let width: CGFloat
     let imageUrl: String
-    let type: StreetPasType
+    let type: PassType
     
     var body: some View {
         

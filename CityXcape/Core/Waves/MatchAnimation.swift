@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct MatchAnimation: View {
+    
+    @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
+
     @State private var rotation: Double = 90
     @State private var lenght: CGFloat = 120
     @State private var opacity: Double = 0
@@ -33,13 +36,18 @@ struct MatchAnimation: View {
             .padding(.horizontal, 20)
             HStack {Spacer()}
             VStack {
+                Image("dot")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 30)
                 Text("New Connection!")
                     .foregroundColor(.orange)
                     .fontWeight(.thin)
-                    .font(.title3)
-                    .opacity(opacity)
-                    .animation(.easeOut(duration: 0.5), value: opacity)
+                    .font(.title2)
+                    
             }
+            .opacity(opacity)
+            .animation(.easeOut(duration: 0.5), value: opacity)
             
             Spacer()
             Spacer()

@@ -27,6 +27,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var username: String = ""
     @Published var profileUrl: String = ""
     @Published var success: Bool = false
+
     
 }
 

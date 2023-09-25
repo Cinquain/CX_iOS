@@ -22,6 +22,7 @@ class ImageManager: NSObject {
         let path = getProfileImagePath(uid: uid)
         do {
             let url = try await uploadImage(path: path, image: image)
+            UserDefaults.standard.set(url, forKey: AppUserDefaults.profileUrl)
             return url
         } catch {
             throw error

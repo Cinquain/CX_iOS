@@ -8,7 +8,16 @@
 import SwiftUI
 
 struct PublicStreetPass: View {
+    
+    //MARK: USER DEFAULTS
+    @AppStorage(AppUserDefaults.waveCount) var wavecount: Double?
+
+    //MARK: STATE PROPERTIES
     @State private var showMenu: Bool = false
+    @State private var message: String = ""
+    @State private var isWaving: Bool = false
+    @State private var showAlert: Bool = false
+    @State private var alertMessgae: String = ""
     
     let user: User
     var body: some View {
@@ -18,6 +27,8 @@ struct PublicStreetPass: View {
                 StreetPassHeader()
                 UserDot()
                 Spacer()
+                    .frame(height: 80)
+                TextMessage()
                 WaveButton()
                 Spacer()
                 
@@ -42,7 +53,18 @@ struct PublicStreetPass: View {
         }
         .edgesIgnoringSafeArea(.all)
     }
-    
+    @ViewBuilder
+    func TextMessage() -> some View {
+        TextField("  Write a Message", text: $message, onCommit: {
+            //Send the wave away!!
+        })
+            .frame(width: 250, height: 40)
+            .background(.white.opacity(0.9))
+            .clipShape(Capsule())
+            .padding(.bottom, 30)
+            .opacity(isWaving ? 1 : 0)
+            .animation(.easeOut(duration: 0.5), value: isWaving)
+    }
     @ViewBuilder
     func StreetPassHeader() -> some View {
         HStack {
@@ -71,19 +93,22 @@ struct PublicStreetPass: View {
                 .font(.title)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
+                .alert(isPresented: $showAlert) {
+                    return Alert(title: Text(alertMessgae))
+                }
         }
     }
     
     @ViewBuilder
     func WaveButton() -> some View {
         Button {
-            showMenu.toggle()
+            sendWave()
         } label: {
             HStack(spacing: 2) {
-                Image(systemName: "hands.sparkles.fill")
+                Image(systemName: isWaving ? "arrow.uturn.right.circle.fill": "hands.sparkles.fill")
                     .foregroundColor(.white)
                 
-                Text("Wave")
+                Text(isWaving ? "Send" : "Wave")
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(.white)
@@ -93,6 +118,36 @@ struct PublicStreetPass: View {
                 .frame(width: 150, height: 40))
         }
     }
+    
+    func sendWave() {
+        if isWaving {
+            if message.count < 3 {
+                alertMessgae = "Please send a message with your wave"
+                showAlert.toggle()
+                return
+            }
+        Task {
+            do {
+                try await DataService.shared.sendWave(userId: user.id, message: message)
+                isWaving.toggle()
+                alertMessgae = "Wave Sent"
+                showAlert.toggle()
+            } catch {
+                alertMessgae = error.localizedDescription
+                showAlert.toggle()
+                }
+            }
+            return
+        }
+//            if wavecount == nil || wavecount == 0 {
+//                showMenu.toggle()
+//                return
+//            }
+            isWaving.toggle()
+        
+    }
+        
+    
 }
 
 struct PublicStreetPass_Previews: PreviewProvider {

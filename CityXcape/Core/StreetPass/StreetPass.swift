@@ -11,6 +11,7 @@ import PhotosUI
 struct StreetPass: View {
     
     let user: User
+    @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
     @EnvironmentObject private var vm: StreetPassViewModel
 
     
@@ -75,7 +76,7 @@ struct StreetPass: View {
         
         PhotosPicker(selection: $vm.selectedItem, matching: .images) {
             VStack(spacing: 3) {
-                BubbleView(width: 300, imageUrl: vm.profileUrl, type: .personal)
+                BubbleView(width: 300, imageUrl: profileUrl ?? "", type: .personal)
                 
                 Text(user.username ?? "Create Username")
                     .font(.title2)

@@ -16,6 +16,8 @@ class WaveViewModel: ObservableObject {
     @Published var lastCardIndex: Int = 1
     @Published var waveCount: Int = 1
     @Published var showMatch: Bool = false
+    
+    
     func moveCard() {
         
         
