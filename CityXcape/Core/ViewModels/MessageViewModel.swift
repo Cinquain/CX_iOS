@@ -11,8 +11,8 @@ import Foundation
 class MessageViewModel: ObservableObject {
     
     @Published var connections: [User] = [User.demo, User.demo3, User.demo, User.demo3, User.demo2, User.demo3, User.demo2,]
-    @Published var messages: [Message] = [Message.demo3, Message.demo, Message.demo2, Message.demo4, Message.demo5, Message.demo6]
-    @Published var recentMessages: [RecentMessage] = [RecentMessage.demo3, RecentMessage.demo, RecentMessage.demo2, RecentMessage.demo4]
+
+    @Published var messages: [Message] = [Message.demo3, Message.demo, Message.demo2, Message.demo4]
     
     @Published var count: Int = 0
     @Published var message: String = ""
@@ -39,7 +39,7 @@ class MessageViewModel: ObservableObject {
     }
     
     func deleteRecentMessage(uid: String) {
-        recentMessages.removeAll(where: {$0.fromId == uid})
+        messages.removeAll(where: {$0.fromId == uid})
         DataService.shared.deleteRecentMessage(userId: uid)
     }
     

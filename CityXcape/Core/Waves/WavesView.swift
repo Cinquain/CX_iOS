@@ -134,9 +134,10 @@ struct WavesView: View {
             VStack {
                 Image(systemName: "x.circle")
                     .modifier(swipeModifier())
+                    .foregroundColor(.red)
                    
                 Text("Dismiss!")
-                    .foregroundColor(.white)
+                    .foregroundColor(.red)
                     .font(.title2)
                     .fontWeight(.medium)
                     
@@ -147,6 +148,7 @@ struct WavesView: View {
             VStack {
                 Image(systemName: "heart.circle")
                     .modifier(swipeModifier())
+                    .foregroundColor(.white)
                
                 Text("Connect!")
                     .foregroundColor(.white)
@@ -167,7 +169,7 @@ struct WavesView: View {
                 .frame(height: 200)
                 .opacity(0.7)
             
-            Text("No Waves Pending \n Check in a \(Image("pin_feed")) location to meet people")
+            Text("No Waves Pending \n Check in a \(Image("pin_feed").renderingMode(.template)) location to meet people")
                 .font(.title3)
                 .fontWeight(.thin)
                 .multilineTextAlignment(.center)

@@ -22,7 +22,7 @@ struct MessagesView: View {
                     .frame(height: 40)
                 
                 ScrollView {
-                    ForEach(vm.recentMessages) { message in
+                    ForEach(vm.messages) { message in
                         NavigationLink {
                             ChatView(user: User(message: message), vm: vm)
                         } label: {

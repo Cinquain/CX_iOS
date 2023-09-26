@@ -36,7 +36,7 @@ struct MatchAnimation: View {
             .padding(.horizontal, 20)
             HStack {Spacer()}
             VStack {
-                Image("dot")
+                Image("connect")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 30)

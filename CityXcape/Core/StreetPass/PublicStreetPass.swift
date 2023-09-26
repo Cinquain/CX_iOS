@@ -139,12 +139,11 @@ struct PublicStreetPass: View {
             }
             return
         }
-//            if wavecount == nil || wavecount == 0 {
-//                showMenu.toggle()
-//                return
-//            }
+            if wavecount == nil || wavecount == 0 {
+                showMenu.toggle()
+                return
+            }
             isWaving.toggle()
-        
     }
         
     

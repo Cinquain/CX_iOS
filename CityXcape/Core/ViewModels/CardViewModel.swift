@@ -16,7 +16,7 @@ class CardViewModel: ObservableObject {
     @Published var timer = Timer.publish(every: 1, on: .main, in:.common)
                                     .autoconnect()
     
-    @Published var minutes: Int = 15
+    @Published var minutes: Int = 10
     @Published var seconds: Int = 0
     @Published var isStarted: Bool = false
     @Published var timerString: String = ""
@@ -25,22 +25,22 @@ class CardViewModel: ObservableObject {
     @Published var showPass: Bool = false
     
     
-    func notify() {
+    func notify(username: String) {
         let content = UNMutableNotificationContent()
         content.title = "Wave has Expired"
-        content.body = "Cinquain's request to connect with you has run out of time!"
+        content.body = "\(username) request to connect with you has run out of time!"
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(staticTotalSeconds), repeats: false)
         let request = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
         
     }
     
-    func startTimer() {
+    func startTimer(username: String) {
         isStarted = true
         timerString = "\(minutes >= 10 ? "\(minutes):" :"\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
         totalSeconds = (minutes * 60) + seconds
         staticTotalSeconds = totalSeconds
-        notify()
+        notify(username: username)
     }
     
     func updateTimer() {

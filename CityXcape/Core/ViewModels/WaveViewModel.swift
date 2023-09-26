@@ -11,7 +11,7 @@ import Foundation
 
 class WaveViewModel: ObservableObject {
     
-    @Published var cardView: CardView? = CardView(message: RecentMessage.demo)
+    @Published var cardView: CardView? = CardView(wave: Wave.demo)
 
     @Published var lastCardIndex: Int = 1
     @Published var waveCount: Int = 1

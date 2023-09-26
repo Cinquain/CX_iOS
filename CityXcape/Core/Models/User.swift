@@ -48,7 +48,7 @@ struct User: Identifiable, Equatable, Codable {
         self.phone = data[User.CodingKeys.phone.rawValue] as? String ?? nil
     }
     
-    init(message: RecentMessage) {
+    init(message: Message) {
         self.id = message.fromId
         self.imageUrl = message.profileUrl
         self.username = message.displayName

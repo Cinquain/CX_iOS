@@ -10,7 +10,7 @@ import SwiftUI
 struct WavePreview: View {
     
     //User for now, Message Model Later
-    var message: RecentMessage
+    var message: Message
     
     var body: some View {
         VStack {
@@ -58,6 +58,6 @@ struct WavePreview: View {
 
 struct MessagePreview_Previews: PreviewProvider {
     static var previews: some View {
-        WavePreview(message: RecentMessage.demo)
+        WavePreview(message: Message.demo)
     }
 }

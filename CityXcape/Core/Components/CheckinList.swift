@@ -85,14 +85,14 @@ struct CheckinList: View {
                                     .foregroundColor(.white)
                                     .frame(height: 30)
                                 
-                                Text("\(Int.random(in: 1...100)) likes in common")
+                                Text("\(Int.random(in: 1...100)) shared likes")
                                     .foregroundColor(.white)
                                     .fontWeight(.thin)
                                 Spacer()
                             }
                             .frame(width: 220)
                             HStack(spacing: 4) {
-                                Image("Stamp")
+                                Image("pin_feed")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(height: 20)

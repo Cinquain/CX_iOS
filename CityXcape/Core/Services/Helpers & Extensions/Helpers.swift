@@ -30,11 +30,28 @@ struct AppUserDefaults {
     static let profileUrl = "profileUrl"
     static let username = "username"
     static let waveCount = "waveCount"
+    static let location = "location"
 }
 
 enum PassType {
     case stranger
     case personal
+}
+
+enum CustomError: Error {
+    case invalidPassword
+    case uidNotFound
+}
+
+extension CustomError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidPassword:
+            return NSLocalizedString("Incorrect Password", comment: "Invalid Password")
+        case .uidNotFound:
+            return NSLocalizedString("User AuthID Not Found", comment: "UID Not Found!")
+        }
+    }
 }
 
 enum Tab: String, CaseIterable {
@@ -65,7 +82,6 @@ enum Tab: String, CaseIterable {
 struct swipeModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .foregroundColor(.white)
             .font(.system(size: 128))
             .shadow(color: Color(UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)), radius: 12, x: 0, y: 0)
     }

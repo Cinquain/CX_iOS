@@ -124,6 +124,7 @@ class LocationsViewModel: ObservableObject {
                     self.statuses[2] = true
                     self.offset = 100
                     self.isCheckedIn = true
+                    UserDefaults.standard.set(spot.name, forKey: AppUserDefaults.location)
                 })
             } catch {
                 alertMessage = error.localizedDescription

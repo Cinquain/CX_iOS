@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21A507912AC301BC00EBA040 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A507902AC301BC00EBA040 /* Wave.swift */; };
 		21A55A972AC0E18D00ED822B /* MatchAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A55A962AC0E18D00ED822B /* MatchAnimation.swift */; };
 		21AB5D642A9CCBD10037FB73 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */; };
 		21ACA93C2AB341EB00B62C16 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ACA93B2AB341EB00B62C16 /* ChatView.swift */; };
@@ -23,7 +24,6 @@
 		21AE60802AA7430C0001BB48 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE607F2AA7430C0001BB48 /* Message.swift */; };
 		21AE60822AA7462C0001BB48 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE60812AA7462C0001BB48 /* MessageBubble.swift */; };
 		21AED6872A8F150D000A1649 /* SpotThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AED6862A8F150D000A1649 /* SpotThumbnail.swift */; };
-		21B224542AC1BFBC0021A302 /* Wave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B224532AC1BFBC0021A302 /* Wave.swift */; };
 		21B295FB2A8D3802007CF130 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */; };
 		21B3A70A2ABB0CFC0041F217 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3A7092ABB0CFC0041F217 /* CardViewModel.swift */; };
 		21B3A70C2ABB1EB40041F217 /* WaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3A70B2ABB1EB40041F217 /* WaveViewModel.swift */; };
@@ -80,6 +80,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21A507902AC301BC00EBA040 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
 		21A55A962AC0E18D00ED822B /* MatchAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchAnimation.swift; sourceTree = "<group>"; };
 		21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		21ACA93B2AB341EB00B62C16 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
@@ -95,7 +96,6 @@
 		21AE607F2AA7430C0001BB48 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		21AE60812AA7462C0001BB48 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		21AED6862A8F150D000A1649 /* SpotThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotThumbnail.swift; sourceTree = "<group>"; };
-		21B224532AC1BFBC0021A302 /* Wave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wave.swift; sourceTree = "<group>"; };
 		21B295F92A8D3674007CF130 /* CityXcape.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CityXcape.entitlements; sourceTree = "<group>"; };
 		21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		21B3A7092ABB0CFC0041F217 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
@@ -298,7 +298,7 @@
 				21CDB6182A82AA8A00A2E1FD /* Stamp.swift */,
 				21AE607F2AA7430C0001BB48 /* Message.swift */,
 				21D03E372A8C0DB100B07162 /* Particle.swift */,
-				21B224532AC1BFBC0021A302 /* Wave.swift */,
+				21A507902AC301BC00EBA040 /* Wave.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -503,7 +503,7 @@
 				21D730DF2AB8B3CE00D50358 /* WavesView.swift in Sources */,
 				21DDCEEB2A9791570028235C /* MapViewRepresentable.swift in Sources */,
 				21ADEB2E2A98D73D002A24CB /* UserDot.swift in Sources */,
-				21B224542AC1BFBC0021A302 /* Wave.swift in Sources */,
+				21A507912AC301BC00EBA040 /* Wave.swift in Sources */,
 				21B52F962A8E53E300C07CAB /* SignUpView.swift in Sources */,
 				21CDB5F72A82A2C800A2E1FD /* HomeView.swift in Sources */,
 				21ADF42E2A9A334500AD2AE8 /* SoundManager.swift in Sources */,

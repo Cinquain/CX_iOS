@@ -20,6 +20,8 @@ final class DataService {
     @AppStorage(AppUserDefaults.username) var username: String?
     @AppStorage(AppUserDefaults.uid) var uid: String?
     @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
+    @AppStorage(AppUserDefaults.location) var location: String?
+
 
     static let shared = DataService()
     private init() {}
@@ -235,18 +237,6 @@ final class DataService {
         try await ref.setData(data)
     }
     
-    func updateWaveCount(counter: Double) async throws {
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        let ref = usersRef.document(uid)
-        let increment: Double = counter
-        let data: [String: Any] = [
-            AppUserDefaults.waveCount: FieldValue.increment(counter)
-        ]
-        var wavecount: Double = wavecount ?? 0
-        wavecount += counter
-        UserDefaults.standard.set(wavecount, forKey: AppUserDefaults.waveCount)
-        try await ref.updateData(data)
-    }
     
     func deleteUser() async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
@@ -303,19 +293,6 @@ final class DataService {
         try await persistRecentMessage(id: user.id, data: data)
     }
     
-    func sendWave(userId: String, message: String) async throws {
-        guard let uid = Auth.auth().currentUser?.uid, let imageUrl = profileUrl else {return}
-        let data: [String: Any] = [
-            Wave.CodingKeys.id.rawValue : uid,
-            Wave.CodingKeys.message.rawValue: message,
-            Wave.CodingKeys.timestamp.rawValue: Timestamp(),
-            Wave.CodingKeys.profileUrl.rawValue: imageUrl
-        ]
-        let ref = privatesRef.document(userId).collection(Server.waves).document(uid)
-        try await ref.setData(data)
-        try await updateWaveCount(counter: -1)
-    }
-    
     func persistRecentMessage(id: String, data: [String: Any]) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let recentRef = privatesRef
@@ -330,9 +307,9 @@ final class DataService {
         print("Removing chat listner")
     }
     
-    func fetchRecentMessages(completion: @escaping (Result<[RecentMessage], Error>) -> Void) {
+    func fetchRecentMessages(completion: @escaping (Result<[Message], Error>) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {return}
-        var messages: [RecentMessage] = []
+        var messages: [Message] = []
         
         recentMessageListener = privatesRef
                 .document(Server.recentMessages)
@@ -348,7 +325,7 @@ final class DataService {
                     snapshot.documentChanges.forEach { change in
                         if change.type == .added {
                             let data = change.document.data()
-                            let message = RecentMessage(data: data)
+                            let message = Message(data: data)
                             messages.insert(message, at: 0)
                         }
                     }
@@ -366,6 +343,60 @@ final class DataService {
             .document(userId)
             .delete()
     }
+    
+    
+    //MARK: WAVE FUNCTIONS
+    func sendWave(userId: String, message: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid, let imageUrl = profileUrl, let displayName = username
+        else {throw CustomError.uidNotFound}
+        
+        let ref = privatesRef.document(userId).collection(Server.waves)
+        let document = ref.document()
+        
+      
+        let data: [String: Any] = [
+            Wave.codingKeys.id.rawValue: document.documentID,
+            Wave.codingKeys.fromId.rawValue: uid,
+            Wave.codingKeys.toId.rawValue: userId,
+            Wave.codingKeys.content.rawValue: message,
+            Wave.codingKeys.timestamp.rawValue: Timestamp(),
+            Wave.codingKeys.location.rawValue: location ?? "",
+            Wave.codingKeys.displayName.rawValue: displayName,
+            Wave.codingKeys.profileUrl.rawValue: imageUrl
+        ]
+            
+        try await document.setData(data)
+        try await updateWaveCount(counter: -1)
+    }
+    
+    func fetchWaves() async throws -> [Wave] {
+        guard let userId = uid else {throw CustomError.uidNotFound}
+        var waves: [Wave] = []
+        
+        let ref = privatesRef.document(userId).collection(Server.waves)
+        
+        let snapshot = try await ref.getDocuments()
+        
+        snapshot.documents.forEach { snapshot in
+            let data = snapshot.data()
+            let wave = Wave(data: data)
+            waves.append(wave)
+        }
+        return waves
+    }
+    
+    func updateWaveCount(counter: Double) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let ref = usersRef.document(uid)
+        let data: [String: Any] = [
+            AppUserDefaults.waveCount: FieldValue.increment(counter)
+        ]
+        var wavecount: Double = wavecount ?? 0
+        wavecount += counter
+        UserDefaults.standard.set(wavecount, forKey: AppUserDefaults.waveCount)
+        try await ref.updateData(data)
+    }
+    
     
     
     

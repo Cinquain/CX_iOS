@@ -55,7 +55,7 @@ struct HomeView: View {
             
             MessagesView()
                 .tag(3)
-                .badge(mesVM.recentMessages.count)
+                .badge(mesVM.messages.count)
                 .environmentObject(mesVM)
                 .tabItem {
                     Image(systemName: Tab.messages.rawValue)

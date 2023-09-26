@@ -11,15 +11,14 @@ import SDWebImageSwiftUI
 struct CardView: View, Identifiable {
     
     @StateObject var vm = CardViewModel()
-    var message: RecentMessage
+    var wave: Wave
     
     var id: String {
-           message.id
+           wave.id
        }
     
     var body: some View {
             VStack {
-
                 userBubble()
                
                 Spacer()
@@ -42,7 +41,7 @@ struct CardView: View, Identifiable {
             .padding(.horizontal)
             .onAppear {
                 withAnimation {
-                    vm.startTimer()
+                    vm.startTimer(username: wave.displayName)
                 }
                 vm.requestNotifications()
             }
@@ -65,18 +64,22 @@ struct CardView: View, Identifiable {
             Button {
                 vm.showPass.toggle()
             } label: {
-            BubbleView(width: 300, imageUrl: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2Fpexels-mahdi-chaghari-13634600.jpg?alt=media&token=81e87218-43fa-4cd7-80ea-c556cde704d8", type: .stranger)
+                BubbleView(width: 300, imageUrl: wave.profileUrl, type: .stranger)
             }
             .sheet(isPresented: $vm.showPass) {
                 PublicStreetPass(user: User.demo)
             }
-            Text("Amanda")
+            Text(wave.displayName)
                 .fontWeight(.thin)
                 .font(.title2)
-            Button {
-                vm.showPass.toggle()
-            } label: {
-                Text("\(Image(systemName: "globe.americas.fill")) 80% Match")
+            HStack(alignment: .bottom, spacing: 2) {
+                Image("pin_feed")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 20)
+                    
+                Text(wave.location)
                     .fontWeight(.thin)
                     .font(.callout)
             }
@@ -89,10 +92,9 @@ struct CardView: View, Identifiable {
     @ViewBuilder
     func waveMessage() -> some View {
         
-            
         VStack {
             Spacer()
-            Text("How are you liking this place?")
+            Text(wave.content)
                     .font(.callout)
                     .foregroundColor(.black)
                     .fontWeight(.medium)
@@ -105,18 +107,6 @@ struct CardView: View, Identifiable {
         }
        
         
-    }
-    
-    @ViewBuilder
-    func location() -> some View {
-        Image("Pin")
-            .resizable()
-            .scaledToFit()
-            .frame(height: 30)
-        Text("Four Seasons")
-            .foregroundColor(.white)
-            .fontWeight(.thin)
-            .font(.title2)
     }
     
     @ViewBuilder
@@ -185,7 +175,7 @@ struct CardView: View, Identifiable {
 
 struct CardView_Previews: PreviewProvider {
     static var previews: some View {
-        CardView(message: RecentMessage.demo)
+        CardView(wave: Wave.demo)
             .previewLayout(.sizeThatFits)
     }
 }
