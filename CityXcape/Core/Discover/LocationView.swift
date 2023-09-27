@@ -193,7 +193,7 @@ struct LocationView: View {
 
             }
             .alert(isPresented: $vm.showAlert) {
-                vm.isCheckedIn ? Alert(title: Text(vm.alertMessage)) :
+                vm.normalAlert ? Alert(title: Text(vm.alertMessage)) :
                 Alert(title: Text(vm.alertMessage), primaryButton: .default(Text("Ok")) {
                     vm.showSignUp.toggle()
                 }, secondaryButton: .cancel {
@@ -206,7 +206,7 @@ struct LocationView: View {
          
             
             Button {
-                vm.saveToBookmark(spot: spot)
+                vm.likeLocation(spot: spot)
             } label: {
                 Image(systemName: "heart.fill")
                     .font(.title2)
@@ -220,12 +220,14 @@ struct LocationView: View {
                     .frame(width: 55, height: 55)
                     .background(vm.statuses[1] ? .red.opacity(0.25) : .pink.opacity(0.75))
                     .clipShape(Circle())
+                    .scaleEffect(vm.statuses[1] ? 0.9 : 1)
+
             }
             
             Button {
-                vm.viewCheckinList(id: spot.id)
+                vm.saveToBookmark(spot: spot)
             } label: {
-                Image(systemName: "person.2.fill")
+                Image(systemName: "bookmark.fill")
                     .font(.title2)
                     .foregroundColor(vm.statuses[2] ? .orange : .white)
                     .particleEffect(

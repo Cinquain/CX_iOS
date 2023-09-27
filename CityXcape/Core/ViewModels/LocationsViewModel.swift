@@ -11,11 +11,16 @@ import SwiftUI
 
 class LocationsViewModel: ObservableObject {
     
+    @Published var showAlert: Bool = false
+    @Published var alertMessage: String = ""
+    @Published var normalAlert: Bool = false
+    
+    
     @Published var offset: CGFloat = 550
     @Published var showSignUp: Bool = false
     @Published var statuses: [Bool] = [false, false, false]
-    @Published var showAlert: Bool = false
-    @Published var alertMessage: String = ""
+  
+    
     @Published var showDetails: Bool = false
     @Published var showCheckinList: Bool = false
     @Published var showFavorites: Bool = false 
@@ -32,12 +37,6 @@ class LocationsViewModel: ObservableObject {
     
     func seeMoreInfo() {
         
-        if isCheckedIn {
-            alertMessage = "Please checkout to interact with location"
-            showAlert.toggle()
-            return
-        }
-        
         statuses[0].toggle()
         statuses[1] = false; statuses[2] = false
         showDetails.toggle()
@@ -46,15 +45,9 @@ class LocationsViewModel: ObservableObject {
         self.opacity = showDetails ? 1 : 0
     }
     
-    func saveToBookmark(spot: Location) {
+    func likeLocation(spot: Location) {
         if AuthService.shared.uid == nil {
-            alertMessage = "You need an account to like this location"
-            showAlert.toggle()
-            return
-        }
-        
-        if isCheckedIn {
-            alertMessage = "Please checkout to interact with location"
+            alertMessage = "You need an account to checkin"
             showAlert.toggle()
             return
         }
@@ -64,39 +57,44 @@ class LocationsViewModel: ObservableObject {
         showDetails = false
         
         Task {
-            try await  DataService.shared.saveLocation(spot: spot)
-            //Show user save list
-            myJourney.append(spot)
-            self.myJourney = myJourney.unique()
-            showFavorites.toggle()
-            
+            do {
+                statuses[1] ? try await DataService.shared.like(spot: spot) :
+                              try await DataService.shared.dislike(spot: spot)
+            } catch {
+                normalAlert.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+                normalAlert = false
+            }
         }
+        
     }
     
-    func viewCheckinList(id: String) {
-        statuses[2].toggle()
-        statuses[0] = false; statuses[1] = false
-        showDetails = false
+    func saveToBookmark(spot: Location) {
         if AuthService.shared.uid == nil {
-            alertMessage = "Please sign to see who's in this location"
+            alertMessage = "You need an account to like this location"
             showAlert.toggle()
             return
         }
-//        
-//        if showCheckinList == false {
-//            alertMessage = "Please sign to see who's in this location"
-//            showAlert.toggle()
-//            return
-//        }
+        
+        statuses[2].toggle()
+        statuses[0] = false; statuses[1] = false
+        showDetails = false
         
         Task {
-            print("fetching users")
-            self.users = try await DataService.shared.fetchUsersCheckedIn(spotId: id)
-            showCheckinList.toggle()
-            self.offset = 100
+            do {
+                statuses[2] ? try await  DataService.shared.saveLocation(spot: spot) :
+                              try await  DataService.shared.unsaveLocation(spot: spot)
+            } catch {
+                normalAlert .toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+                normalAlert = false
+            }
         }
+        
     }
-    
+
     func checkinLocation(spot: Location) {
         if AuthService.shared.uid == nil {
             alertMessage = "You need an account to checkin"
@@ -127,8 +125,10 @@ class LocationsViewModel: ObservableObject {
                     UserDefaults.standard.set(spot.name, forKey: AppUserDefaults.location)
                 })
             } catch {
+                normalAlert.toggle()
                 alertMessage = error.localizedDescription
                 self.showAlert = true
+                normalAlert = false 
             }
         }
     }

@@ -20,11 +20,12 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let latitude: Double
     let city: String
     let address: String?
-    let dateCreated: Date
+    let timestamp: Date
     let ownerId: String
     let hashtags: String
     //Social Component
     let saveCount: Int
+    let likeCount: Int
     let checkinCount: Int
     let commentCount: Int
     
@@ -89,15 +90,17 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.longitude = data[Location.CodingKeys.longitude.rawValue] as? Double ?? 0
         self.city = data[Location.CodingKeys.city.rawValue] as? String ?? ""
         self.address = data[Location.CodingKeys.address.rawValue] as? String ?? ""
-        let timestamp = data[Location.CodingKeys.dateCreated.rawValue] as? Timestamp
-        self.dateCreated = timestamp?.dateValue() ?? Date()
+        let timestamp = data[Location.CodingKeys.timestamp.rawValue] as? Timestamp
+        self.timestamp = timestamp?.dateValue() ?? Date()
         self.saveCount = data[Location.CodingKeys.saveCount.rawValue] as? Int ?? 1
         self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Int ?? 0
+        self.likeCount = data[Location.CodingKeys.likeCount.rawValue] as? Int ?? 0
         self.checkinCount = data[Location.CodingKeys.checkinCount.rawValue] as? Int ?? 0
         self.worldId = data[Location.CodingKeys.worldId.rawValue] as? String ?? nil
         self.worldName = data[Location.CodingKeys.worldName.rawValue] as? String ?? nil
         self.worldImageUrl = data[Location.CodingKeys.worldImageUrl.rawValue] as? String ?? nil
         self.ownerId = data[Location.CodingKeys.ownerId.rawValue] as? String ?? ""
+
     }
 
     
@@ -108,11 +111,12 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case imageUrl
         case longitude
         case latitude
+        case likeCount
         case city
+        case timestamp
         case address
         case hashtags
         case ownerId = "owner_id"
-        case dateCreated = "date_created"
         case saveCount = "save_count"
         case checkinCount = "checkin_count"
         case commentCount = "comment_count"
@@ -131,7 +135,8 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.address.rawValue: "Philadelphia, PA 19125",
         Location.CodingKeys.latitude.rawValue: 39.971779951285704,
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
-        Location.CodingKeys.dateCreated.rawValue: Date(),
+        Location.CodingKeys.timestamp.rawValue: Date(),
+        Location.CodingKeys.likeCount.rawValue: 12,
         Location.CodingKeys.saveCount.rawValue: 10,
         Location.CodingKeys.hashtags.rawValue: "Street Art",
         Location.CodingKeys.checkinCount.rawValue: 3,
@@ -147,7 +152,8 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.address.rawValue: "Philadelphia, PA 19125",
         Location.CodingKeys.latitude.rawValue: 39.971779951285704,
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
-        Location.CodingKeys.dateCreated.rawValue: Date(),
+        Location.CodingKeys.timestamp.rawValue: Date(),
+        Location.CodingKeys.likeCount.rawValue: 21,
         Location.CodingKeys.saveCount.rawValue: 10,
         Location.CodingKeys.hashtags.rawValue: "Nightlife",
         Location.CodingKeys.checkinCount.rawValue: 3,
@@ -163,8 +169,9 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.address.rawValue: "Philadelphia, PA 19125",
         Location.CodingKeys.latitude.rawValue: 39.971779951285704,
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
-        Location.CodingKeys.dateCreated.rawValue: Date(),
+        Location.CodingKeys.timestamp.rawValue: Date(),
         Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.likeCount.rawValue: 60,
         Location.CodingKeys.hashtags.rawValue: "Foodie",
         Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4

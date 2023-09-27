@@ -93,41 +93,96 @@ final class DataService {
     }
     
     func saveLocation(spot: Location) async throws {
-        //Update match capability of user
         guard let uid = Auth.auth().currentUser?.uid else {return}
-        let spotSaveData: [String: Any] = [
+        let increment: Double = 1
+
+        let userData: [String: Any] = [
             User.CodingKeys.id.rawValue: uid,
-            Location.CodingKeys.dateCreated.rawValue: Timestamp()
+            Location.CodingKeys.timestamp.rawValue: Timestamp()
         ]
-        let userSaveData: [String: Any] = [
+        let spotData: [String: Any] = [
             Location.CodingKeys.id.rawValue: spot.id,
-            Location.CodingKeys.dateCreated.rawValue: Timestamp()
+            Location.CodingKeys.timestamp.rawValue: Timestamp()
         ]
-        let incremenet: Double = 1
-        let spotIncrementData: [String: Any] = [
-            Location.CodingKeys.saveCount.rawValue: FieldValue.increment(incremenet)
+        
+        let data: [String: Any] = [
+            Location.CodingKeys.saveCount.rawValue: FieldValue.increment(increment)
         ]
-        let spotSavesRef = locationsRef
-                                .document(spot.id)
-                                .collection(Server.saves)
-                                .document(uid)
         
         let userSavesRef = privatesRef
                                 .document(uid)
                                 .collection(Server.saves)
                                 .document(spot.id)
         let spotsRef = locationsRef.document(spot.id)
-        do {
-            //Save user to likes collection of Location
-            try await spotSavesRef.setData(spotSaveData)
-            //Save Location to saves collection of User
-            try await userSavesRef.setData(userSaveData)
-            //Increment likeCount of location
-            try await spotsRef.updateData(spotIncrementData)
-        } catch {
-            throw error
-        }
+        
+        try await spotsRef.updateData(data)
+        try await userSavesRef.setData(spotData)
+        try await spotsRef.collection(Server.saves).document(uid).setData(userData)
+      
     }
+    
+    func unsaveLocation(spot: Location) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let increment: Double = -1
+        
+        let data: [String: Any] = [
+            Location.CodingKeys.saveCount.rawValue: FieldValue.increment(increment)
+        ]
+        
+        let userSavesRef = privatesRef
+                                .document(uid)
+                                .collection(Server.saves)
+                                .document(spot.id)
+        let spotsRef = locationsRef.document(spot.id)
+        
+        try await spotsRef.updateData(data)
+        try await userSavesRef.delete()
+        try await spotsRef.collection(Server.saves).document(uid).delete()
+    
+    }
+    
+    func like(spot: Location) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let increment: Double = 1
+        let data: [String: Any] = [
+            Location.CodingKeys.likeCount.rawValue: FieldValue.increment(increment)
+        ]
+        let spotRef = locationsRef.document(spot.id)
+        let userLikesRef = privatesRef
+                                .document(uid)
+                                .collection(Server.likes)
+                                .document(spot.id)
+        let likeData: [String: Any] = [
+            User.CodingKeys.id.rawValue: uid,
+            User.CodingKeys.timestamp.rawValue: Timestamp()
+        ]
+        let spotData: [String: Any] = [
+            Location.CodingKeys.id.rawValue: spot.id,
+            Location.CodingKeys.timestamp.rawValue: Timestamp()
+        ]
+        try await spotRef.updateData(data)
+        try await userLikesRef.setData(spotData)
+        try await spotRef.collection(Server.likes).document(uid).setData(likeData)
+        
+    }
+    
+    func dislike(spot: Location) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let increment: Double = -1
+        let spotRef = locationsRef.document(spot.id)
+        let userLikesRef = privatesRef
+                                .document(uid)
+                                .collection(Server.likes)
+                                .document(spot.id)
+
+        let data: [String: Any] = [
+            Location.CodingKeys.likeCount.rawValue: FieldValue.increment(increment)
+        ]
+        try await spotRef.updateData(data)
+        try await spotRef.collection(Server.likes).document(uid).delete()
+        try await userLikesRef.delete()
+    }
+    
     
     func checkinLocation(spot: Location) async throws {
         let spotRef = locationsRef.document(spot.id)
@@ -174,6 +229,9 @@ final class DataService {
         try await updateWaveCount(counter: 1)
     }
     
+  
+    
+    
     
     
     //MARK: USER FUNCTIONS
@@ -184,7 +242,7 @@ final class DataService {
         let data: [String: Any] = [
             User.CodingKeys.id.rawValue: uid,
             User.CodingKeys.email.rawValue: email,
-            User.CodingKeys.joinDate.rawValue: Timestamp()
+            User.CodingKeys.timestamp.rawValue: Timestamp()
         ]
         
         usersRef.document(uid).setData(data)
