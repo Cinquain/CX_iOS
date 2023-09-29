@@ -30,8 +30,9 @@ struct WavesView: View {
                 .frame(height: 30)
             
             ZStack {
-                if vm.cardView != nil {
-                    vm.cardView
+                if !vm.waves.isEmpty {
+                    ForEach(vm.waves) { wave in
+                        CardView(wave: wave)
                             .zIndex(1)
                             .overlay(LikeorDislike())
                             .offset(x: self.dragState.translation.width, y:  self.dragState.translation.height)
@@ -55,24 +56,23 @@ struct WavesView: View {
                                     guard case .second(true, let drag?) = value else {return}
                                     if drag.translation.width < -self.dragThreshold {
                                         //User is dismissed
-                                        vm.cardView = nil
-                                        vm.waveCount -= 1 
+                                        vm.deleteWave(id: wave.id)
                                     }
                                     if drag.translation.width > self.dragThreshold {
-                                        //User is connected
                                         offset = 1000
-                                        vm.match()
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-                                            vm.cardView = nil
-                                            vm.waveCount -= 1
-                                            
+                                        vm.match(wave: wave)
+                                        DispatchQueue.main
+                                            .asyncAfter(deadline: .now() + 5, execute: {
                                             withAnimation {
                                                 tabIndex = 3
+                                                vm.remove(wave: wave)
                                             }
                                         })
                                     }
                                 })
                             )
+                    }
+                       
                     if vm.showMatch {
                         MatchAnimation()
                     }

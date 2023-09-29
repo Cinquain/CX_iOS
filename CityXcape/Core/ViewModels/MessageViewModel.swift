@@ -12,7 +12,8 @@ class MessageViewModel: ObservableObject {
     
     @Published var connections: [User] = [User.demo, User.demo3, User.demo, User.demo3, User.demo2, User.demo3, User.demo2,]
 
-    @Published var messages: [Message] = [Message.demo3, Message.demo, Message.demo2, Message.demo4]
+    @Published var messages: [Message] = []
+    @Published var convo: [Message] = []
     
     @Published var count: Int = 0
     @Published var message: String = ""
@@ -20,22 +21,34 @@ class MessageViewModel: ObservableObject {
     @Published var showAlert: Bool = false
     @Published var showConnections: Bool = false 
  
-    
-    func sendMessage(uid: String) {
-        
+    init() {
+        fetchAllMessages()
     }
+    
     
     func fetchMessages(uid: String) {
         DataService.shared.getMessages(userId: uid) { result in
             switch result {
             case .success(let messages):
-                self.messages = messages
+                self.convo = messages
             case .failure(let error):
                 self.errorMessage = error.localizedDescription
                 self.showAlert.toggle()
             }
         }
 
+    }
+    
+    func fetchAllMessages(){
+        DataService.shared.fetchAllMessages { result in
+            switch result {
+            case .success(let recent):
+                self.messages = recent
+            case .failure(let error):
+                self.errorMessage = error.localizedDescription
+                self.showAlert.toggle()
+            }
+        }
     }
     
     func deleteRecentMessage(uid: String) {
@@ -45,6 +58,18 @@ class MessageViewModel: ObservableObject {
     
     func removeListener() {
         DataService.shared.removeChatListener()
+    }
+    
+    func sendMessage(user: User) {
+        Task {
+            do {
+                try await  DataService.shared.sendMessage(user: user, content: message)
+                message = ""
+            } catch {
+                errorMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
     }
     
    

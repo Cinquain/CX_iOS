@@ -42,7 +42,7 @@ struct ChatView: View {
         ScrollView {
             ScrollViewReader { proxy in
                 
-                ForEach(vm.messages) {
+                ForEach(vm.convo) {
                     MessageBubble(message: $0)
                 }
                 
@@ -73,12 +73,12 @@ struct ChatView: View {
             TextField("write your message", text: $vm.message)
                 .padding(.horizontal)
                 .padding(.vertical, 10)
-                .background(.white.opacity(0.9))
+                .background(.black.opacity(0.9))
                 .opacity(vm.message.isEmpty ? 0.8 : 1)
                 .clipShape(Capsule())
             
             Button {
-                vm.sendMessage(uid: user.id)
+                vm.sendMessage(user: user)
             } label: {
                 Text("Send")
                     .foregroundColor(.white)

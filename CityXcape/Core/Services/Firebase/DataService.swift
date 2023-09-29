@@ -70,25 +70,22 @@ final class DataService {
         ]
               
    
-        do {
-            let imageURL = try await ImageManager.shared.uploadLocationImaeg(id: spotId, image: image)
-            let data: [String: Any] = [
-                Location.CodingKeys.id.rawValue: spotId,
-                Location.CodingKeys.name.rawValue: name,
-                Location.CodingKeys.description.rawValue: description,
-                Location.CodingKeys.hashtags.rawValue: hashtag,
-                Location.CodingKeys.imageUrl.rawValue : imageURL,
-                Location.CodingKeys.longitude.rawValue: longitude,
-                Location.CodingKeys.latitude.rawValue: latitude,
-                Location.CodingKeys.address.rawValue: address,
-                Location.CodingKeys.city.rawValue: city,
-                Location.CodingKeys.ownerId.rawValue: userId
-            ]
-            try await ref.setData(data)
-            try await userRef.updateData(streetcredData)
-        } catch  {
-            throw error
-        }
+        
+        let imageURL = try await ImageManager.shared.uploadLocationImaeg(id: spotId, image: image)
+        let data: [String: Any] = [
+            Location.CodingKeys.id.rawValue: spotId,
+            Location.CodingKeys.name.rawValue: name,
+            Location.CodingKeys.description.rawValue: description,
+            Location.CodingKeys.hashtags.rawValue: hashtag,
+            Location.CodingKeys.imageUrl.rawValue : imageURL,
+            Location.CodingKeys.longitude.rawValue: longitude,
+            Location.CodingKeys.latitude.rawValue: latitude,
+            Location.CodingKeys.address.rawValue: address,
+            Location.CodingKeys.city.rawValue: city,
+            Location.CodingKeys.ownerId.rawValue: userId
+        ]
+        try await ref.setData(data)
+        try await userRef.updateData(streetcredData)
                     
     }
     
@@ -308,6 +305,34 @@ final class DataService {
     
     
     //MARK: MESSAGING FUNCTIONS
+    
+    func fetchAllMessages(completion: @escaping(Result<[Message], Error>) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        var messages: [Message] = []
+        
+        chatListener = messageRef
+            .document(uid)
+            .collection(Server.recentMessages)
+            .addSnapshotListener({ snapshot, error in
+                if let error = error {
+                    print("Error fetch recent messages")
+                    completion(.failure(error))
+                }
+                
+                snapshot?.documentChanges.forEach({ change in
+                    if change.type == .added {
+                        let data = change.document.data()
+                        let message = Message(data: data)
+                        messages.append(message)
+                    }
+                })
+                DispatchQueue.main.async {
+                    completion(.success(messages))
+                }
+        })
+        
+    }
+    
     func getMessages(userId: String, completion: @escaping(Result<[Message], Error>) -> ()) {
         guard let uid  = Auth.auth().currentUser?.uid else {return}
         var messages: [Message] = []
@@ -428,10 +453,10 @@ final class DataService {
     }
     
     func fetchWaves() async throws -> [Wave] {
-        guard let userId = uid else {throw CustomError.uidNotFound}
+        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
         var waves: [Wave] = []
         
-        let ref = privatesRef.document(userId).collection(Server.waves)
+        let ref = privatesRef.document(uid).collection(Server.waves)
         
         let snapshot = try await ref.getDocuments()
         
@@ -441,6 +466,21 @@ final class DataService {
             waves.append(wave)
         }
         return waves
+    }
+    
+    func deleteWave(waveId: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
+        let ref = privatesRef.document(uid).collection(Server.waves).document(waveId)
+        try await ref.delete()
+    }
+    
+    func acceptWave(wave: Wave) throws {
+        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
+        let message = Message(wave: wave)
+        let ref = messageRef.document(uid).collection(Server.recentMessages).document(wave.id)
+        let personalRef = messageRef.document(uid).collection(wave.fromId).document(wave.id)
+        try ref.setData(from: message)
+        try personalRef.setData(from: message)
     }
     
     func updateWaveCount(counter: Double) async throws {

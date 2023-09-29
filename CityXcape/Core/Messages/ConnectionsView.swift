@@ -11,23 +11,27 @@ struct ConnectionsView: View {
     @StateObject var vm: MessageViewModel
     
     var body: some View {
+        
+        NavigationView {
             VStack {
-                ForEach(vm.connections) { user in
-                    NavigationLink {
-                        ChatView(user: user, vm: vm)
-                    } label: {
-                        userRow(user: user)
+                    ForEach(vm.connections) { user in
+                        NavigationLink {
+                            ChatView(user: user, vm: vm)
+                        } label: {
+                            userRow(user: user)
+                        }
+                        
+                        Divider()
+                            .frame(height: 0.5)
+                            .background(.white)
+                            .padding(.horizontal)
                     }
-                    Divider()
-                        .frame(height: 0.5)
-                        .background(.white)
-                        .padding(.horizontal)
+                    Spacer()
                 }
-                Spacer()
-            }
-            .background(.black)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("Friends")
+                .background(.black)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("Friends")
+        }
           
 
        

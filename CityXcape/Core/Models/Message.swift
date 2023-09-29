@@ -25,8 +25,8 @@ struct Message: Identifiable, Hashable, Codable {
         case toId
         case content
         case timestamp
-        case profileUrl = "profile_url"
-        case displayName = "display_Name"
+        case profileUrl 
+        case displayName
     }
     
     func hash(into hasher: inout Hasher) {
@@ -49,14 +49,24 @@ struct Message: Identifiable, Hashable, Codable {
         self.displayName = data[Message.CodingKeys.displayName.rawValue] as? String ?? ""
        }
     
+    init(wave: Wave) {
+        self.id = wave.id
+        self.fromId = wave.fromId
+        self.toId = wave.toId
+        self.content = wave.content
+        self.displayName = wave.displayName
+        self.profileUrl = wave.profileUrl
+        self.timestamp = wave.timestamp
+    }
+    
     
     static let data: [String: Any] = [
         Message.CodingKeys.id.rawValue: "eifjoifjoiejo797744ijefoijfeos",
         Message.CodingKeys.fromId.rawValue: "oyda5lEqnnt4dqqUr8oV",
-        Message.CodingKeys.content.rawValue: "Hey how you doing",
+        Message.CodingKeys.content.rawValue: "What you're in town for?",
         Message.CodingKeys.timestamp.rawValue: Date(timeIntervalSinceNow: 100000),
-        Message.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2Fpexels-mahdi-chaghari-13634600.jpg?alt=media&token=81e87218-43fa-4cd7-80ea-c556cde704d8",
-        Message.CodingKeys.displayName.rawValue: "Amanda"
+        Message.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FwHlDbRkHtUnlbX5g6PgN%2F7-min.jpg?alt=media&token=6ddfed73-025a-4d76-b0b7-ea6f458a2fd0",
+        Message.CodingKeys.displayName.rawValue: "Jessica"
     ]
     
     static let data2: [String: Any] = [
@@ -64,7 +74,7 @@ struct Message: Identifiable, Hashable, Codable {
         Message.CodingKeys.fromId.rawValue: "wHlDbRkHtU9888998988nlbX5g6PgN",
         Message.CodingKeys.content.rawValue: "When we leaving to the lounge",
         Message.CodingKeys.timestamp.rawValue: Date(),
-        Message.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FwHlDbRkHtUnlbX5g6PgN%2F7-min.jpg?alt=media&token=6ddfed73-025a-4d76-b0b7-ea6f458a2fd0",
+        Message.CodingKeys.profileUrl.rawValue: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2F4wUh5lWK5YHR4IczOV3j%2F1-min.jpg?alt=media&token=ba1dae5d-5e13-4a32-b79c-7f8bcbbbee5a",
         Message.CodingKeys.displayName.rawValue: "Crystal",
     ]
     

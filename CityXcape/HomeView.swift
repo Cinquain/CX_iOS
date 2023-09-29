@@ -43,7 +43,7 @@ struct HomeView: View {
             
             WavesView(tabIndex: $selection, vm: waveVM)
                 .tag(2)
-                .badge(waveVM.waveCount)
+                .badge(waveVM.waves.count)
                 .tabItem {
                     Image(Tab.waves.rawValue)
                         .renderingMode(.template)

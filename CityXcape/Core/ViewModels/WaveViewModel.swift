@@ -16,16 +16,60 @@ class WaveViewModel: ObservableObject {
     @Published var lastCardIndex: Int = 1
     @Published var waveCount: Int = 1
     @Published var showMatch: Bool = false
+    @Published var waves: [Wave] = []
+    
+    @Published var errorMessage: String = ""
+    @Published var showAlert: Bool = false
+    
+    init() {
+        fetchAllWaves()
+    }
+ 
     
     
-    func moveCard() {
-        
-        
+    func fetchAllWaves() {
+        Task {
+            do {
+                self.waves = try await DataService.shared.fetchWaves()
+            } catch {
+                errorMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
     }
     
-    func match() {
+    func match(wave: Wave) {
         showMatch.toggle()
-        
-    
+        do {
+            try DataService.shared.acceptWave(wave: wave)
+
+        } catch {
+            errorMessage = error.localizedDescription
+            showAlert.toggle()
+        }
     }
+    
+    func remove(wave: Wave) {
+        if let index = waves.firstIndex(where: {$0.id == wave.id}) {
+            waves.remove(at: index)
+        }
+    }
+    
+    func deleteWave(id: String) {
+        Task {
+            do {
+                try await DataService.shared.deleteWave(waveId: id)
+                if let index = waves.firstIndex(where: {$0.id == id}) {
+                    waves.remove(at: index)
+                }
+            } catch {
+                errorMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
+    }
+    
+    
+    
+    
 }

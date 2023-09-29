@@ -54,12 +54,14 @@ struct MessagesView: View {
                 .fontWeight(.thin)
             Spacer()
             Button {
-                //Show connections view
+                vm.showConnections.toggle()
             } label: {
                 Image(systemName: "square.and.pencil")
                     .font(.title3)
             }
-
+            .sheet(isPresented: $vm.showConnections) {
+                ConnectionsView(vm: vm)
+            }
          
         }
         .padding(.horizontal, 10)

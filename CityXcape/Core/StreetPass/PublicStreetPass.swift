@@ -120,30 +120,31 @@ struct PublicStreetPass: View {
     }
     
     func sendWave() {
-        if isWaving {
-            if message.count < 3 {
-                alertMessgae = "Please send a message with your wave"
-                showAlert.toggle()
-                return
-            }
-        Task {
-            do {
-                try await DataService.shared.sendWave(userId: user.id, message: message)
-                isWaving.toggle()
-                alertMessgae = "Wave Sent"
-                showAlert.toggle()
-            } catch {
-                alertMessgae = error.localizedDescription
-                showAlert.toggle()
-                }
-            }
-            return
-        }
-            if wavecount == nil || wavecount == 0 {
-                showMenu.toggle()
-                return
-            }
-            isWaving.toggle()
+//        if isWaving {
+//            if message.count < 3 {
+//                alertMessgae = "Please send a message with your wave"
+//                showAlert.toggle()
+//                return
+//            }
+//        Task {
+//            do {
+//                try await DataService.shared.sendWave(userId: user.id, message: message)
+//                isWaving.toggle()
+//                alertMessgae = "Wave Sent"
+//                showAlert.toggle()
+//            } catch {
+//                alertMessgae = error.localizedDescription
+//                showAlert.toggle()
+//                }
+//            }
+//            return
+//        }
+//            if wavecount == nil || wavecount == 0 {
+//                showMenu.toggle()
+//                return
+//            }
+//            isWaving.toggle()
+        showMenu.toggle()
     }
         
     
