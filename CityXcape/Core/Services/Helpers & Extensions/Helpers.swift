@@ -19,6 +19,7 @@ struct Server {
     static let saves = "saves"
     static let messages = "messages"
     static let stamps = "stamps"
+    static let connections = "connections"
     static let recentMessages = "recentMessage"
     static let waves = "waves"
     static let likes = "likes"
@@ -42,6 +43,7 @@ enum PassType {
 enum CustomError: Error {
     case invalidPassword
     case uidNotFound
+    case badData
 }
 
 extension CustomError: LocalizedError {
@@ -51,6 +53,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Incorrect Password", comment: "Invalid Password")
         case .uidNotFound:
             return NSLocalizedString("User AuthID Not Found", comment: "UID Not Found!")
+        case .badData:
+            return NSLocalizedString("Bad Data", comment: "Data not found or formatted incorrectly")
         }
     }
 }

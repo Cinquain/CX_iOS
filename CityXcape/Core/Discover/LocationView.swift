@@ -70,8 +70,8 @@ struct LocationView: View {
                 .overlay {
                  CustomLayer(size: size)
                 }
-                .sheet(isPresented: $vm.showFavorites) {
-                    FavoritesList(spot: spot, locations: vm.myJourney)
+                .sheet(isPresented: $vm.showBucketList) {
+                    BucketList(saves: vm.saves)
                         .presentationDetents([.height(500)])
                 }
         }

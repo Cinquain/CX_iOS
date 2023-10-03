@@ -49,12 +49,6 @@ class WaveViewModel: ObservableObject {
         }
     }
     
-    func remove(wave: Wave) {
-        if let index = waves.firstIndex(where: {$0.id == wave.id}) {
-            waves.remove(at: index)
-        }
-    }
-    
     func deleteWave(id: String) {
         Task {
             do {

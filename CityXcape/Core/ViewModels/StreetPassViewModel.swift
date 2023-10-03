@@ -28,6 +28,8 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var profileUrl: String = ""
     @Published var success: Bool = false
 
+    @Published var showBucketList: Bool = false
+    @Published var bucketList: [Save] = []
     
 }
 
@@ -78,6 +80,19 @@ extension StreetPassViewModel {
         }
       
         
+    }
+    
+    
+    func fetchBucketList() {
+        Task {
+            do {
+                self.bucketList = try await DataService.shared.fetchBucketlist()
+                showBucketList.toggle()
+            } catch {
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
     }
     
     func signOut() {

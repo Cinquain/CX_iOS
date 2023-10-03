@@ -65,7 +65,7 @@ struct WavesView: View {
                                             .asyncAfter(deadline: .now() + 5, execute: {
                                             withAnimation {
                                                 tabIndex = 3
-                                                vm.remove(wave: wave)
+                                                vm.deleteWave(id: wave.id)
                                             }
                                         })
                                     }

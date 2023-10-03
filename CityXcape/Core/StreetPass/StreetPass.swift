@@ -91,20 +91,61 @@ struct StreetPass: View {
     @ViewBuilder
     func MyJourney() -> some View {
   
-        Button {
-            //
-        } label: {
-            HStack {
-                Image("Journey")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30, height: 30)
-                
-                Text("My Journey")
-                    .font(.title3)
-                    .foregroundColor(.white)
-                    .fontWeight(.thin)
+        VStack(alignment: .leading, spacing: 20) {
+            
+            Button {
+                vm.fetchBucketList()
+            } label: {
+                HStack {
+                    Image(systemName: "bookmark.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.white)
+                    
+                    Text("Bucket List")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .fontWeight(.thin)
+                        .popover(isPresented: $vm.showBucketList) {
+                            BucketList(saves: vm.bucketList)
+                                .presentationDetents([.medium, .large])
+
+                        }
+                }
             }
+            
+            Button {
+                //
+            } label: {
+                HStack {
+                    Image(systemName: "book.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.white)
+                    Text("Travel Diary")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .fontWeight(.thin)
+                }
+                
+            }
+            
+            Button {
+                //
+            } label: {
+                HStack {
+                    Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.white)
+                    
+                    Text("Analytics")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .fontWeight(.thin)
+                }
+            }
+
+            
+          
+
             
         }
         

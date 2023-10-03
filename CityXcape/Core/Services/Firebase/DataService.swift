@@ -37,6 +37,14 @@ final class DataService {
     
     
     //MARK: LOCATION FUNCTIONS
+    
+    func getSpotFromId(id: String) async throws -> Location {
+        let referene = locationsRef.document(id)
+        let snapshot = try await referene.getDocument()
+        guard let data = snapshot.data() else {throw CustomError.badData}
+        return Location(data: data)
+    }
+    
     func fetchAllLocations() async throws -> [Location] {
         let ref = locationsRef
         var locations: [Location] = []
@@ -89,6 +97,7 @@ final class DataService {
                     
     }
     
+    
     func saveLocation(spot: Location) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let increment: Double = 1
@@ -98,11 +107,15 @@ final class DataService {
             Location.CodingKeys.timestamp.rawValue: Timestamp()
         ]
         let spotData: [String: Any] = [
-            Location.CodingKeys.id.rawValue: spot.id,
-            Location.CodingKeys.timestamp.rawValue: Timestamp()
+            Save.CodingKeys.id.rawValue: spot.id,
+            Save.CodingKeys.name.rawValue: spot.name,
+            Save.CodingKeys.longitude.rawValue: spot.longitude,
+            Save.CodingKeys.latitude.rawValue: spot.latitude,
+            Save.CodingKeys.imageUrl.rawValue: spot.imageUrl,
+            Save.CodingKeys.timestamp.rawValue: Timestamp()
         ]
         
-        let data: [String: Any] = [
+        let countData: [String: Any] = [
             Location.CodingKeys.saveCount.rawValue: FieldValue.increment(increment)
         ]
         
@@ -112,13 +125,13 @@ final class DataService {
                                 .document(spot.id)
         let spotsRef = locationsRef.document(spot.id)
         
-        try await spotsRef.updateData(data)
+        try await spotsRef.updateData(countData)
         try await userSavesRef.setData(spotData)
         try await spotsRef.collection(Server.saves).document(uid).setData(userData)
       
     }
     
-    func unsaveLocation(spot: Location) async throws {
+    func unsaveLocation(spotId: String) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let increment: Double = -1
         
@@ -129,13 +142,27 @@ final class DataService {
         let userSavesRef = privatesRef
                                 .document(uid)
                                 .collection(Server.saves)
-                                .document(spot.id)
-        let spotsRef = locationsRef.document(spot.id)
+                                .document(spotId)
+        let spotsRef = locationsRef.document(spotId)
         
         try await spotsRef.updateData(data)
         try await userSavesRef.delete()
         try await spotsRef.collection(Server.saves).document(uid).delete()
     
+    }
+    
+    func fetchBucketlist() async throws -> [Save] {
+        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
+        let reference = privatesRef.document(uid).collection(Server.saves)
+        var locations: [Save] = []
+        let snapshot = try await reference.getDocuments()
+        snapshot.documents.forEach { document in
+            let data = document.data()
+            let save = Save(data: data)
+            locations.append(save)
+        }
+        print("Locations is", locations)
+        return locations
     }
     
     func like(spot: Location) async throws {
@@ -479,8 +506,11 @@ final class DataService {
         let message = Message(wave: wave)
         let ref = messageRef.document(uid).collection(Server.recentMessages).document(wave.id)
         let personalRef = messageRef.document(uid).collection(wave.fromId).document(wave.id)
+        let connectionsRef = privatesRef.document(uid).collection(Server.connections).document(wave.toId)
+        let connectionData: [String: Any] = [User.CodingKeys.id.rawValue: wave.toId, User.CodingKeys.timestamp.rawValue: Timestamp()]
         try ref.setData(from: message)
         try personalRef.setData(from: message)
+        connectionsRef.setData(connectionData)
     }
     
     func updateWaveCount(counter: Double) async throws {

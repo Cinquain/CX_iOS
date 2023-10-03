@@ -23,7 +23,7 @@ class LocationsViewModel: ObservableObject {
     
     @Published var showDetails: Bool = false
     @Published var showCheckinList: Bool = false
-    @Published var showFavorites: Bool = false 
+    @Published var showBucketList: Bool = false 
     @Published var showStamp: Bool = false
     @Published var isCheckedIn: Bool = false 
     
@@ -32,7 +32,7 @@ class LocationsViewModel: ObservableObject {
     @Published var basicAlert: Bool = false
     
     @Published private(set) var locations: [Location] = []
-    @Published var myJourney: [Location] = [Location.demo2, Location.demo1]
+    @Published var saves:[Save] = []
 
     
     func seeMoreInfo() {
@@ -84,7 +84,11 @@ class LocationsViewModel: ObservableObject {
         Task {
             do {
                 statuses[2] ? try await  DataService.shared.saveLocation(spot: spot) :
-                              try await  DataService.shared.unsaveLocation(spot: spot)
+                try await  DataService.shared.unsaveLocation(spotId: spot.id)
+                if statuses[2] {
+                    self.saves = try await DataService.shared.fetchBucketlist()
+                    self.showBucketList.toggle()
+                }
             } catch {
                 normalAlert .toggle()
                 alertMessage = error.localizedDescription
