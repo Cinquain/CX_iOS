@@ -296,6 +296,10 @@ extension Color {
         return Color("Dark_Grey")
     }
     
+    static var passport: Color {
+        return Color("Stamp_blue")
+    }
+    
     static var random: Color {
         return Color(
             red: .random(in: 0...1),

@@ -31,6 +31,9 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var showBucketList: Bool = false
     @Published var bucketList: [Save] = []
     
+    
+    @Published var showDiary: Bool = false
+    @Published var stamps: [Stamp] = []
 }
 
 extension StreetPassViewModel {
@@ -88,6 +91,18 @@ extension StreetPassViewModel {
             do {
                 self.bucketList = try await DataService.shared.fetchBucketlist()
                 showBucketList.toggle()
+            } catch {
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
+    }
+    
+    func fetchStamps() {
+        Task {
+            do {
+                self.stamps = try await DataService.shared.fetchallstamps()
+                showDiary.toggle()
             } catch {
                 alertMessage = error.localizedDescription
                 showAlert.toggle()

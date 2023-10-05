@@ -80,9 +80,10 @@ struct BucketList: View {
 
                     
                 }
-           
                 .padding(.horizontal, 20)
                 Divider()
+                    .foregroundColor(.white)
+                    .frame(height: 0.5)
                
             }
            

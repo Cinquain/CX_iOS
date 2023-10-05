@@ -12,6 +12,8 @@
 		21AB5D642A9CCBD10037FB73 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */; };
 		21ACA93C2AB341EB00B62C16 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ACA93B2AB341EB00B62C16 /* ChatView.swift */; };
 		21ACBA2E2ACCC7EF000E96A1 /* Save.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ACBA2D2ACCC7EF000E96A1 /* Save.swift */; };
+		21AD9C6B2ACF235600BBECB9 /* StampDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AD9C6A2ACF235600BBECB9 /* StampDetail.swift */; };
+		21AD9C6D2ACF292B00BBECB9 /* PassPortStamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AD9C6C2ACF292B00BBECB9 /* PassPortStamp.swift */; };
 		21ADEB2E2A98D73D002A24CB /* UserDot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADEB2D2A98D73D002A24CB /* UserDot.swift */; };
 		21ADEB302A98E7E1002A24CB /* CheckinList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADEB2F2A98E7E1002A24CB /* CheckinList.swift */; };
 		21ADF42C2A9A2CCB00AD2AE8 /* StampView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21ADF42B2A9A2CCB00AD2AE8 /* StampView.swift */; };
@@ -79,6 +81,8 @@
 		21DDCEE62A97871A0028235C /* LocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCEE52A97871A0028235C /* LocationsView.swift */; };
 		21DDCEE92A978D960028235C /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCEE82A978D960028235C /* MapView.swift */; };
 		21DDCEEB2A9791570028235C /* MapViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DDCEEA2A9791570028235C /* MapViewRepresentable.swift */; };
+		21F0F2A12ACDD55F002AF144 /* TravelDiary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0F2A02ACDD55F002AF144 /* TravelDiary.swift */; };
+		21F0F2A32ACDD96A002AF144 /* StampThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F0F2A22ACDD96A002AF144 /* StampThumbnail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +91,8 @@
 		21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		21ACA93B2AB341EB00B62C16 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		21ACBA2D2ACCC7EF000E96A1 /* Save.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Save.swift; sourceTree = "<group>"; };
+		21AD9C6A2ACF235600BBECB9 /* StampDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampDetail.swift; sourceTree = "<group>"; };
+		21AD9C6C2ACF292B00BBECB9 /* PassPortStamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassPortStamp.swift; sourceTree = "<group>"; };
 		21ADEB2D2A98D73D002A24CB /* UserDot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDot.swift; sourceTree = "<group>"; };
 		21ADEB2F2A98E7E1002A24CB /* CheckinList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckinList.swift; sourceTree = "<group>"; };
 		21ADF42B2A9A2CCB00AD2AE8 /* StampView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampView.swift; sourceTree = "<group>"; };
@@ -147,6 +153,8 @@
 		21DDCEE52A97871A0028235C /* LocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsView.swift; sourceTree = "<group>"; };
 		21DDCEE82A978D960028235C /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		21DDCEEA2A9791570028235C /* MapViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewRepresentable.swift; sourceTree = "<group>"; };
+		21F0F2A02ACDD55F002AF144 /* TravelDiary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelDiary.swift; sourceTree = "<group>"; };
+		21F0F2A22ACDD96A002AF144 /* StampThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StampThumbnail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +198,9 @@
 				21B5FF352A997BCA005DA658 /* BubbleView.swift */,
 				21BCDB492ACAFEBF00E316BF /* BucketList.swift */,
 				21BCDB4B2ACB059500E316BF /* PinView.swift */,
+				21F0F2A02ACDD55F002AF144 /* TravelDiary.swift */,
+				21F0F2A22ACDD96A002AF144 /* StampThumbnail.swift */,
+				21AD9C6A2ACF235600BBECB9 /* StampDetail.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -240,6 +251,7 @@
 			children = (
 				21B5FF372A998428005DA658 /* PublicStreetPass.swift */,
 				21B92D822A9E352B0024E835 /* StreetPass.swift */,
+				21AD9C6C2ACF292B00BBECB9 /* PassPortStamp.swift */,
 			);
 			path = StreetPass;
 			sourceTree = "<group>";
@@ -482,6 +494,7 @@
 				21D8B3F82AA0DDF80094679C /* ImageManger.swift in Sources */,
 				21BCDB4C2ACB059500E316BF /* PinView.swift in Sources */,
 				21CDB6152A82A9D200A2E1FD /* User.swift in Sources */,
+				21AD9C6B2ACF235600BBECB9 /* StampDetail.swift in Sources */,
 				21D03E382A8C0DB100B07162 /* Particle.swift in Sources */,
 				21DDCEE92A978D960028235C /* MapView.swift in Sources */,
 				21D03E362A8C097100B07162 /* CustomButton.swift in Sources */,
@@ -514,6 +527,7 @@
 				21ACBA2E2ACCC7EF000E96A1 /* Save.swift in Sources */,
 				21CDB5F72A82A2C800A2E1FD /* HomeView.swift in Sources */,
 				21ADF42E2A9A334500AD2AE8 /* SoundManager.swift in Sources */,
+				21AD9C6D2ACF292B00BBECB9 /* PassPortStamp.swift in Sources */,
 				21B3A70A2ABB0CFC0041F217 /* CardViewModel.swift in Sources */,
 				21D70FD52AB5F7F800275B6B /* ConnectionsView.swift in Sources */,
 				21CDB5F52A82A2C800A2E1FD /* CityXcapeApp.swift in Sources */,
@@ -523,10 +537,12 @@
 				21AE60822AA7462C0001BB48 /* MessageBubble.swift in Sources */,
 				21D4676D2A83ED2700973AB9 /* DataService.swift in Sources */,
 				21BCDB4A2ACAFEBF00E316BF /* BucketList.swift in Sources */,
+				21F0F2A32ACDD96A002AF144 /* StampThumbnail.swift in Sources */,
 				21D4676B2A83EC9800973AB9 /* Extensions.swift in Sources */,
 				21B5FF382A998428005DA658 /* PublicStreetPass.swift in Sources */,
 				21CDB6172A82A9DC00A2E1FD /* World.swift in Sources */,
 				21DAF7EA2A939C3600AC1C28 /* Helpers.swift in Sources */,
+				21F0F2A12ACDD55F002AF144 /* TravelDiary.swift in Sources */,
 				21DAF7ED2A93E43100AC1C28 /* LocationsViewModel.swift in Sources */,
 				21D467692A83E70800973AB9 /* Utilities.swift in Sources */,
 				21AE55022A8BBCB200CF1820 /* WorldView.swift in Sources */,

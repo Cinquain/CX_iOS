@@ -94,6 +94,25 @@ struct StreetPass: View {
         VStack(alignment: .leading, spacing: 20) {
             
             Button {
+                vm.fetchStamps()
+            } label: {
+                HStack {
+                    Image(systemName: "book.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.white)
+                    Text("Travel Diary")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .fontWeight(.thin)
+                }
+                .fullScreenCover(isPresented: $vm.showDiary) {
+                    TravelDiary(stamps: vm.stamps)
+                        .presentationDetents([.medium, .large])
+                }
+                
+            }
+            
+            Button {
                 vm.fetchBucketList()
             } label: {
                 HStack {
@@ -113,20 +132,6 @@ struct StreetPass: View {
                 }
             }
             
-            Button {
-                //
-            } label: {
-                HStack {
-                    Image(systemName: "book.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.white)
-                    Text("Travel Diary")
-                        .font(.title3)
-                        .foregroundColor(.white)
-                        .fontWeight(.thin)
-                }
-                
-            }
             
             Button {
                 //

@@ -226,7 +226,7 @@ final class DataService {
             Stamp.CodingKeys.longitude.rawValue: spot.longitude,
             Stamp.CodingKeys.likeCount.rawValue: 0,
             Stamp.CodingKeys.timestamp.rawValue: Timestamp(),
-            Stamp.CodingKeys.stampImageUrl.rawValue: spot.imageUrl
+            Stamp.CodingKeys.imageUrl.rawValue: spot.imageUrl
         ]
         
         let spotData: [String: Any] = [
@@ -525,7 +525,19 @@ final class DataService {
         try await ref.updateData(data)
     }
     
-    
+    //MARK: STAMP FUNCTIONS
+    func fetchallstamps() async throws -> [Stamp]{
+        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
+        let ref = privatesRef.document(uid).collection(Server.stamps)
+        var stamps: [Stamp] = []
+        let snapshot = try await ref.getDocuments()
+        snapshot.documents.forEach { document in
+            let data = document.data()
+            let stamp = Stamp(data: data)
+            stamps.append(stamp)
+        }
+        return stamps
+    }
     
     
 }
