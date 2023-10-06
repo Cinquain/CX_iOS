@@ -24,10 +24,11 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let ownerId: String
     let hashtags: String
     //Social Component
-    let saveCount: Int
-    let likeCount: Int
-    let checkinCount: Int
-    let commentCount: Int
+    let saveCount: Double
+    let likeCount: Double
+    let checkinCount: Double
+    let commentCount: Double
+    let connections: Double
     
     //World Component
     let worldId: String?
@@ -92,15 +93,15 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.address = data[Location.CodingKeys.address.rawValue] as? String ?? ""
         let timestamp = data[Location.CodingKeys.timestamp.rawValue] as? Timestamp
         self.timestamp = timestamp?.dateValue() ?? Date()
-        self.saveCount = data[Location.CodingKeys.saveCount.rawValue] as? Int ?? 1
-        self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Int ?? 0
-        self.likeCount = data[Location.CodingKeys.likeCount.rawValue] as? Int ?? 0
-        self.checkinCount = data[Location.CodingKeys.checkinCount.rawValue] as? Int ?? 0
+        self.saveCount = data[Location.CodingKeys.saveCount.rawValue] as? Double ?? 1
+        self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Double ?? 0
+        self.likeCount = data[Location.CodingKeys.likeCount.rawValue] as? Double ?? 0
+        self.checkinCount = data[Location.CodingKeys.checkinCount.rawValue] as? Double ?? 0
         self.worldId = data[Location.CodingKeys.worldId.rawValue] as? String ?? nil
         self.worldName = data[Location.CodingKeys.worldName.rawValue] as? String ?? nil
         self.worldImageUrl = data[Location.CodingKeys.worldImageUrl.rawValue] as? String ?? nil
         self.ownerId = data[Location.CodingKeys.ownerId.rawValue] as? String ?? ""
-
+        self.connections = data[Location.CodingKeys.connections.rawValue] as? Double ?? 0
     }
 
     
@@ -114,6 +115,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case likeCount
         case city
         case timestamp
+        case connections
         case address
         case hashtags
         case ownerId = "owner_id"

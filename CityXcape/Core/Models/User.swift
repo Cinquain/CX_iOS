@@ -13,15 +13,14 @@ struct User: Identifiable, Equatable, Codable {
     let id: String
     let username: String
     let imageUrl: String
-    
     let bio: String?
     let fcmToken: String?
-    
-    //World Information
     let timestamp: Date?
     
-    //User Profile
-    let streetCred: Int?
+    let connections: Double
+    let streetCred: Double
+    let spotsFound: Double
+    
     let footprint: [String: Int]?
     let saves: [String: Int]?
 //
@@ -41,20 +40,24 @@ struct User: Identifiable, Equatable, Codable {
         self.fcmToken = data[User.CodingKeys.fcmToken.rawValue] as? String ?? nil
         let timestamp = data[User.CodingKeys.timestamp.rawValue] as? Timestamp
         self.timestamp = timestamp?.dateValue() ?? Date()
-        self.streetCred = data[User.CodingKeys.streetCred.rawValue] as? Int ?? nil
+        self.streetCred = data[User.CodingKeys.streetCred.rawValue] as? Double ?? 0
         self.footprint = data[User.CodingKeys.footprint.rawValue] as? [String: Int] ?? nil
         self.saves = data[User.CodingKeys.saves.rawValue] as? [String: Int] ?? nil
         self.email = data[User.CodingKeys.email.rawValue] as? String ?? nil
         self.phone = data[User.CodingKeys.phone.rawValue] as? String ?? nil
+        self.connections = data[User.CodingKeys.connections.rawValue] as? Double ?? 0
+        self.spotsFound = data[User.CodingKeys.spotsFound.rawValue] as? Double ?? 0
     }
     
     init(message: Message) {
         self.id = message.fromId
         self.imageUrl = message.profileUrl
         self.username = message.displayName
+        self.connections = 0
+        self.streetCred = 0
+        self.spotsFound = 0
         self.bio = nil
         self.fcmToken = nil
-        self.streetCred = nil
         self.timestamp = nil
         self.email = nil
         self.phone = nil
@@ -72,10 +75,12 @@ struct User: Identifiable, Equatable, Codable {
         case fcmToken
         case timestamp
         case streetCred
+        case connections
         case footprint
         case saves
         case email
         case phone
+        case spotsFound
     }
     
     static let data : [String: Any] = [

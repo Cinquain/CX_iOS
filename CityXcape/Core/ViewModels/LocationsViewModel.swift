@@ -127,6 +127,7 @@ class LocationsViewModel: ObservableObject {
                     self.offset = 100
                     self.isCheckedIn = true
                     UserDefaults.standard.set(spot.name, forKey: AppUserDefaults.location)
+                    UserDefaults.standard.set(spot.id, forKey: AppUserDefaults.spotId)
                 })
             } catch {
                 normalAlert.toggle()

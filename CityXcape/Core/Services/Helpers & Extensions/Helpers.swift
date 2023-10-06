@@ -23,6 +23,7 @@ struct Server {
     static let recentMessages = "recentMessage"
     static let waves = "waves"
     static let likes = "likes"
+    static let uploads = "uploads"
 }
 
 struct AppUserDefaults {
@@ -33,6 +34,7 @@ struct AppUserDefaults {
     static let username = "username"
     static let waveCount = "waveCount"
     static let location = "location"
+    static let spotId = "spotId"
 }
 
 enum PassType {

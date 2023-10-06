@@ -20,7 +20,8 @@ final class DataService {
     @AppStorage(AppUserDefaults.username) var username: String?
     @AppStorage(AppUserDefaults.uid) var uid: String?
     @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
-    @AppStorage(AppUserDefaults.location) var location: String?
+    @AppStorage(AppUserDefaults.location) var locationName: String?
+    @AppStorage(AppUserDefaults.spotId) var locationId: String?
 
 
     static let shared = DataService()
@@ -45,12 +46,31 @@ final class DataService {
         return Location(data: data)
     }
     
+    func getSpotsFromIds(ids: [String], completion: (Result<[Location], Error>) ->Void){
+        var locations: [Location] = []
+        for id in ids {
+            var location: Location?
+            locationsRef.document(id)
+                .getDocument { snapshot, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    }
+                    guard let data = snapshot?.data() else {return}
+                    location = Location(data: data)
+                }
+            if let location = location {
+                locations.append(location)
+            }
+        }
+        completion(.success(locations))
+    }
+    
     func fetchAllLocations() async throws -> [Location] {
         let ref = locationsRef
         var locations: [Location] = []
         print("Fetching all locations")
         
-        let snapshot = try await ref.getDocuments()
+        let snapshot = try await ref.limit(to: 50).getDocuments()
         
          snapshot.documents.forEach {
             let location = Location(data:  $0.data())
@@ -61,8 +81,8 @@ final class DataService {
     }
     
     func createLocation(name: String, description: String, hashtag: String, image: UIImage, mapItem: MKMapItem) async throws {
-        let ref = locationsRef.document()
-        let spotId = ref.documentID
+        let spotRef = locationsRef.document()
+        let spotId = spotRef.documentID
         let increment: Double = 1
         let address = mapItem.getAddress()
         let longitude = mapItem.placemark.coordinate.longitude
@@ -71,12 +91,16 @@ final class DataService {
         
         let userId = Auth.auth().currentUser?.uid ?? ""
         let userRef = usersRef.document(userId)
-
-
+        let userRecordsRef = privatesRef.document(userId).collection(Server.privates).document(spotId)
+    
         let streetcredData: [String: Any] = [
-            User.CodingKeys.streetCred.rawValue: FieldValue.increment(increment)
+            User.CodingKeys.streetCred.rawValue: FieldValue.increment(increment),
+            User.CodingKeys.spotsFound.rawValue: FieldValue.increment(Double(1))
         ]
-              
+        let personalData: [String: Any] = [
+            Location.CodingKeys.id.rawValue: spotId,
+            Location.CodingKeys.timestamp.rawValue: Timestamp()
+        ]
    
         
         let imageURL = try await ImageManager.shared.uploadLocationImaeg(id: spotId, image: image)
@@ -92,9 +116,26 @@ final class DataService {
             Location.CodingKeys.city.rawValue: city,
             Location.CodingKeys.ownerId.rawValue: userId
         ]
-        try await ref.setData(data)
+        
+        try await spotRef.setData(data)
         try await userRef.updateData(streetcredData)
+        try await userRecordsRef.setData(personalData)
                     
+    }
+    
+    func deleteLocation(spotId: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
+        let spotRef = locationsRef.document(spotId)
+        let userRef = usersRef.document(uid)
+        let userRecordsRef = privatesRef.document(uid).collection(Server.uploads).document(spotId)
+        
+        let data: [String: Any] = [
+            User.CodingKeys.spotsFound.rawValue: FieldValue.increment(Double(-1))
+        ]
+        
+        try await spotRef.delete()
+        try await userRecordsRef.delete()
+        try await userRef.updateData(data)
     }
     
     
@@ -470,7 +511,8 @@ final class DataService {
             Wave.codingKeys.toId.rawValue: userId,
             Wave.codingKeys.content.rawValue: message,
             Wave.codingKeys.timestamp.rawValue: Timestamp(),
-            Wave.codingKeys.location.rawValue: location ?? "",
+            Wave.codingKeys.location.rawValue: locationName ?? "",
+            Wave.codingKeys.spotId.rawValue: locationId ?? "",
             Wave.codingKeys.displayName.rawValue: displayName,
             Wave.codingKeys.profileUrl.rawValue: imageUrl
         ]
@@ -504,13 +546,42 @@ final class DataService {
     func acceptWave(wave: Wave) throws {
         guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
         let message = Message(wave: wave)
-        let ref = messageRef.document(uid).collection(Server.recentMessages).document(wave.id)
-        let personalRef = messageRef.document(uid).collection(wave.fromId).document(wave.id)
+        
+        //Create messages for both users
+        let recentRef = messageRef.document(uid).collection(Server.recentMessages).document(wave.id)
+        let messageRef = messageRef.document(uid).collection(wave.fromId).document(wave.id)
+        try recentRef.setData(from: message)
+        try messageRef.setData(from: message)
+        
+        //Create connecitons in personal collections
         let connectionsRef = privatesRef.document(uid).collection(Server.connections).document(wave.toId)
-        let connectionData: [String: Any] = [User.CodingKeys.id.rawValue: wave.toId, User.CodingKeys.timestamp.rawValue: Timestamp()]
-        try ref.setData(from: message)
-        try personalRef.setData(from: message)
+        let connections2Ref = privatesRef.document(wave.toId).collection(Server.connections).document(uid)
+        
+        let connectionData: [String: Any] = [User.CodingKeys.id.rawValue: wave.toId,
+                                             User.CodingKeys.timestamp.rawValue: Timestamp(),
+                                             Wave.codingKeys.location.rawValue: wave.location,
+                                             Wave.codingKeys.spotId.rawValue: wave.spotId]
+        
+        let connections2Data: [String: Any] = [User.CodingKeys.id.rawValue: uid,
+                                               User.CodingKeys.timestamp.rawValue: Timestamp(),
+                                               Wave.codingKeys.location.rawValue: wave.location,
+                                               Wave.codingKeys.spotId.rawValue: wave.spotId]
         connectionsRef.setData(connectionData)
+        connections2Ref.setData(connections2Data)
+        
+        //Update connections counter for both users and location
+        let spotRef = locationsRef.document(wave.spotId)
+        let toRef = usersRef.document(wave.toId)
+        let fromRef = usersRef.document(wave.fromId)
+        
+        let counterData: [String: Any] = [
+            User.CodingKeys.connections.rawValue: FieldValue.increment(Double(1)),
+            User.CodingKeys.streetCred.rawValue: FieldValue.increment(Double(3))
+        ]
+        
+        spotRef.updateData(counterData)
+        toRef.updateData(counterData)
+        fromRef.updateData(counterData)
     }
     
     func updateWaveCount(counter: Double) async throws {
@@ -524,6 +595,32 @@ final class DataService {
         UserDefaults.standard.set(wavecount, forKey: AppUserDefaults.waveCount)
         try await ref.updateData(data)
     }
+    
+    
+    func deleteConnection(id: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let userRecord = privatesRef.document(uid).collection(Server.connections).document(id)
+        let connectionRecord = privatesRef.document(id).collection(Server.connections).document(uid)
+        try await userRecord.delete()
+        try await connectionRecord.delete()
+        
+        let userRef = usersRef.document(uid)
+        let connectionRef = usersRef.document(id)
+        let data: [String: Any] = [
+            User.CodingKeys.connections.rawValue: FieldValue.increment(Double(-1)),
+            User.CodingKeys.streetCred.rawValue: FieldValue.increment(Double(-1))
+        ]
+        try await userRef.updateData(data)
+        try await connectionRef.updateData(data)
+        
+        let userMessage = messageRef.document(uid).collection(Server.recentMessages).document(id)
+        let connectionMessage = messageRef.document(id).collection(Server.recentMessages).document(uid)
+        try await userMessage.delete()
+        try await connectionMessage.delete()
+    }
+    
+    
     
     //MARK: STAMP FUNCTIONS
     func fetchallstamps() async throws -> [Stamp]{
