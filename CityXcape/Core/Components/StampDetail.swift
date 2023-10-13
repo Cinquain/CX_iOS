@@ -76,6 +76,17 @@ struct StampDetail: View {
         }
         .padding(.horizontal, 20)
     }
+    
+    @ViewBuilder
+    func Background() -> some View {
+        ZStack {
+            Color.black
+            Image("street-paths")
+                .resizable()
+                .scaledToFill()
+        }
+        .edgesIgnoringSafeArea(.all)
+    }
 }
 
 struct StampDetail_Previews: PreviewProvider {

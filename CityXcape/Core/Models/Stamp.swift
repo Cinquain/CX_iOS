@@ -17,8 +17,9 @@ struct Stamp: Identifiable, Equatable, Codable {
     let longitude: Double
     let latitude: Double
     let imageUrl: String
-    let likeCount: Int
     let ownerId: String
+    let displayName: String
+    let ownerImageUrl: String
  
     
     static func == (lhs: Stamp, rhs: Stamp) -> Bool {
@@ -32,10 +33,11 @@ struct Stamp: Identifiable, Equatable, Codable {
         self.longitude = data[Stamp.CodingKeys.longitude.rawValue] as? Double ?? 0
         self.latitude = data[Stamp.CodingKeys.latitude.rawValue] as? Double ?? 0
         self.imageUrl = data[Stamp.CodingKeys.imageUrl.rawValue] as? String ?? ""
-        self.likeCount = data[Stamp.CodingKeys.likeCount.rawValue] as? Int ?? 0
         self.ownerId = data[Stamp.CodingKeys.ownerId.rawValue] as? String ?? ""
         let timestamp =  data[Stamp.CodingKeys.timestamp.rawValue] as? Timestamp
         self.timestamp = timestamp?.dateValue() ?? Date()
+        self.displayName = data[Stamp.CodingKeys.displayName.rawValue] as? String ?? ""
+        self.ownerImageUrl = data[Stamp.CodingKeys.ownerImageUrl.rawValue] as? String ?? ""
     }
     
     enum CodingKeys: String, CodingKey {
@@ -46,8 +48,9 @@ struct Stamp: Identifiable, Equatable, Codable {
         case longitude
         case latitude
         case imageUrl = "stamp_imageUrl"
-        case likeCount = "like_count"
         case ownerId = "owner_id"
+        case displayName
+        case ownerImageUrl
     }
     
     static let data: [String: Any] = [
@@ -59,7 +62,6 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "The Magic Garden",
         Stamp.CodingKeys.ownerId.rawValue: "jhoihoiowioiwj",
-        Stamp.CodingKeys.likeCount.rawValue: 5
     ]
     
     static let data2: [String: Any] = [
@@ -71,7 +73,6 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "The Vessel",
         Stamp.CodingKeys.ownerId.rawValue: "jhoihoiowioflfnlkflkiwj",
-        Stamp.CodingKeys.likeCount.rawValue: 7
     ]
     
     
@@ -84,7 +85,6 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "Graffiti Pier",
         Stamp.CodingKeys.ownerId.rawValue: "jhoihoiowioflkfkljkflfnlkflkiwj",
-        Stamp.CodingKeys.likeCount.rawValue: 7
     ]
     
     static let data4: [String: Any] = [
@@ -96,7 +96,6 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "One57 Bar",
         Stamp.CodingKeys.ownerId.rawValue: "jhooidhihjkddihoiowioflfnlkflkiwj",
-        Stamp.CodingKeys.likeCount.rawValue: 7
     ]
     
     static let demo = Stamp(data: data)

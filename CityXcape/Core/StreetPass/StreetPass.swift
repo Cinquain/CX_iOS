@@ -45,12 +45,19 @@ struct StreetPass: View {
     @ViewBuilder
     func StreetPassHeader() -> some View {
         HStack {
-            Text("STREETPASS")
-                .font(.system(size: 24))
-                .fontWeight(.thin)
-                .foregroundColor(.white)
-                .tracking(4)
-                .opacity(0.7)
+            VStack(alignment: .leading) {
+                Text("STREETPASS")
+                    .font(.system(size: 24))
+                    .fontWeight(.thin)
+                    .tracking(4)
+                    .opacity(0.7)
+                Text("STC Balance: 0")
+                    .font(.caption)
+                    .fontWeight(.thin)
+                    .opacity(0.7)
+            }
+            .foregroundColor(.white)
+
             Spacer()
             Menu {
                 //Sign out user
@@ -92,6 +99,25 @@ struct StreetPass: View {
     func MyJourney() -> some View {
   
         VStack(alignment: .leading, spacing: 20) {
+            Button {
+                vm.fetchBucketList()
+            } label: {
+                HStack {
+                    Image(systemName: "list.bullet.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.white)
+                    
+                    Text("Bucket List")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .fontWeight(.thin)
+                        .popover(isPresented: $vm.showBucketList) {
+                            BucketList(locations: vm.bucketList)
+                                .presentationDetents([.medium, .large])
+
+                        }
+                }
+            }
             
             Button {
                 vm.fetchStamps()
@@ -112,29 +138,9 @@ struct StreetPass: View {
                 
             }
             
-            Button {
-                vm.fetchBucketList()
-            } label: {
-                HStack {
-                    Image(systemName: "bookmark.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.white)
-                    
-                    Text("Bucket List")
-                        .font(.title3)
-                        .foregroundColor(.white)
-                        .fontWeight(.thin)
-                        .popover(isPresented: $vm.showBucketList) {
-                            BucketList(saves: vm.bucketList)
-                                .presentationDetents([.medium, .large])
-
-                        }
-                }
-            }
-            
             
             Button {
-                //
+                vm.fetchUploads()
             } label: {
                 HStack {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
@@ -147,7 +153,9 @@ struct StreetPass: View {
                         .fontWeight(.thin)
                 }
             }
-
+            .fullScreenCover(isPresented: $vm.showStreetRep) {
+                StreetReportCard(vm: vm)
+            }
             
           
 

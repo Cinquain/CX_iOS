@@ -37,8 +37,8 @@ struct SignUpViewII: View {
                 .foregroundColor(.black)
                 .frame(width: 260)
                 .clipShape(Capsule())
-                .alert(isPresented: $vm.showAlert) {
-                    return Alert(title: Text(vm.alertMessage))
+                .alert(isPresented: $vm.showError) {
+                    return Alert(title: Text(vm.errorMessage))
                 }
             Spacer()
             

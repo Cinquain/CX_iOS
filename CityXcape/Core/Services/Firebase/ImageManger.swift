@@ -30,7 +30,7 @@ class ImageManager: NSObject {
     }
     
     //MARK: LOCATION IMAGE FUNCTIONS
-    func uploadLocationImaeg(id: String, image: UIImage) async throws -> String {
+    func uploadLocationImage(id: String, image: UIImage) async throws -> String {
         let path = getLocationMainImagePath(spotId: id)
         do {
             let url = try await uploadImage(path: path, image: image)

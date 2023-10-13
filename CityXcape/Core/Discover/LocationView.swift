@@ -50,6 +50,9 @@ struct LocationView: View {
                             vm.offset = startLocation.y + value.translation.height
                         })
                 )
+                .onAppear {
+                    vm.updateViewCount(id: spot.id)
+                }
                 .onDisappear {
                     vm.showStamp = false
                     vm.statuses[2] = false
@@ -71,7 +74,7 @@ struct LocationView: View {
                  CustomLayer(size: size)
                 }
                 .sheet(isPresented: $vm.showBucketList) {
-                    BucketList(saves: vm.saves)
+                    BucketList(locations: vm.saves)
                         .presentationDetents([.height(500)])
                 }
         }

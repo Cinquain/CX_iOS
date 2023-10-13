@@ -24,11 +24,12 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let ownerId: String
     let hashtags: String
     //Social Component
-    let saveCount: Double
-    let likeCount: Double
-    let checkinCount: Double
-    let commentCount: Double
-    let connections: Double
+    let saveCount: Int
+    let likeCount: Int
+    let viewCount: Int
+    let checkinCount: Int
+    let commentCount: Int
+    let connections: Int
     
     //World Component
     let worldId: String?
@@ -93,15 +94,16 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.address = data[Location.CodingKeys.address.rawValue] as? String ?? ""
         let timestamp = data[Location.CodingKeys.timestamp.rawValue] as? Timestamp
         self.timestamp = timestamp?.dateValue() ?? Date()
-        self.saveCount = data[Location.CodingKeys.saveCount.rawValue] as? Double ?? 1
-        self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Double ?? 0
-        self.likeCount = data[Location.CodingKeys.likeCount.rawValue] as? Double ?? 0
-        self.checkinCount = data[Location.CodingKeys.checkinCount.rawValue] as? Double ?? 0
+        self.saveCount = data[Location.CodingKeys.saveCount.rawValue] as? Int ?? 1
+        self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Int ?? 0
+        self.likeCount = data[Location.CodingKeys.likeCount.rawValue] as? Int ?? 0
+        self.checkinCount = data[Location.CodingKeys.checkinCount.rawValue] as? Int ?? 0
         self.worldId = data[Location.CodingKeys.worldId.rawValue] as? String ?? nil
         self.worldName = data[Location.CodingKeys.worldName.rawValue] as? String ?? nil
         self.worldImageUrl = data[Location.CodingKeys.worldImageUrl.rawValue] as? String ?? nil
         self.ownerId = data[Location.CodingKeys.ownerId.rawValue] as? String ?? ""
-        self.connections = data[Location.CodingKeys.connections.rawValue] as? Double ?? 0
+        self.connections = data[Location.CodingKeys.connections.rawValue] as? Int ?? 0
+        self.viewCount = data[Location.CodingKeys.viewCount.rawValue] as? Int ?? 0
     }
 
     
@@ -124,6 +126,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case commentCount = "comment_count"
         case worldName = "world_name"
         case worldId = "world_id"
+        case viewCount = "view_count"
         case worldImageUrl =  "world_imageUrl"
   
     }
@@ -138,11 +141,12 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.latitude.rawValue: 39.971779951285704,
         Location.CodingKeys.longitude.rawValue: -75.1136488197242,
         Location.CodingKeys.timestamp.rawValue: Date(),
-        Location.CodingKeys.likeCount.rawValue: 12,
-        Location.CodingKeys.saveCount.rawValue: 10,
+        Location.CodingKeys.likeCount.rawValue: 322,
+        Location.CodingKeys.saveCount.rawValue: 100,
         Location.CodingKeys.hashtags.rawValue: "Street Art",
-        Location.CodingKeys.checkinCount.rawValue: 3,
-        Location.CodingKeys.commentCount.rawValue: 4
+        Location.CodingKeys.checkinCount.rawValue: 34,
+        Location.CodingKeys.commentCount.rawValue: 40,
+        Location.CodingKeys.viewCount.rawValue: 423
     ]
     
     static let data1: [String: Any] = [
@@ -159,7 +163,8 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.saveCount.rawValue: 10,
         Location.CodingKeys.hashtags.rawValue: "Nightlife",
         Location.CodingKeys.checkinCount.rawValue: 3,
-        Location.CodingKeys.commentCount.rawValue: 4
+        Location.CodingKeys.commentCount.rawValue: 4,
+        Location.CodingKeys.viewCount.rawValue: 1485
     ]
     
     static let data2: [String: Any] = [
@@ -176,7 +181,8 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.likeCount.rawValue: 60,
         Location.CodingKeys.hashtags.rawValue: "Foodie",
         Location.CodingKeys.checkinCount.rawValue: 3,
-        Location.CodingKeys.commentCount.rawValue: 4
+        Location.CodingKeys.commentCount.rawValue: 4,
+        Location.CodingKeys.viewCount.rawValue: 25485
     ]
     
     static let demo = Location(data: data)

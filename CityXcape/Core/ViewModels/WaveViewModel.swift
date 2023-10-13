@@ -11,26 +11,25 @@ import Foundation
 
 class WaveViewModel: ObservableObject {
     
-    @Published var cardView: CardView? = CardView(wave: Wave.demo)
 
     @Published var lastCardIndex: Int = 1
     @Published var waveCount: Int = 1
     @Published var showMatch: Bool = false
-    @Published var waves: [Wave] = []
+    @Published var messages: [Message] = []
     
     @Published var errorMessage: String = ""
     @Published var showAlert: Bool = false
     
     init() {
-        fetchAllWaves()
+        fetcConnectionRequests()
     }
  
     
     
-    func fetchAllWaves() {
+    func fetcConnectionRequests() {
         Task {
             do {
-                self.waves = try await DataService.shared.fetchWaves()
+                self.messages = try await DataService.shared.fetchRequests()
             } catch {
                 errorMessage = error.localizedDescription
                 showAlert.toggle()
@@ -38,10 +37,10 @@ class WaveViewModel: ObservableObject {
         }
     }
     
-    func match(wave: Wave) {
+    func match(message: Message) {
         showMatch.toggle()
         do {
-            try DataService.shared.acceptWave(wave: wave)
+            try DataService.shared.acceptWave(message: message)
 
         } catch {
             errorMessage = error.localizedDescription
@@ -53,8 +52,8 @@ class WaveViewModel: ObservableObject {
         Task {
             do {
                 try await DataService.shared.deleteWave(waveId: id)
-                if let index = waves.firstIndex(where: {$0.id == id}) {
-                    waves.remove(at: index)
+                if let index = messages.firstIndex(where: {$0.id == id}) {
+                    messages.remove(at: index)
                 }
             } catch {
                 errorMessage = error.localizedDescription

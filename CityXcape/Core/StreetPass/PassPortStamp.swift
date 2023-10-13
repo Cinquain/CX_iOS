@@ -11,13 +11,13 @@ struct PassPortStamp: View {
     
     let stamp: Stamp
     @State private var animate: Bool = true
-    
+    let random: Color = Color.random
     var body: some View {
         Image("Stamp")
             .renderingMode(.template)
             .resizable()
             .scaledToFit()
-            .foregroundColor(.passport)
+            .foregroundColor(random)
             .frame(width: 220)
             .overlay(timeStamp())
             .rotationEffect(animate ? Angle(degrees: 0) : Angle(degrees: -35))
@@ -44,7 +44,7 @@ struct PassPortStamp: View {
                 .font(.caption)
                 .fontWeight(.medium)
         }
-        .foregroundColor(Color.passport)
+        .foregroundColor(random)
         .rotationEffect(Angle(degrees: -32))
 
     }

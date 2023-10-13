@@ -32,8 +32,7 @@ class LocationsViewModel: ObservableObject {
     @Published var basicAlert: Bool = false
     
     @Published private(set) var locations: [Location] = []
-    @Published var saves:[Save] = []
-
+    @Published var saves: [Location] = []
     
     func seeMoreInfo() {
         
@@ -86,7 +85,8 @@ class LocationsViewModel: ObservableObject {
                 statuses[2] ? try await  DataService.shared.saveLocation(spot: spot) :
                 try await  DataService.shared.unsaveLocation(spotId: spot.id)
                 if statuses[2] {
-                    self.saves = try await DataService.shared.fetchBucketlist()
+                    let savesIds = try await DataService.shared.fetchBucketlist()
+                    self.saves = try await DataService.shared.getSpotsFromIds(ids: savesIds)
                     self.showBucketList.toggle()
                 }
             } catch {
@@ -138,6 +138,15 @@ class LocationsViewModel: ObservableObject {
         }
     }
     
+    func updateViewCount(id: String) {
+        Task {
+            do {
+                try await DataService.shared.updateViewCount(spotId: id)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     func getAllLocations() async throws {
         self.locations = try await DataService.shared.fetchAllLocations()

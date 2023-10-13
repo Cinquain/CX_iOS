@@ -24,15 +24,17 @@ struct Server {
     static let waves = "waves"
     static let likes = "likes"
     static let uploads = "uploads"
+    static let requests = "requets"
+    static let history = "history"
 }
 
 struct AppUserDefaults {
     static let uid = "uid"
     static let city = "city"
+    static let streetcred = "streetcred"
     static let loadMessage = "loadMessage"
     static let profileUrl = "profileUrl"
     static let username = "username"
-    static let waveCount = "waveCount"
     static let location = "location"
     static let spotId = "spotId"
 }
@@ -46,6 +48,19 @@ enum CustomError: Error {
     case invalidPassword
     case uidNotFound
     case badData
+}
+
+enum MetricCategory: String, CaseIterable, Identifiable {
+    case Views
+    case Likes
+    case Checkins
+    var id: MetricCategory {self}
+}
+
+enum SpotMetric: String, CaseIterable, Identifiable {
+    case Metrics
+    case Modify
+    var id: SpotMetric {self}
 }
 
 extension CustomError: LocalizedError {

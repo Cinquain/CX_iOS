@@ -27,14 +27,18 @@ final class AuthService: NSObject {
     
     func signOut() throws {
         try Auth.auth().signOut()
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.uid)
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.username)
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.streetcred)
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.profileUrl)
     }
     
     func signInWithGoogle(credentials: AuthCredential) async throws {
         let authResult = try await Auth.auth().signIn(with: credentials)
         let uid = authResult.user.uid
         if await DataService.shared.checkIfUserExist(uid: uid) {
-            //User is already exist
-            UserDefaults.setValue(uid, forKey: AppUserDefaults.uid)
+            //User is already exist, set uid in User Defaults
+            UserDefaults.standard.setValue(uid, forKey: AppUserDefaults.uid)
             print("User is brand spanking new")
         } else {
             //User does not exist
@@ -48,8 +52,8 @@ final class AuthService: NSObject {
        let appleResult = try await Auth.auth().signIn(with: credentials)
        let uid = appleResult.user.uid
         if await DataService.shared.checkIfUserExist(uid: uid) {
-            //User is already exist
-            UserDefaults.setValue(uid, forKey: AppUserDefaults.uid)
+            //User is already exist, set uid in User Defaults
+            UserDefaults.standard.setValue(uid, forKey: AppUserDefaults.uid)
             print("User is brand spanking new")
         } else {
             //User does not exist

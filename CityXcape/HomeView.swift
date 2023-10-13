@@ -41,9 +41,9 @@ struct HomeView: View {
                     Text(Tab.post.title)
                 }
             
-            WavesView(tabIndex: $selection, vm: waveVM)
+            ConnectionView(tabIndex: $selection, vm: waveVM)
                 .tag(2)
-                .badge(waveVM.waves.count)
+                .badge(waveVM.messages.count)
                 .tabItem {
                     Image(Tab.waves.rawValue)
                         .renderingMode(.template)

@@ -16,6 +16,8 @@ struct Message: Identifiable, Hashable, Codable {
     let toId: String
     let timestamp: Date
     let content: String
+    let location: String?
+    let spotId: String?
     let profileUrl: String
     let displayName: String
     
@@ -25,6 +27,8 @@ struct Message: Identifiable, Hashable, Codable {
         case toId
         case content
         case timestamp
+        case location
+        case spotId
         case profileUrl 
         case displayName
     }
@@ -47,17 +51,10 @@ struct Message: Identifiable, Hashable, Codable {
         self.timestamp = time?.dateValue() ?? Date()
         self.profileUrl = data[Message.CodingKeys.profileUrl.rawValue] as? String ?? ""
         self.displayName = data[Message.CodingKeys.displayName.rawValue] as? String ?? ""
+        self.location = data[Message.CodingKeys.location.rawValue] as? String ?? nil
+        self.spotId = data[Message.CodingKeys.spotId.rawValue] as? String ?? nil
        }
-    
-    init(wave: Wave) {
-        self.id = wave.id
-        self.fromId = wave.fromId
-        self.toId = wave.toId
-        self.content = wave.content
-        self.displayName = wave.displayName
-        self.profileUrl = wave.profileUrl
-        self.timestamp = wave.timestamp
-    }
+
     
     
     static let data: [String: Any] = [
