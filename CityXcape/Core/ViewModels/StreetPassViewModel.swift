@@ -22,9 +22,14 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var errorMessage: String = ""
     @Published var showError: Bool = false
     @Published var isUploading: Bool = false
+    @Published var editSP: Bool = false 
   
     @Published var username: String = ""
     @Published var profileUrl: String = ""
+    @Published var bio: String = ""
+    @Published var changedGender: Bool = false
+    @Published var changedAge: Bool = false
+    @Published var changedStatus: Bool = false
     @Published var success: Bool = false
 
     @Published var showBucketList: Bool = false
@@ -53,6 +58,22 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var imageSelection: PhotosPickerItem? = nil {
         didSet {
             setSpotImage(from: imageSelection)
+        }
+    }
+    @Published var isMale: Bool = true {
+        didSet {
+            changedGender = true
+        }
+    }
+    @Published var single: Bool = false {
+        didSet {
+            changedStatus = true
+        }
+    }
+    
+    @Published var age: Int = 0 {
+        didSet {
+            changedAge = true
         }
     }
     
@@ -87,7 +108,9 @@ class StreetPassViewModel: NSObject, ObservableObject {
             do {
                 let saveIds = try await DataService.shared.fetchBucketlist()
                 self.bucketList = try await DataService.shared.getSpotsFromIds(ids: saveIds)
-                showBucketList.toggle()
+                DispatchQueue.main.async {
+                    self.showBucketList.toggle()
+                }
             } catch {
                 errorMessage = error.localizedDescription
                 showError.toggle()
@@ -99,7 +122,9 @@ class StreetPassViewModel: NSObject, ObservableObject {
         Task {
             do {
                 self.stamps = try await DataService.shared.fetchallstamps()
-                showDiary.toggle()
+                DispatchQueue.main.async {
+                    self.showDiary.toggle()
+                }
             } catch {
                 errorMessage = error.localizedDescription
                 showError.toggle()
@@ -107,6 +132,9 @@ class StreetPassViewModel: NSObject, ObservableObject {
         }
     }
     
+    func editStreetPass() {
+        editSP.toggle()
+    }
    
     
     //MARK: LOCATION EDIT FUNCTIONS
@@ -129,11 +157,26 @@ class StreetPassViewModel: NSObject, ObservableObject {
         }
     }
     
+    func submitLocationChanges(spotId: String) {
+        if !editTitle.isEmpty {
+            changeTitle(id: spotId)
+        }
+        if !editDetails.isEmpty {
+            changeDetails(id: spotId)
+        }
+        if !longitude.isEmpty {
+            changeLong(id: spotId)
+        }
+        if !latitude.isEmpty {
+            changeLat(id: spotId)
+        }
+    }
+    
     func changeTitle(id: String) {
         Task {
             do {
                 try await DataService.shared.updateTitle(spotId: id, title: editTitle)
-                errorMessage = "Title Changed Successfully"
+                errorMessage = "Updated Successfully"
                 editTitle = ""
                 showError.toggle()
             } catch {
@@ -147,7 +190,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
         Task {
             do {
                 try await DataService.shared.updateDetail(spotId: id, detail: editDetails)
-                errorMessage = "Description Changed Successfully"
+                errorMessage = "Updated Successfully"
                 editDetails = ""
                 showError.toggle()
             } catch {
@@ -187,6 +230,8 @@ class StreetPassViewModel: NSObject, ObservableObject {
 
     }
     
+   
+    
 }
 
 extension StreetPassViewModel {
@@ -200,6 +245,7 @@ extension StreetPassViewModel {
                 let data = try await selection.loadTransferable(type: Data.self)
                 guard let data, let uiImage = UIImage(data: data) else {return}
                 let imageUrl = try await ImageManager.shared.uploadProfileImage(uid: uid, image: uiImage)
+                try await DataService.shared.updateImageUrl(url: imageUrl)
                 await MainActor.run(body: {
                     self.profileUrl = imageUrl
                 })
@@ -254,6 +300,67 @@ extension StreetPassViewModel {
         Task {
             do {
                 try await DataService.shared.deleteUser()
+            } catch {
+                errorMessage = error.localizedDescription
+                showError.toggle()
+            }
+        }
+    }
+    
+    
+    func submitProfileChanges() {
+        
+        if !username.isEmpty {
+            UserDefaults.standard.set(username, forKey: AppUserDefaults.username)
+            let data: [String: Any] = [
+                User.CodingKeys.username.rawValue: username
+            ]
+            updateData(data: data)
+            username = ""
+        }
+        if !bio.isEmpty {
+            UserDefaults.standard.set(bio, forKey: AppUserDefaults.bio)
+            let data: [String: Any] = [
+                User.CodingKeys.bio.rawValue: bio
+            ]
+            updateData(data: data)
+            bio = ""
+        }
+        
+        if changedStatus {
+            let data: [String: Any] = [
+                "single": single
+            ]
+            updateData(data: data)
+            changedStatus = false 
+        }
+        
+        if changedGender {
+            let data: [String: Any] = [
+                "isMale": isMale
+            ]
+            updateData(data: data)
+            changedGender = false
+        }
+        
+        if changedAge {
+            UserDefaults.standard.set(age, forKey: AppUserDefaults.age)
+            let data: [String: Any] = [
+                "Age": age
+            ]
+            updateData(data: data)
+            age = 0
+            changedAge = false
+        }
+      
+    }
+    
+    func updateData(data: [String: Any]) {
+        Task {
+            do {
+                try await DataService.shared.updateStreetPass(data: data)
+                errorMessage = "StreetPass Successfully Updated!"
+                showError.toggle()
             } catch {
                 errorMessage = error.localizedDescription
                 showError.toggle()

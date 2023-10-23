@@ -41,7 +41,7 @@ struct SpotThumbnail: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 5)
                     
-                    Text("\(spot.checkinCount)")
+                    Text("\(spot.liveCount)")
                         .font(.callout)
                         .foregroundColor(.white)
                         .fontWeight(.thin)

@@ -28,6 +28,7 @@ struct User: Identifiable, Equatable, Codable {
     let email: String?
     let phone: String?
     
+    
     static func == (lhs: User, rhs: User) -> Bool {
             return lhs.id == rhs.id
         }

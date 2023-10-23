@@ -40,7 +40,7 @@ class WaveViewModel: ObservableObject {
     func match(message: Message) {
         showMatch.toggle()
         do {
-            try DataService.shared.acceptWave(message: message)
+            try DataService.shared.acceptRequest(message: message)
 
         } catch {
             errorMessage = error.localizedDescription
@@ -51,7 +51,7 @@ class WaveViewModel: ObservableObject {
     func deleteWave(id: String) {
         Task {
             do {
-                try await DataService.shared.deleteWave(waveId: id)
+                try await DataService.shared.deleteRequest(id: id)
                 if let index = messages.firstIndex(where: {$0.id == id}) {
                     messages.remove(at: index)
                 }

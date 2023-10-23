@@ -16,7 +16,7 @@ let DB = Firestore.firestore()
 final class DataService {
     
     //MARK: USER DEFAULTS
-    @AppStorage(AppUserDefaults.streetcred) var streetcred: Double?
+    @AppStorage(AppUserDefaults.streetcred) var streetcred: Int?
     @AppStorage(AppUserDefaults.username) var username: String?
     @AppStorage(AppUserDefaults.uid) var uid: String?
     @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
@@ -35,10 +35,10 @@ final class DataService {
     var messageRef = DB.collection(Server.messages)
     var chatListener: ListenerRegistration?
     var recentMessageListener: ListenerRegistration?
+    var checkinListener: ListenerRegistration?
     
     
     //MARK: LOCATION FUNCTIONS
-    
     func getSpotFromId(id: String) async throws -> Location {
         let referene = locationsRef.document(id)
         let snapshot = try await referene.getDocument()
@@ -151,6 +151,23 @@ final class DataService {
         let long = Int(longitude)
         let data: [String: Any] = [
             Location.CodingKeys.longitude.rawValue: long ?? 0
+        ]
+        try await spotRef.updateData(data)
+    }
+    
+    func updateLiveCount(spotId: String, increment: Double) async throws {
+        let spotRef = locationsRef.document(spotId)
+        let data: [String: Any] = [
+            Location.CodingKeys.liveCount.rawValue: FieldValue.increment(increment)
+        ]
+        try await spotRef.updateData(data)
+    }
+    
+    func updateCheckinCount(spotId: String) async throws {
+        let spotRef = locationsRef.document(spotId)
+        let increment: Double = 1
+        let data: [String: Any] = [
+            Location.CodingKeys.checkinCount.rawValue: FieldValue.increment(increment)
         ]
         try await spotRef.updateData(data)
     }
@@ -286,7 +303,7 @@ final class DataService {
     
     func checkinLocation(spot: Location) async throws {
         let spotRef = locationsRef.document(spot.id)
-        guard let uid = Auth.auth().currentUser?.uid, let imageUrl = profileUrl, let displayName = username else {return}
+        guard let uid = Auth.auth().currentUser?.uid else {return}
        
         let userStampsCollectionRef = privatesRef.document(uid).collection(Server.stamps).document(spot.id)
         let spotCheckinsRef = spotRef.collection(Server.checkIns).document(uid)
@@ -301,29 +318,44 @@ final class DataService {
             Stamp.CodingKeys.longitude.rawValue: spot.longitude,
             Stamp.CodingKeys.timestamp.rawValue: Timestamp(),
             Stamp.CodingKeys.imageUrl.rawValue: spot.imageUrl,
-            Stamp.CodingKeys.ownerImageUrl.rawValue: imageUrl,
-            Stamp.CodingKeys.displayName.rawValue: displayName
+            Stamp.CodingKeys.ownerImageUrl.rawValue: profileUrl ?? "",
+            Stamp.CodingKeys.displayName.rawValue: username ?? ""
         ]
         
-        //Increment the spot checkin count by 1
-        let increment: Double = 1
-        let incrementData: [String: Any] = [
-            Location.CodingKeys.checkinCount.rawValue: FieldValue.increment(increment)
+        let message: [String: Any] = [
+            Message.CodingKeys.id.rawValue: uid,
+            Message.CodingKeys.toId.rawValue: spot.id,
+            Message.CodingKeys.fromId.rawValue: uid,
+            Message.CodingKeys.timestamp.rawValue: Timestamp(),
+            Message.CodingKeys.spotId.rawValue: spot.id,
+            Message.CodingKeys.location.rawValue: spot.name,
+            Message.CodingKeys.profileUrl.rawValue: profileUrl ?? "",
+            Message.CodingKeys.displayName.rawValue: username ?? "",
+            Message.CodingKeys.content.rawValue: "\(username ?? "") checked in \(spot.name)"
         ]
-        
+                
         //Adds the location to user collection if it does not exist
         if try await !userStampsCollectionRef.getDocument().exists {
             try await userStampsCollectionRef.setData(data)
             try await updateStreetCred(counter: 5)
         }
-        
         //Adds it to check in history of location if it's user's first time
         if try await !spotHistoryRef.getDocument().exists {
             try await spotHistoryRef.setData(data)
+            try await updateCheckinCount(spotId: spot.id)
         }
-        
-        try await spotCheckinsRef.setData(data)
-        try await spotRef.updateData(incrementData)
+       
+        try await spotCheckinsRef.setData(message)
+        try await updateLiveCount(spotId: spot.id, increment: 1)
+    }
+    
+    func checkoutLocation(spot: Location) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let spotRef = locationsRef.document(spot.id)
+        try await spotRef.collection(Server.connections).document(uid).delete()
+        try await updateLiveCount(spotId: spot.id, increment: -1)
+        checkinListener?.remove()
+        print("Check in listener removed!")
     }
     
   
@@ -370,18 +402,31 @@ final class DataService {
     }
     
     
-    func fetchUsersCheckedIn(spotId: String) async throws -> [User] {
-        var users: [User] = []
-        let ref = locationsRef
+    func fetchUsersCheckedIn(spotId: String, completion: @escaping(Result<[Message], Error>) -> Void) {
+        var messages: [Message] = []
+        checkinListener = locationsRef
                         .document(spotId)
                         .collection(Server.checkIns)
-        let snapshot = try await ref.getDocuments()
+                        .addSnapshotListener({ snapshot, error in
+                            if let error = error {
+                                print("Error fetch recent messages")
+                                completion(.failure(error))
+                            }
+                            
+                            snapshot?.documentChanges.forEach { change in
+                                if change.type == .added {
+                                    let data = change.document.data()
+                                    let message = Message(data: data)
+                                    messages.insert(message, at: 0)
+                                }
+                               
+                            }
+                            DispatchQueue.main.async {
+                                completion(.success(messages))
+                            }
+                        })
         
-        snapshot.documents.forEach {
-            let user = User(data: $0.data())
-            users.append(user)
-        }
-        return users
+      
     }
     
     func uploadStreetPass(imageUrl: String, username: String) async throws {
@@ -395,6 +440,21 @@ final class DataService {
         try await ref.setData(data)
     }
     
+    func updateImageUrl(url: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let data: [String: Any] = [
+            User.CodingKeys.imageUrl.rawValue: url
+        ]
+        
+        let ref = usersRef.document(uid)
+        try await ref.updateData(data)
+    }
+    
+    func updateStreetPass(data: [String: Any]) async throws  {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let ref = usersRef.document(uid)
+        try await ref.updateData(data)
+    }
     
     func deleteUser() async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
@@ -410,7 +470,6 @@ final class DataService {
     
     
     //MARK: MESSAGING FUNCTIONS
-    
     func fetchAllMessages(completion: @escaping(Result<[Message], Error>) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         var messages: [Message] = []
@@ -480,6 +539,22 @@ final class DataService {
         try await persistRecentMessage(id: user.id, data: data)
     }
     
+    func sendLobbyMessage(content: String, spotId: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let spotRef = locationsRef.document(spotId).collection(Server.checkIns).document()
+        let documentId = spotRef.documentID
+        let data: [String: Any] = [
+            Message.CodingKeys.content.rawValue: content,
+            Message.CodingKeys.id.rawValue: documentId,
+            Message.CodingKeys.toId.rawValue: spotId,
+            Message.CodingKeys.fromId.rawValue: uid,
+            Message.CodingKeys.timestamp.rawValue: Timestamp(),
+            Message.CodingKeys.profileUrl.rawValue: profileUrl ?? "",
+            Message.CodingKeys.displayName.rawValue: username ?? ""
+        ]
+        try await spotRef.setData(data)
+    }
+    
     func persistRecentMessage(id: String, data: [String: Any]) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let recentRef = privatesRef
@@ -532,8 +607,8 @@ final class DataService {
     }
     
     
-    //MARK: WAVE FUNCTIONS
-    func sendWave(userId: String, message: String) async throws {
+    //MARK: REQUEST FUNCTIONS
+    func sendRequest(userId: String, message: String) async throws {
         guard let uid = Auth.auth().currentUser?.uid, let imageUrl = profileUrl, let displayName = username
         else {throw CustomError.uidNotFound}
         
@@ -573,13 +648,13 @@ final class DataService {
         return messages
     }
     
-    func deleteWave(waveId: String) async throws {
+    func deleteRequest(id: String) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
-        let ref = privatesRef.document(uid).collection(Server.waves).document(waveId)
+        let ref = privatesRef.document(uid).collection(Server.waves).document(id)
         try await ref.delete()
     }
     
-    func acceptWave(message: Message) throws {
+    func acceptRequest(message: Message) throws {
         guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
         
         //Create messages for both users
@@ -619,13 +694,13 @@ final class DataService {
         fromRef.updateData(counterData)
     }
     
-    func updateStreetCred(counter: Double) async throws {
+    func updateStreetCred(counter: Int) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let ref = usersRef.document(uid)
         let data: [String: Any] = [
-            User.CodingKeys.streetCred.rawValue: FieldValue.increment(counter)
+            User.CodingKeys.streetCred.rawValue: FieldValue.increment(Double(counter))
         ]
-        var streetcred: Double = streetcred ?? 0
+        var streetcred: Int = streetcred ?? 0
         streetcred += counter
         UserDefaults.standard.set(streetcred, forKey: AppUserDefaults.streetcred)
         try await ref.updateData(data)

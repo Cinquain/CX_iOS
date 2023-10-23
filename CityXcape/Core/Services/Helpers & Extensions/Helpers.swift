@@ -31,6 +31,8 @@ struct Server {
 struct AppUserDefaults {
     static let uid = "uid"
     static let city = "city"
+    static let bio = "bio"
+    static let age = "age"
     static let streetcred = "streetcred"
     static let loadMessage = "loadMessage"
     static let profileUrl = "profileUrl"
@@ -62,6 +64,7 @@ enum SpotMetric: String, CaseIterable, Identifiable {
     case Modify
     var id: SpotMetric {self}
 }
+
 
 extension CustomError: LocalizedError {
     public var errorDescription: String? {

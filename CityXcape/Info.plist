@@ -20,6 +20,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>times new roman.ttf</string>
+		<string>DS-DIGI.TTF</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

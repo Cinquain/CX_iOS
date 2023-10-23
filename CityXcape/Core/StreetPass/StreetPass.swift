@@ -10,8 +10,10 @@ import PhotosUI
 
 struct StreetPass: View {
     
-    let user: User
+    @AppStorage(AppUserDefaults.username) var username: String?
     @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
+    @AppStorage(AppUserDefaults.streetcred) var streetcred: Int?
+
     @EnvironmentObject private var vm: StreetPassViewModel
 
     
@@ -51,15 +53,22 @@ struct StreetPass: View {
                     .fontWeight(.thin)
                     .tracking(4)
                     .opacity(0.7)
-                Text("STC Balance: 0")
+                Text("STC Balance: \(streetcred ?? 0)")
                     .font(.caption)
                     .fontWeight(.thin)
                     .opacity(0.7)
+                    .sheet(isPresented: $vm.editSP) {
+                        EditProfile(vm: vm)
+                    }
+
             }
             .foregroundColor(.white)
 
             Spacer()
             Menu {
+                Button(action: vm.editStreetPass) {
+                       Label("Edit StreetPass", systemImage: "pencil.circle")
+                   }
                 //Sign out user
                 Button(action: vm.signOut) {
                        Label("Signout", systemImage: "point.filled.topleft.down.curvedto.point.bottomright.up")
@@ -68,6 +77,7 @@ struct StreetPass: View {
                 Button(action: vm.deleteAccount) {
                        Label("Delete Account", systemImage: "power.circle")
                    }
+             
             } label: {
                 Image(systemName: "gearshape.fill")
                     .font(.title2)
@@ -85,7 +95,7 @@ struct StreetPass: View {
             VStack(spacing: 3) {
                 BubbleView(width: 300, imageUrl: profileUrl ?? "", type: .personal)
                 
-                Text(user.username ?? "Create Username")
+                Text(username ?? "Create Username")
                     .font(.title2)
                     .foregroundColor(.white)
                     .fontWeight(.thin)
@@ -113,9 +123,10 @@ struct StreetPass: View {
                         .fontWeight(.thin)
                         .popover(isPresented: $vm.showBucketList) {
                             BucketList(locations: vm.bucketList)
-                                .presentationDetents([.medium, .large])
-
+                                .presentationDetents([.medium])
                         }
+                        .presentationDetents([.medium])
+
                 }
             }
             
@@ -133,7 +144,6 @@ struct StreetPass: View {
                 }
                 .fullScreenCover(isPresented: $vm.showDiary) {
                     TravelDiary(stamps: vm.stamps)
-                        .presentationDetents([.medium, .large])
                 }
                 
             }
@@ -171,7 +181,7 @@ struct StreetPass: View {
 
 struct StreetPass_Previews: PreviewProvider {
     static var previews: some View {
-        StreetPass(user: User.demo)
+        StreetPass()
             .environmentObject(StreetPassViewModel())
     }
 }

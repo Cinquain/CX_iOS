@@ -26,7 +26,7 @@ struct MessagesView: View {
                         NavigationLink {
                             ChatView(user: User(message: message), vm: vm)
                         } label: {
-                            WavePreview(message: message)
+                            MessagePreview(message: message)
                         }
                     }
                 }
@@ -60,7 +60,7 @@ struct MessagesView: View {
                     .font(.title3)
             }
             .sheet(isPresented: $vm.showConnections) {
-                ConnectionsView(vm: vm)
+                FriendsView(vm: vm)
             }
          
         }

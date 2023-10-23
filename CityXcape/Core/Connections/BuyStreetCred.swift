@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BuyWavesView: View {
+struct BuyStreetCred: View {
     
     @Environment(\.dismiss) private var dismiss
 
@@ -76,7 +76,7 @@ struct BuyWavesView: View {
             Image("network")
                 .resizable()
                 .scaledToFill()
-                .overlay(Color.black.opacity(0.65))
+                .overlay(Color.black.opacity(0.80))
                 .frame(width: size.width, height: size.height)
                 .edgesIgnoringSafeArea(.all)
         }
@@ -100,7 +100,7 @@ struct BuyWavesView: View {
             HStack {
                 Spacer()
                 VStack {
-                    Text("You Need StreetCred for Connection")
+                    Text("Buy StreetCred to Connect")
                         .font(Font.custom("times new roman", size: 20))
                         .fontWeight(.semibold)
                     .opacity(0.8)
@@ -120,6 +120,6 @@ struct BuyWavesView: View {
 
 struct BuyWavesView_Previews: PreviewProvider {
     static var previews: some View {
-        BuyWavesView()
+        BuyStreetCred()
     }
 }

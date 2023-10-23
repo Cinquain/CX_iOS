@@ -63,7 +63,7 @@ struct HomeView: View {
                 }
             
            
-            StreetPass(user: User.demo)
+            StreetPass()
                 .tag(4)
                 .environmentObject(spVM)
                 .tabItem {

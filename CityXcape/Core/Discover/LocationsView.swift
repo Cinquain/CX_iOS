@@ -45,16 +45,15 @@ struct LocationsView: View {
                     .padding(.top, 25)
                 }
                 .zIndex(1)
+                .refreshable {
+                    vm.getAllLocations()
+                }
             }
             
             
         }
         .task {
-            do {
-                try await vm.getAllLocations()
-            } catch (let error) {
-                print("Error getting locations",error.localizedDescription)
-            }
+            vm.getAllLocations()
         }
         .background(Color.black)
         .edgesIgnoringSafeArea(.bottom)

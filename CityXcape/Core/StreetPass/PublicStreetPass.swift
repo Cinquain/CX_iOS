@@ -10,7 +10,7 @@ import SwiftUI
 struct PublicStreetPass: View {
     
     //MARK: USER DEFAULTS
-    @AppStorage(AppUserDefaults.streetcred) var wavecount: Double?
+    @AppStorage(AppUserDefaults.streetcred) var streetcred: Int?
 
     //MARK: STATE PROPERTIES
     @State private var showMenu: Bool = false
@@ -75,7 +75,7 @@ struct PublicStreetPass: View {
                 .tracking(4)
                 .padding(.top, 5)
                 .popover(isPresented: $showMenu) {
-                    BuyWavesView()
+                    BuyStreetCred()
                         .presentationDetents([.height(380)])
                 }
             Spacer()
@@ -128,7 +128,7 @@ struct PublicStreetPass: View {
             }
         Task {
             do {
-                try await DataService.shared.sendWave(userId: user.id, message: message)
+                try await DataService.shared.sendRequest(userId: user.id, message: message)
                 isWaving.toggle()
                 alertMessgae = "Wave Sent"
                 showAlert.toggle()
@@ -139,7 +139,7 @@ struct PublicStreetPass: View {
             }
             return
         }
-            if wavecount == nil || wavecount == 0 {
+            if streetcred == nil || streetcred == 0 {
                 showMenu.toggle()
                 return
             }

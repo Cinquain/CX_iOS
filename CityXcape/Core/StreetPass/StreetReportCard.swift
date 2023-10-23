@@ -35,25 +35,15 @@ struct StreetReportCard: View {
                 .font(.caption)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
+                .padding(.bottom, 20)
             
-            Picker("Metrics", selection: $vm.metricsCategory) {
-                ForEach(MetricCategory.allCases) { category in
-                    Text(category.rawValue)
-                }
-            }
-            .pickerStyle(.segmented)
-            .colorScheme(.dark)
-            .padding(.top, 20)
-            .padding(.bottom, 10)
+            Text("Your Locations")
+                .foregroundColor(.white)
+                .font(.title2)
+                .fontWeight(.thin)
             
-            switch vm.metricsCategory {
-                case .Checkins:
-                    stampCount()
-                case .Likes:
-                    likeCount()
-                case .Views:
-                    viewCount()
-            }
+            viewCount()
+            
             Spacer()
         }
         .background(.black)
@@ -80,6 +70,7 @@ struct StreetReportCard: View {
     
     @ViewBuilder
     func viewCount() -> some View {
+        
         ForEach(vm.uploads.sorted(by: {$0.viewCount > $1.viewCount})) { spot in
             Button(action: {
                 vm.spotId = spot.id

@@ -32,25 +32,26 @@ struct TravelDiary: View {
         HStack {
             Image(systemName: "airplane.departure")
                 .font(.title)
-                .foregroundColor(.black)
+                .foregroundColor(.white)
+            
             VStack(alignment: .leading) {
                 Text("My Journey")
                     .font(.title)
-                .fontWeight(.thin)
+                    .fontWeight(.thin)
                 Text("\(stamps.count) Locations")
                     .fontWeight(.thin)
                     .font(.caption)
             }
-            .foregroundColor(.black)
+            .foregroundColor(.white)
             Spacer()
             
             Button {
                 dismiss()
             } label: {
                 Image(systemName: "xmark.square.fill")
-                    .foregroundColor(.black)
                     .font(.title2)
             }
+            .foregroundColor(.white)
 
         }
         .padding(.horizontal, 20)
@@ -58,13 +59,11 @@ struct TravelDiary: View {
     @ViewBuilder
     func background() -> some View {
         ZStack {
-            Color.vintage
-            Image("Compass")
-                .renderingMode(.template)
+            Color.black
+            Image("America")
                 .resizable()
-                .scaledToFit()
-                .opacity(0.1)
-                
+                .scaledToFill()
+                .opacity(0.6)
         }
         .edgesIgnoringSafeArea(.all)
     }

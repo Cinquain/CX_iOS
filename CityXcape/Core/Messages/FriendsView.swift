@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct ConnectionsView: View {
+struct FriendsView: View {
+    
     @StateObject var vm: MessageViewModel
     
     var body: some View {
@@ -67,6 +68,6 @@ struct ConnectionsView: View {
 
 struct ConnectionsView_Previews: PreviewProvider {
     static var previews: some View {
-        ConnectionsView(vm: MessageViewModel())
+        FriendsView(vm: MessageViewModel())
     }
 }

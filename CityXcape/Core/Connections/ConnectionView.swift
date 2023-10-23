@@ -100,10 +100,12 @@ struct ConnectionView: View {
     func header() -> some View {
         HStack {
      
-            Image("hive")
+            Image("dot")
                 .resizable()
                 .scaledToFit()
                 .frame(height: 30)
+            
+        
             Text("Pending Connection")
                 .font(.title3)
                 .fontWeight(.thin)
@@ -169,7 +171,7 @@ struct ConnectionView: View {
                 .frame(height: 200)
                 .opacity(0.7)
             
-            Text("No One Pending \n Check in a location to meet people")
+            Text("No Request Pending \n Check in a location to meet people")
                 .font(.title3)
                 .fontWeight(.thin)
                 .multilineTextAlignment(.center)

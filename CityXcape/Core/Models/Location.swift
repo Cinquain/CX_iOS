@@ -26,6 +26,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     //Social Component
     let saveCount: Int
     let likeCount: Int
+    let liveCount: Int
     let viewCount: Int
     let checkinCount: Int
     let commentCount: Int
@@ -104,6 +105,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.ownerId = data[Location.CodingKeys.ownerId.rawValue] as? String ?? ""
         self.connections = data[Location.CodingKeys.connections.rawValue] as? Int ?? 0
         self.viewCount = data[Location.CodingKeys.viewCount.rawValue] as? Int ?? 0
+        self.liveCount = data[Location.CodingKeys.liveCount.rawValue] as? Int ?? 0
     }
 
     
@@ -120,6 +122,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case connections
         case address
         case hashtags
+        case liveCount
         case ownerId = "owner_id"
         case saveCount = "save_count"
         case checkinCount = "checkin_count"

@@ -107,7 +107,7 @@ struct SpotAnalytics: View {
     @ViewBuilder
     func chart() -> some View {
         VStack {
-            Text("Location Analytics")
+            Text("Location Performance")
                 .font(.caption)
                 .fontWeight(.thin)
                 .foregroundColor(.white)
@@ -124,74 +124,23 @@ struct SpotAnalytics: View {
     }
     @ViewBuilder
     func editLocation() -> some View {
-        VStack(spacing: 0) {
-            TextField(vm.editTitle, text: $vm.editTitle, onCommit: {
-                vm.changeTitle(id: spot.id)
-            })
-                .padding()
-                .foregroundColor(.white)
-                .placeholder(when: vm.editTitle.isEmpty) {
-                    Text("Change Name \( Image(systemName: "pencil"))")
-                        .foregroundColor(.gray)
-                        .fontWeight(.thin)
-                        .padding(.horizontal, 20)
-                }
-                .background(.black)
+        
+        Form {
+            TextField("Change Title", text: $vm.editTitle)
+      
+            TextField("Add Description", text: $vm.editDetails)
             
-            TextField(vm.editDetails, text: $vm.editDetails, onCommit: {
-                vm.changeDetails(id: spot.id)
-            })
-                .padding()
-                .foregroundColor(.white)
-                .placeholder(when: vm.editDetails.isEmpty) {
-                    Text("Add Description \( Image(systemName: "pencil"))")
-                        .fontWeight(.thin)
-                        .foregroundColor(.gray)
-                        .padding(.horizontal, 20)
-                        .lineLimit(1)
-                        
-                }
-                .background(.black)
+            TextField("Edit Longitude", text: $vm.longitude)
+               
+            TextField("Edit Latitude", text: $vm.latitude)
             
-            HStack(spacing: 0) {
-                
-                TextField(vm.longitude, text: $vm.longitude, onCommit: {
-                    vm.changeLong(id: spot.id)
-                })
-                    .padding()
-                    .foregroundColor(.white)
-                    .placeholder(when: vm.longitude.isEmpty) {
-                        Text("Longitude \( Image(systemName: "pencil"))")
-                            .fontWeight(.thin)
-                            .foregroundColor(.gray)
-                            .padding(.horizontal, 20)
-                            .lineLimit(1)
-                            
-                    }
-                    .background(.black)
-                
-                TextField(vm.latitude, text: $vm.latitude, onCommit: {
-                    vm.changeLat(id: spot.id)
-                })
-                    .padding()
-                    .foregroundColor(.white)
-                    .placeholder(when: vm.latitude.isEmpty) {
-                        Text("Latitude \( Image(systemName: "pencil"))")
-                            .fontWeight(.thin)
-                            .foregroundColor(.gray)
-                            .padding(.horizontal, 20)
-                            .lineLimit(1)
-                            
-                    }
-                    .background(.black)
-                
+            
+            Section {
+                finishButton()
             }
-            .padding(.bottom, 10)
-   
-
-            
             
         }
+        .colorScheme(.dark)
 
     }
     
@@ -204,6 +153,23 @@ struct SpotAnalytics: View {
         data.append(likes)
         data.append(saves)
         data.append(checkins)
+    }
+    
+    @ViewBuilder
+    func finishButton() -> some View {
+        Button {
+            vm.submitLocationChanges(spotId: spot.id)
+        } label: {
+            HStack(spacing: 2) {
+                Spacer()
+                Image(systemName: "checkmark.circle.fill")
+                Text("Done")
+                    .font(.headline)
+                Spacer()
+            }
+            .foregroundColor(.cx_blue)
+        }
+
     }
     
 }

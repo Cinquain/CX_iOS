@@ -29,6 +29,9 @@ struct LocationView: View {
                     if vm.showStamp {
                         StampView(spot: spot)
                             .padding(.bottom, 20)
+                            .fullScreenCover(isPresented: $vm.showCheckinList) {
+                                DigitalLobby(spot: spot, vm: vm)
+                            }
                     }
                     
                     ZStack {
@@ -75,7 +78,7 @@ struct LocationView: View {
                 }
                 .sheet(isPresented: $vm.showBucketList) {
                     BucketList(locations: vm.saves)
-                        .presentationDetents([.height(500)])
+                        .presentationDetents([.height(350)])
                 }
         }
         .edgesIgnoringSafeArea(.all)
@@ -111,20 +114,14 @@ struct LocationView: View {
                         .multilineTextAlignment(.leading)
                         .opacity(vm.opacity)
                         .animation(.easeIn(duration: 0.5), value: vm.opacity)
+                       
 
 
                 }
                 .padding(20)
             }
             
-            if vm.showCheckinList {
-                withAnimation {
-                    CheckinList(spot: spot, users: vm.users)
-                   
-                }
-            }
-                
-                            
+       
             
             Spacer()
         }
@@ -253,7 +250,6 @@ struct LocationView: View {
     @ViewBuilder
     func CheckInButton() -> some View {
         Button {
-            vm.isCheckedIn ? vm.checkOut() :
             vm.checkinLocation(spot: spot)
         } label: {
             Text(vm.isCheckedIn ? "Check Out": "CHECK IN")
