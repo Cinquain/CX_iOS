@@ -9,7 +9,6 @@ import Firebase
 import FirebaseAuth
 import GoogleSignIn
 import SwiftUI
-import Foundation
 import AuthenticationServices
 
 final class AuthService: NSObject {

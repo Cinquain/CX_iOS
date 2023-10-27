@@ -1,0 +1,63 @@
+{
+  "identifier" : "BA5A876A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "7C2DE23D",
+      "localizations" : [
+        {
+          "description" : "The currency of the streets",
+          "displayName" : "StreetCred",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.cityportal.CityXcape0.streetcred",
+      "referenceName" : "StreetCred10",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "29.99",
+      "familyShareable" : false,
+      "internalID" : "DEA02315",
+      "localizations" : [
+        {
+          "description" : "The currency of the streets",
+          "displayName" : "StreetCred",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.cityportal.CityXcape0.streetcred50",
+      "referenceName" : "StreetCred50",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "74.99",
+      "familyShareable" : false,
+      "internalID" : "E299C2D6",
+      "localizations" : [
+        {
+          "description" : "The currency of the streets",
+          "displayName" : "StreetCred",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.cityportal.CityXcape0.streetcred100",
+      "referenceName" : "StreetCred100",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

@@ -53,11 +53,10 @@ struct PublicStreetPass: View {
         }
         .edgesIgnoringSafeArea(.all)
     }
+    
     @ViewBuilder
     func TextMessage() -> some View {
-        TextField("  Write a Message", text: $message, onCommit: {
-            //Send the wave away!!
-        })
+        TextField("  Write a Message", text: $message)
             .frame(width: 250, height: 40)
             .background(.white.opacity(0.9))
             .clipShape(Capsule())
@@ -65,6 +64,7 @@ struct PublicStreetPass: View {
             .opacity(isWaving ? 1 : 0)
             .animation(.easeOut(duration: 0.5), value: isWaving)
     }
+    
     @ViewBuilder
     func StreetPassHeader() -> some View {
         HStack {
@@ -87,9 +87,9 @@ struct PublicStreetPass: View {
     func UserDot() -> some View {
         VStack(spacing: 3) {
             BubbleView(width: 300,
-                       imageUrl: user.imageUrl ?? "",
+                       imageUrl: user.imageUrl,
                      type: .stranger)
-            Text(user.username ?? "")
+            Text(user.username)
                 .font(.title)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
@@ -120,35 +120,36 @@ struct PublicStreetPass: View {
     }
     
     func sendWave() {
-        if isWaving {
-            if message.count < 3 {
-                alertMessgae = "Please send a message with your connection"
-                showAlert.toggle()
-                return
-            }
+        if streetcred == nil || streetcred == 0 {showMenu.toggle(); return}
+        
+        if !isWaving {
+            isWaving.toggle()
+            return
+        }
+        
+        if message.count < 3 {
+            alertMessgae = "Your message must be at least 3 characters long"
+            showAlert.toggle()
+            return
+        }
+
         Task {
             do {
                 try await DataService.shared.sendRequest(userId: user.id, message: message)
                 isWaving.toggle()
-                alertMessgae = "Wave Sent"
+                alertMessgae = "Message Sent"
                 showAlert.toggle()
             } catch {
                 alertMessgae = error.localizedDescription
                 showAlert.toggle()
                 }
             }
-            return
         }
-            if streetcred == nil || streetcred == 0 {
-                showMenu.toggle()
-                return
-            }
-            isWaving.toggle()
-        showMenu.toggle()
+    
     }
         
     
-}
+
 
 struct PublicStreetPass_Previews: PreviewProvider {
     static var previews: some View {

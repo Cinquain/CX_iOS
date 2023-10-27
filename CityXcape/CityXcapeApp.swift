@@ -13,6 +13,7 @@ import GoogleSignIn
 @main
 struct CityXcapeApp: App {
     
+    @ObservedObject private var store = Store()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var vm = LocationsViewModel()
     
@@ -20,6 +21,7 @@ struct CityXcapeApp: App {
         WindowGroup {
             HomeView()
                 .environmentObject(vm)
+                .environmentObject(store)
         }
     }
 }

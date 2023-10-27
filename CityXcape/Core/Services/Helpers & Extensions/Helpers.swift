@@ -41,6 +41,24 @@ struct AppUserDefaults {
     static let spotId = "spotId"
 }
 
+enum Product: String, CaseIterable, Identifiable {
+    case streetcred = "com.cityportal.CityXcape0.streetcred"
+    case streetcred_50 = "com.cityportal.CityXcape0.streetcred50"
+    case streetcred_100 = "com.cityportal.CityXcape0.streetcred100"
+    var id: Product {self}
+    
+    var count:Int {
+        switch self {
+        case .streetcred:
+            return 10
+        case .streetcred_50:
+            return 50
+        case .streetcred_100:
+            return 100
+        }
+    }
+}
+
 enum PassType {
     case stranger
     case personal
@@ -50,6 +68,7 @@ enum CustomError: Error {
     case invalidPassword
     case uidNotFound
     case badData
+    case failedPurchase
 }
 
 enum MetricCategory: String, CaseIterable, Identifiable {
@@ -75,6 +94,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("User AuthID Not Found", comment: "UID Not Found!")
         case .badData:
             return NSLocalizedString("Bad Data", comment: "Data not found or formatted incorrectly")
+        case .failedPurchase:
+            return NSLocalizedString("Failed Purchase", comment: "Purchase transaction did not go through")
         }
     }
 }

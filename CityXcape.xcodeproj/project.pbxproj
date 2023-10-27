@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21460F782AEAF83900159E39 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21460F772AEAF83900159E39 /* StoreKit.framework */; };
+		21460F7B2AEAFAB100159E39 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21460F7A2AEAFAB100159E39 /* Store.swift */; };
 		21A55A972AC0E18D00ED822B /* MatchAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A55A962AC0E18D00ED822B /* MatchAnimation.swift */; };
 		21AB5D642A9CCBD10037FB73 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */; };
 		21AC2B062AD18DEC00B3F22B /* StreetReportCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AC2B052AD18DEC00B3F22B /* StreetReportCard.swift */; };
@@ -87,6 +89,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21460F772AEAF83900159E39 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		21460F792AEAF8D100159E39 /* Store.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Store.storekit; sourceTree = "<group>"; };
+		21460F7A2AEAFAB100159E39 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		21A55A962AC0E18D00ED822B /* MatchAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchAnimation.swift; sourceTree = "<group>"; };
 		21AA5D012ADF28FB006D40BC /* DS-DIGI.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DS-DIGI.TTF"; sourceTree = "<group>"; };
 		21AB5D632A9CCBD10037FB73 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
@@ -168,6 +173,7 @@
 				21AE54FE2A8BBC4000CF1820 /* SDWebImageSwiftUI in Frameworks */,
 				21CDB60E2A82A6C900A2E1FD /* FirebaseFirestoreSwift in Frameworks */,
 				21CDB60A2A82A6C900A2E1FD /* FirebaseCrashlytics in Frameworks */,
+				21460F782AEAF83900159E39 /* StoreKit.framework in Frameworks */,
 				21CDB60C2A82A6C900A2E1FD /* FirebaseFirestore in Frameworks */,
 				21BB4CA82A83C20E00A7FAD3 /* GoogleSignInSwift in Frameworks */,
 				21CDB6062A82A6C900A2E1FD /* FirebaseAnalytics in Frameworks */,
@@ -182,6 +188,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		21460F762AEAF83900159E39 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				21460F772AEAF83900159E39 /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		21ADF42F2A9A33C100AD2AE8 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,6 +291,7 @@
 			children = (
 				21CDB5F32A82A2C800A2E1FD /* CityXcape */,
 				21CDB5F22A82A2C800A2E1FD /* Products */,
+				21460F762AEAF83900159E39 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -296,6 +311,7 @@
 				21CDB5F62A82A2C800A2E1FD /* HomeView.swift */,
 				21B7ED032A8666ED001BEF78 /* Core */,
 				21CDB5F82A82A2C900A2E1FD /* Assets.xcassets */,
+				21460F792AEAF8D100159E39 /* Store.storekit */,
 				21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */,
 				21BB4CA32A83C1AD00A7FAD3 /* Info.plist */,
 				21AA5D012ADF28FB006D40BC /* DS-DIGI.TTF */,
@@ -332,6 +348,7 @@
 				21D467682A83E70800973AB9 /* Utilities.swift */,
 				21DAF7E72A93988F00AC1C28 /* LocationService.swift */,
 				21ADF42D2A9A334500AD2AE8 /* SoundManager.swift */,
+				21460F7A2AEAFAB100159E39 /* Store.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -542,6 +559,7 @@
 				21CDB6132A82A9C500A2E1FD /* Location.swift in Sources */,
 				21B7ED022A8665DA001BEF78 /* AnalyticsService.swift in Sources */,
 				21AB5D642A9CCBD10037FB73 /* MapViewModel.swift in Sources */,
+				21460F7B2AEAFAB100159E39 /* Store.swift in Sources */,
 				21ADF42C2A9A2CCB00AD2AE8 /* StampView.swift in Sources */,
 				21B92D832A9E352B0024E835 /* StreetPass.swift in Sources */,
 				21CF24FC2AA61BE5009BAF90 /* CongratsView.swift in Sources */,

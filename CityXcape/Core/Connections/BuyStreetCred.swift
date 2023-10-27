@@ -10,30 +10,67 @@ import SwiftUI
 struct BuyStreetCred: View {
     
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var store: Store
+    @AppStorage(AppUserDefaults.streetcred) var wallet: Int?
 
+    @State private var message: String = ""
+    @State private var showMessage: Bool = false
+    
     var body: some View {
             
             VStack {
                 Headline()
                     .padding(.top, 25)
+                    .alert(isPresented: $showMessage) {
+                        return Alert(title: Text(message))
+                    }
 
                 VStack(spacing: 12) {
                     
                     Button {
-                        //Make Purchase
+                        if let product = store.product(for: Product.streetcred.rawValue) {
+                            store.purchaseProduct(product) { result in
+                                switch result {
+                                case .success(_):
+                                    updateStreetCred(count: Product.streetcred.count)
+                                case .failure(let error):
+                                    message = error.localizedDescription
+                                    showMessage.toggle()
+                                }
+                            }
+                        }
                     } label: {
                         WaveCapsule(count: 10, price: 9.99)
                     }
                     
                     Button {
-                        //Make Purchase
+                        if let product = store.product(for: Product.streetcred_50.rawValue) {
+                            store.purchaseProduct(product) { result in
+                                switch result {
+                                case .success(_):
+                                    updateStreetCred(count: Product.streetcred_50.count)
+                                case .failure(let error):
+                                    message = error.localizedDescription
+                                    showMessage.toggle()
+                                }
+                            }
+                        }
                     } label: {
                         WaveCapsule(count: 50, price: 29.99)
                     }
                     
                     Button {
-                        //Make Purchase
-                    } label: {
+                        if let product = store.product(for: Product.streetcred_100.rawValue) {
+                            store.purchaseProduct(product) { result in
+                                switch result {
+                                case .success(_):
+                                    updateStreetCred(count: Product.streetcred_100.count)
+                                case .failure(let error):
+                                    message = error.localizedDescription
+                                    showMessage.toggle()
+                                }
+                            }
+                        }                    } label: {
                         WaveCapsule(count: 100, price: 74.99)
                     }
                     
@@ -47,11 +84,15 @@ struct BuyStreetCred: View {
             .cornerRadius(24)
             .background(Background())
             .edgesIgnoringSafeArea(.bottom)
+            .colorScheme(.dark)
+            
            
         
 
 
     }
+    
+
     
     @ViewBuilder
     func WaveCapsule(count: Int, price: Double) -> some View {
@@ -104,7 +145,7 @@ struct BuyStreetCred: View {
                         .font(Font.custom("times new roman", size: 20))
                         .fontWeight(.semibold)
                     .opacity(0.8)
-                    Text("Balance: 0")
+                    Text("Balance: \(wallet ?? 0)")
                         .foregroundColor(.white)
                         .fontWeight(.thin)
                         .font(.caption)
@@ -115,6 +156,26 @@ struct BuyStreetCred: View {
         }
         .padding(.top, 25)
         .foregroundColor(.white)
+    }
+    
+    fileprivate func updateStreetCred(count: Int) {
+        var streetcred = wallet ?? 0
+        streetcred += count
+        let data: [String: Any] = [
+            User.CodingKeys.streetCred.rawValue: streetcred
+        ]
+        UserDefaults.standard.set(streetcred, forKey: AppUserDefaults.streetcred)
+        Task {
+            do {
+                try await  DataService.shared.updateStreetPass(data: data)
+                message = "Your wallet has now \(streetcred) STC"
+                showMessage.toggle()
+            } catch {
+                message = error.localizedDescription
+                showMessage.toggle()
+            }
+        }
+       
     }
 }
 
