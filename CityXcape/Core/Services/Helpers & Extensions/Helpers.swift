@@ -39,6 +39,7 @@ struct AppUserDefaults {
     static let username = "username"
     static let location = "location"
     static let spotId = "spotId"
+    static let fcmToken = "fcmtoken"
 }
 
 enum Product: String, CaseIterable, Identifiable {

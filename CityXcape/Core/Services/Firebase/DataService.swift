@@ -450,6 +450,16 @@ final class DataService {
         try await ref.updateData(data)
     }
     
+    func updateFcmToken(fcm: String) {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        UserDefaults.standard.set(fcm, forKey: AppUserDefaults.fcmToken)
+        let data: [String: Any] = [
+            User.CodingKeys.fcmToken.rawValue: fcm
+        ]
+        let ref = usersRef.document(uid)
+        ref.updateData(data)
+    }
+    
     func updateStreetPass(data: [String: Any]) async throws  {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let ref = usersRef.document(uid)

@@ -35,6 +35,8 @@
 		21B52F962A8E53E300C07CAB /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B52F952A8E53E300C07CAB /* SignUpView.swift */; };
 		21B5FF362A997BCA005DA658 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5FF352A997BCA005DA658 /* BubbleView.swift */; };
 		21B5FF382A998428005DA658 /* PublicStreetPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B5FF372A998428005DA658 /* PublicStreetPass.swift */; };
+		21B790D82AF01EE500D0448E /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 21B790D72AF01EE500D0448E /* FirebaseMessaging */; };
+		21B790DA2AF023A300D0448E /* NotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B790D92AF023A300D0448E /* NotificationsManager.swift */; };
 		21B7ED022A8665DA001BEF78 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B7ED012A8665DA001BEF78 /* AnalyticsService.swift */; };
 		21B92D832A9E352B0024E835 /* StreetPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B92D822A9E352B0024E835 /* StreetPass.swift */; };
 		21BB4CA22A83BFBE00A7FAD3 /* AnimationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BB4CA12A83BFBE00A7FAD3 /* AnimationController.swift */; };
@@ -119,6 +121,7 @@
 		21B52F952A8E53E300C07CAB /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		21B5FF352A997BCA005DA658 /* BubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleView.swift; sourceTree = "<group>"; };
 		21B5FF372A998428005DA658 /* PublicStreetPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicStreetPass.swift; sourceTree = "<group>"; };
+		21B790D92AF023A300D0448E /* NotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsManager.swift; sourceTree = "<group>"; };
 		21B7ED012A8665DA001BEF78 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		21B92D822A9E352B0024E835 /* StreetPass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreetPass.swift; sourceTree = "<group>"; };
 		21BB4CA12A83BFBE00A7FAD3 /* AnimationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationController.swift; sourceTree = "<group>"; };
@@ -178,6 +181,7 @@
 				21BB4CA82A83C20E00A7FAD3 /* GoogleSignInSwift in Frameworks */,
 				21CDB6062A82A6C900A2E1FD /* FirebaseAnalytics in Frameworks */,
 				21CDB6082A82A6C900A2E1FD /* FirebaseAuth in Frameworks */,
+				21B790D82AF01EE500D0448E /* FirebaseMessaging in Frameworks */,
 				21CDB6102A82A6C900A2E1FD /* FirebaseStorage in Frameworks */,
 				21CE1A792A870744005DAD42 /* AsyncButton in Frameworks */,
 				21BB4CA62A83C20E00A7FAD3 /* GoogleSignIn in Frameworks */,
@@ -349,6 +353,7 @@
 				21DAF7E72A93988F00AC1C28 /* LocationService.swift */,
 				21ADF42D2A9A334500AD2AE8 /* SoundManager.swift */,
 				21460F7A2AEAFAB100159E39 /* Store.swift */,
+				21B790D92AF023A300D0448E /* NotificationsManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -449,6 +454,7 @@
 				21CE1A782A870744005DAD42 /* AsyncButton */,
 				21AE54FD2A8BBC4000CF1820 /* SDWebImageSwiftUI */,
 				21CE839D2AA3518A00D86F88 /* Shimmer */,
+				21B790D72AF01EE500D0448E /* FirebaseMessaging */,
 			);
 			productName = CityXcape;
 			productReference = 21CDB5F12A82A2C800A2E1FD /* CityXcape.app */;
@@ -548,6 +554,7 @@
 				21DDCEE92A978D960028235C /* MapView.swift in Sources */,
 				21D03E362A8C097100B07162 /* CustomButton.swift in Sources */,
 				21A55A972AC0E18D00ED822B /* MatchAnimation.swift in Sources */,
+				21B790DA2AF023A300D0448E /* NotificationsManager.swift in Sources */,
 				21CF24FA2AA5FDBA009BAF90 /* StreetPassViewModel.swift in Sources */,
 				21DAF7E82A93988F00AC1C28 /* LocationService.swift in Sources */,
 				21ADEB302A98E7E1002A24CB /* DigitalLobby.swift in Sources */,
@@ -865,6 +872,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 21AE54FC2A8BBC4000CF1820 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
+		};
+		21B790D72AF01EE500D0448E /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 21CDB6042A82A6C900A2E1FD /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 		21BB4CA52A83C20E00A7FAD3 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
