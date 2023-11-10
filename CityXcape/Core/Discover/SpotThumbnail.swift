@@ -53,9 +53,10 @@ struct SpotThumbnail: View {
                     
                     HStack(alignment: .bottom, spacing: 3) {
                      
-                        Image("Pin")
+                        Image(systemName: "figure.walk.circle.fill")
                             .resizable()
                             .scaledToFit()
+                            .opacity(0.7)
                             .frame(height: 20)
                         
                         Text(spot.distanceString)

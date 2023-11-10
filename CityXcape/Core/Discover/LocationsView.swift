@@ -72,31 +72,23 @@ struct LocationsView: View {
     
     @ViewBuilder
     func HeaderView() -> some View {
-        VStack(spacing: 0) {
-            HStack {
-                    Text("\(Image("pin_feed")) Spots Nearby")
-                    .font(.title2)
-                    .foregroundColor(.white)
-                    .fontWeight(.thin)
-                    
-                
-                Spacer()
-                
-//                Button {
-//                    //
-//                } label: {
-//                    Image(systemName: "mappin.and.ellipse")
-//                        .font(.title)
-//                        .foregroundColor(.white)
-//                        .opacity(0.7)
-//                        .padding(.trailing, 10)
-//                }
-
-            }
+        VStack(alignment: .leading, spacing: 0) {
+            
+                Image("Logo White")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 150)
             
             Divider()
                 .background(Color.white)
                 .frame(height: 0.5)
+            
+            Text("\(Image("pin_feed")) Spots Nearby")
+            .font(.title2)
+            .foregroundColor(.white)
+            .fontWeight(.thin)
+            .padding(.leading, 10)
+    
         }
     }
 }

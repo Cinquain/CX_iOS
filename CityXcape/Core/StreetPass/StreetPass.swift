@@ -101,6 +101,7 @@ struct StreetPass: View {
                     .fontWeight(.thin)
                   
             }
+            .padding(.top, 20)
         }
         
     }

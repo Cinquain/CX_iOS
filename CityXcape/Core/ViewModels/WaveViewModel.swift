@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 
 
@@ -19,6 +20,7 @@ class WaveViewModel: ObservableObject {
     
     @Published var errorMessage: String = ""
     @Published var showAlert: Bool = false
+    @Published var matchedUrl: String?
     
     init() {
         fetcConnectionRequests()
@@ -27,21 +29,27 @@ class WaveViewModel: ObservableObject {
     
     
     func fetcConnectionRequests() {
-        Task {
-            do {
-                self.messages = try await DataService.shared.fetchRequests()
-            } catch {
-                errorMessage = error.localizedDescription
-                showAlert.toggle()
+        DataService.shared.fetchRequests { result in
+            switch result {
+            case .success(let newMessages):
+                self.messages = newMessages
+            case .failure(let error):
+                self.errorMessage = error.localizedDescription
+                self.showAlert.toggle()
             }
         }
     }
     
+    func removeNotification(uid: String) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [uid])
+    }
+    
     func match(message: Message) {
         showMatch.toggle()
+        removeNotification(uid: message.id)
+        matchedUrl = message.profileUrl
         do {
             try DataService.shared.acceptRequest(message: message)
-
         } catch {
             errorMessage = error.localizedDescription
             showAlert.toggle()
@@ -49,12 +57,12 @@ class WaveViewModel: ObservableObject {
     }
     
     func deleteWave(id: String) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10, execute: {
+            self.showMatch = false
+        })
         Task {
             do {
                 try await DataService.shared.deleteRequest(id: id)
-                if let index = messages.firstIndex(where: {$0.id == id}) {
-                    messages.remove(at: index)
-                }
             } catch {
                 errorMessage = error.localizedDescription
                 showAlert.toggle()

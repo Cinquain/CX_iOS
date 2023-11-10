@@ -33,9 +33,11 @@ final class DataService {
     var worldsRef = DB.collection(Server.worlds)
     var privatesRef = DB.collection(Server.privates)
     var messageRef = DB.collection(Server.messages)
+    
     var chatListener: ListenerRegistration?
     var recentMessageListener: ListenerRegistration?
     var checkinListener: ListenerRegistration?
+    var requestListener: ListenerRegistration?
     
     
     //MARK: LOCATION FUNCTIONS
@@ -66,8 +68,8 @@ final class DataService {
             let location = Location(data:  $0.data())
             locations.append(location)
         }
+            return locations
         
-        return locations
     }
     
     func createLocation(name: String, description: String, hashtag: String, image: UIImage, mapItem: MKMapItem) async throws {
@@ -194,8 +196,11 @@ final class DataService {
 
         let userData: [String: Any] = [
             User.CodingKeys.id.rawValue: uid,
-            Location.CodingKeys.timestamp.rawValue: Timestamp()
+            Location.CodingKeys.timestamp.rawValue: Timestamp(),
+            User.CodingKeys.username.rawValue: username ?? "",
+            User.CodingKeys.imageUrl.rawValue: profileUrl ?? ""
         ]
+        
         let spotData: [String: Any] = [
             Location.CodingKeys.id.rawValue: spot.id,
             Location.CodingKeys.name.rawValue: spot.name,
@@ -271,7 +276,9 @@ final class DataService {
                                 .document(spot.id)
         let likeData: [String: Any] = [
             User.CodingKeys.id.rawValue: uid,
-            User.CodingKeys.timestamp.rawValue: Timestamp()
+            User.CodingKeys.timestamp.rawValue: Timestamp(),
+            User.CodingKeys.username.rawValue: username ?? "",
+            User.CodingKeys.imageUrl.rawValue: profileUrl ?? ""
         ]
         let spotData: [String: Any] = [
             Location.CodingKeys.id.rawValue: spot.id,
@@ -352,7 +359,7 @@ final class DataService {
     func checkoutLocation(spot: Location) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let spotRef = locationsRef.document(spot.id)
-        try await spotRef.collection(Server.connections).document(uid).delete()
+        try await spotRef.collection(Server.checkIns).document(uid).delete()
         try await updateLiveCount(spotId: spot.id, increment: -1)
         checkinListener?.remove()
         print("Check in listener removed!")
@@ -418,6 +425,13 @@ final class DataService {
                                     let data = change.document.data()
                                     let message = Message(data: data)
                                     messages.insert(message, at: 0)
+                                }
+                                
+                                if change.type == .removed {
+                                    let  id = change.document.documentID
+                                    if let index = messages.firstIndex(where: {$0.id == id}) {
+                                        messages.remove(at: index)
+                                    }
                                 }
                                
                             }
@@ -622,12 +636,12 @@ final class DataService {
         guard let uid = Auth.auth().currentUser?.uid, let imageUrl = profileUrl, let displayName = username
         else {throw CustomError.uidNotFound}
         
-        let ref = privatesRef.document(userId).collection(Server.waves)
-        let document = ref.document()
-        
+        let ref = privatesRef.document(userId)
+                              .collection(Server.waves)
+                              .document(uid)
       
         let data: [String: Any] = [
-            Message.CodingKeys.id.rawValue: document.documentID,
+            Message.CodingKeys.id.rawValue: uid,
             Message.CodingKeys.fromId.rawValue: uid,
             Message.CodingKeys.toId.rawValue: userId,
             Message.CodingKeys.content.rawValue: message,
@@ -638,24 +652,42 @@ final class DataService {
             Message.CodingKeys.profileUrl.rawValue: imageUrl
         ]
             
-        try await document.setData(data)
+        try await ref.setData(data)
         try await updateStreetCred(counter: -1)
     }
     
-    func fetchRequests() async throws -> [Message] {
-        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
+    func fetchRequests(completion: @escaping (Result<[Message], Error>) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
         var messages: [Message] = []
         
-        let ref = privatesRef.document(uid).collection(Server.waves)
-        
-        let snapshot = try await ref.getDocuments()
-        
-        snapshot.documents.forEach { snapshot in
-            let data = snapshot.data()
-            let message = Message(data: data)
-            messages.append(message)
-        }
-        return messages
+        requestListener = privatesRef.document(uid).collection(Server.waves).addSnapshotListener({ snapshot, error in
+            if let error = error {
+                print("Error find new connection request", error.localizedDescription)
+                completion(.failure(error))
+            }
+            
+            snapshot?.documentChanges.forEach({ change in
+                if change.type == .added {
+                    let data = change.document.data()
+                    let message = Message(data: data)
+                    messages.insert(message, at: 0)
+                }
+                
+                if change.type == .removed {
+                    let requestId = change.document.documentID
+                    if let index = messages.firstIndex(where: {$0.id == requestId}) {
+                        messages.remove(at: index)
+                    }
+                }
+            })
+            DispatchQueue.main.async {
+                completion(.success(messages))
+            }
+        })
+    }
+    
+    func removeRequestRegistration() {
+        requestListener?.remove()
     }
     
     func deleteRequest(id: String) async throws {
@@ -668,22 +700,28 @@ final class DataService {
         guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
         
         //Create messages for both users
-        let recentRef = messageRef.document(uid).collection(Server.recentMessages).document(message.id)
-        let messageRef = messageRef.document(uid).collection(message.fromId).document(message.id)
+        let recentRef = messageRef.document(uid).collection(message.id).document()
+        let messageRef = messageRef.document(message.id).collection(uid).document()
         try recentRef.setData(from: message)
         try messageRef.setData(from: message)
         
+ 
+
         //Create connecitons in personal collections
-        let connectionsRef = privatesRef.document(uid).collection(Server.connections).document(message.toId)
-        let connections2Ref = privatesRef.document(message.toId).collection(Server.connections).document(uid)
+        let connectionsRef = privatesRef.document(uid).collection(Server.connections).document(message.fromId)
+        let connections2Ref = privatesRef.document(message.fromId).collection(Server.connections).document(uid)
         
         let connectionData: [String: Any] = [User.CodingKeys.id.rawValue: message.toId,
                                              User.CodingKeys.timestamp.rawValue: Timestamp(),
+                                             User.CodingKeys.username.rawValue: message.displayName,
+                                             Message.CodingKeys.profileUrl.rawValue: message.profileUrl,
                                              Message.CodingKeys.location.rawValue: message.location ?? "",
                                              Message.CodingKeys.spotId.rawValue: message.spotId ?? ""]
         
         let connections2Data: [String: Any] = [User.CodingKeys.id.rawValue: uid,
                                                User.CodingKeys.timestamp.rawValue: Timestamp(),
+                                               User.CodingKeys.username.rawValue: username ?? "",
+                                               Message.CodingKeys.profileUrl.rawValue: profileUrl ?? "",
                                                Message.CodingKeys.location.rawValue: message.location ?? "",
                                                Message.CodingKeys.spotId.rawValue: message.spotId ?? ""]
         connectionsRef.setData(connectionData)

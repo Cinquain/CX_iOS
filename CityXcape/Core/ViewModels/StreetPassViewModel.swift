@@ -244,6 +244,7 @@ extension StreetPassViewModel {
             do {
                 let data = try await selection.loadTransferable(type: Data.self)
                 guard let data, let uiImage = UIImage(data: data) else {return}
+                profileImage = uiImage
                 let imageUrl = try await ImageManager.shared.uploadProfileImage(uid: uid, image: uiImage)
                 try await DataService.shared.updateImageUrl(url: imageUrl)
                 await MainActor.run(body: {

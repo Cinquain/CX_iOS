@@ -74,7 +74,7 @@ struct ConnectionView: View {
                     }
                        
                     if vm.showMatch {
-                        MatchAnimation()
+                        MatchAnimation(matchUrl: vm.matchedUrl ?? "")
                     }
                     
                 } else {

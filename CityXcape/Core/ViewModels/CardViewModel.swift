@@ -25,25 +25,29 @@ class CardViewModel: ObservableObject {
     @Published var showPass: Bool = false
     
     
-    func notify(username: String) {
+    func notify(username: String, id: String) {
         let content = UNMutableNotificationContent()
-        content.title = "Wave has Expired"
+        content.title = "Connection Expired!"
         content.body = "\(username) request to connect with you has run out of time!"
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(staticTotalSeconds), repeats: false)
-        let request = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request)
+        if minutes == 0 && seconds == 0 {
+            stopTimer(messageId: id)
+        }
         
     }
     
-    func startTimer(username: String) {
+  
+    func startTimer(username: String, id: String) {
         isStarted = true
         timerString = "\(minutes >= 10 ? "\(minutes):" :"\(minutes):")\(seconds >= 10 ? "\(seconds)" : "0\(seconds)")"
         totalSeconds = (minutes * 60) + seconds
         staticTotalSeconds = totalSeconds
-        notify(username: username)
+        notify(username: username, id: id)
     }
     
-    func updateTimer() {
+    func updateTimer(messageId: String) {
         totalSeconds -= 1
         to = CGFloat(totalSeconds) / CGFloat(staticTotalSeconds)
         to = to < 0 ? 0 : to
@@ -54,12 +58,12 @@ class CardViewModel: ObservableObject {
         
         if minutes == 0 && seconds == 0 {
             isStarted = false
-            stopTimer()
+            stopTimer(messageId: messageId)
             print("Timer Finished")
         }
     }
     
-    func stopTimer() {
+    func stopTimer(messageId: String) {
             isStarted = false
             minutes = 0
             seconds = 0
@@ -69,6 +73,13 @@ class CardViewModel: ObservableObject {
         staticTotalSeconds = 0
         timerString = "0:00"
         timer.upstream.connect().cancel()
+        Task {
+            do {
+                try await DataService.shared.deleteRequest(id: messageId)
+            } catch {
+                print("Error deleting request from DB", error.localizedDescription)
+            }
+        }
     }
     
     func requestNotifications() {

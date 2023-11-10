@@ -46,12 +46,16 @@ struct MessagesView: View {
     func Header() -> some View {
         HStack(spacing: 2){
             Spacer()
+            
             Image("dot")
                 .resizable()
                 .scaledToFit()
-            .frame(height: 20)
+                .frame(height: 25)
+            
             Text("Messages")
+                .font(.title2)
                 .fontWeight(.thin)
+            
             Spacer()
             Button {
                 vm.showConnections.toggle()

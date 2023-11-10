@@ -41,13 +41,13 @@ struct CardView: View, Identifiable {
             .padding(.horizontal)
             .onAppear {
                 withAnimation {
-                    vm.startTimer(username: message.displayName)
+                    vm.startTimer(username: message.displayName, id: message.id)
                 }
                 vm.requestNotifications()
             }
             .onReceive(vm.timer, perform: { (_) in
                 withAnimation {
-                    vm.updateTimer()
+                    vm.updateTimer(messageId: message.id)
                 }
             })
           
@@ -114,6 +114,7 @@ struct CardView: View, Identifiable {
         ZStack {
             Color.black
                 .opacity(0.9)
+            
             Image("black-paths")
                  .resizable()
                  .scaledToFill()

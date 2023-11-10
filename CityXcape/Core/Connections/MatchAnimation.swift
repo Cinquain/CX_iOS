@@ -10,7 +10,8 @@ import SwiftUI
 struct MatchAnimation: View {
     
     @AppStorage(AppUserDefaults.profileUrl) var profileUrl: String?
-
+    
+    @State var matchUrl: String
     @State private var rotation: Double = 90
     @State private var lenght: CGFloat = 120
     @State private var opacity: Double = 0
@@ -18,7 +19,7 @@ struct MatchAnimation: View {
         VStack {
             Spacer()
             HStack {
-                UserDot(width: 125, imageUrl: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FW6EUJxka1OihhJ0Iyest%2F2-min.jpg?alt=media&token=1930940d-704f-42b1-aa2b-cd8c919b0161")
+                UserDot(width: 125, imageUrl: profileUrl ?? "")
                     .rotationEffect(Angle(degrees: rotation))
                     .animation(.easeOut(duration: 0.5), value: rotation)
                
@@ -28,7 +29,7 @@ struct MatchAnimation: View {
                 
                 
                 
-                UserDot(width: 125, imageUrl: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2Fpexels-mahdi-chaghari-13634600.jpg?alt=media&token=81e87218-43fa-4cd7-80ea-c556cde704d8")
+                UserDot(width: 125, imageUrl: matchUrl)
                     .rotationEffect(Angle(degrees: rotation))
                     .animation(.easeOut(duration: 0.5), value: rotation)
 
@@ -73,6 +74,6 @@ struct MatchAnimation: View {
 
 struct MatchAnimation_Previews: PreviewProvider {
     static var previews: some View {
-        MatchAnimation()
+        MatchAnimation(matchUrl: "https://firebasestorage.googleapis.com/v0/b/cityxcape-8888.appspot.com/o/Users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2Fpexels-mahdi-chaghari-13634600.jpg?alt=media&token=81e87218-43fa-4cd7-80ea-c556cde704d8")
     }
 }

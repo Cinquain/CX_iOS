@@ -123,7 +123,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case address
         case hashtags
         case liveCount
-        case ownerId = "owner_id"
+        case ownerId 
         case saveCount = "save_count"
         case checkinCount = "checkin_count"
         case commentCount = "comment_count"
