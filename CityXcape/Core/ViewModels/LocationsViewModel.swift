@@ -37,7 +37,8 @@ class LocationsViewModel: ObservableObject {
     @Published var saves: [Location] = []
     @Published var chatInput: String = ""
     @Published var showBuy: Bool = false 
-    
+    @Published var user: User?
+
     func seeMoreInfo() {
         
         statuses[0].toggle()
@@ -46,6 +47,17 @@ class LocationsViewModel: ObservableObject {
         
         //Animation the view
         self.opacity = showDetails ? 1 : 0
+    }
+    
+    func getOwnerInfo(uid: String) {
+        Task {
+            do {
+                let user = try await DataService.shared.getUserFrom(id: uid)
+                self.user = user
+            } catch {
+                print("Error finding user who owns the spot", error.localizedDescription)
+            }
+        }
     }
     
     func likeLocation(spot: Location) {
@@ -110,28 +122,29 @@ class LocationsViewModel: ObservableObject {
             return
         }
         
-        //Check if user distance is at location
-//        guard spot.distanceFromUser < 100 else {
-//            alertMessage = "You Need to be Inside to Checkin"
-//            showAlert.toggle()
-//            return
-//        }
-        
+//        Check if user distance is at location
+        guard spot.distanceFromUser < 100 else {
+            alertMessage = "You Need to be Inside to Checkin"
+            print("Distance from user is: \(spot.distanceFromUser)")
+            showAlert.toggle()
+            return
+        }
+        print("Distance from user is: \(spot.distanceFromUser)")
         //Give User a Stamp
         //Increment Wave Count On User Object
         Task {
             do {
                 try await DataService.shared.checkinLocation(spot: spot)
-                self.showStamp = true
-                loadCheckin(id: spot.id)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-                    //Show user list of others in the spot
-                    self.showCheckinList = true
-                    self.statuses[2] = true
-                    self.isCheckedIn = true
-                    UserDefaults.standard.set(spot.name, forKey: AppUserDefaults.location)
-                    UserDefaults.standard.set(spot.id, forKey: AppUserDefaults.spotId)
-                })
+                DispatchQueue.main.async {
+                    self.showStamp = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                        self.normalAlert = true
+                        self.alertMessage = "\(spot.name) has been added to your passport"
+                        self.showAlert = true
+                    })
+                }
+             
+                
             } catch {
                 normalAlert.toggle()
                 alertMessage = error.localizedDescription
@@ -167,7 +180,7 @@ class LocationsViewModel: ObservableObject {
         Task {
             do {
                 self.locations = try await DataService.shared.fetchAllLocations()
-                self.locations.sort(by: {$0.distanceFromUser < $1.distanceFromUser})
+                self.locations.sort(by: {$0.distanceFromUserinMiles < $1.distanceFromUserinMiles})
             } catch {
                 alertMessage = error.localizedDescription
                 showAlert.toggle()

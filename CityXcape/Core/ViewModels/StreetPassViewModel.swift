@@ -12,11 +12,13 @@ import FirebaseAuth
 
 class StreetPassViewModel: NSObject, ObservableObject {
     
-    @Published var selectedItem: PhotosPickerItem? {
+    @Published var selectedItem: UIImage? {
         didSet {
-            setImage(from: selectedItem)
+            setProfileImage(from: selectedItem)
         }
     }
+    
+    @Published var stampSelection: UIImage?
     
     @Published var profileImage: UIImage?
     @Published var errorMessage: String = ""
@@ -24,7 +26,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var isUploading: Bool = false
     @Published var editSP: Bool = false 
   
-    @Published var username: String = ""
+    var username: String = ""
     @Published var profileUrl: String = ""
     @Published var bio: String = ""
     @Published var changedGender: Bool = false
@@ -34,6 +36,10 @@ class StreetPassViewModel: NSObject, ObservableObject {
 
     @Published var showBucketList: Bool = false
     @Published var bucketList: [Location] = []
+    
+    @Published var showPicker: Bool = false
+    @Published var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @Published var showActionSheet: Bool = false 
     
     
     @Published var showDiary: Bool = false
@@ -55,7 +61,9 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var longitude: String = ""
     @Published var latitude: String = ""
     
-    @Published var imageSelection: PhotosPickerItem? = nil {
+    
+    @Published var stampImageUrl = ""
+    @Published var imageSelection: UIImage?  = nil {
         didSet {
             setSpotImage(from: imageSelection)
         }
@@ -138,15 +146,13 @@ class StreetPassViewModel: NSObject, ObservableObject {
    
     
     //MARK: LOCATION EDIT FUNCTIONS
-    func setSpotImage(from selection: PhotosPickerItem?) {
+    func setSpotImage(from selection: UIImage?) {
         guard let selection else {return}
         isUploading = true
         Task {
             do {
-                let data = try await selection.loadTransferable(type: Data.self)
-                guard let data, let uiImage = UIImage(data: data) else {return}
-                let _ = try await ImageManager.shared.uploadLocationImage(id: spotId, image: uiImage)
-                spotImage = uiImage
+                let _ = try await ImageManager.shared.uploadLocationImage(id: spotId, image: selection)
+                spotImage = selection
                 isUploading = false
             } catch {
                 errorMessage = error.localizedDescription
@@ -230,6 +236,8 @@ class StreetPassViewModel: NSObject, ObservableObject {
 
     }
     
+
+    
    
     
 }
@@ -237,15 +245,13 @@ class StreetPassViewModel: NSObject, ObservableObject {
 extension StreetPassViewModel {
     //MARK: USER MANAGEMENT
 
-    private func setImage(from selection: PhotosPickerItem?) {
+    private func setProfileImage(from selection: UIImage?) {
         guard let selection else {return}
         let uid = Auth.auth().currentUser?.uid ?? ""
         Task {
             do {
-                let data = try await selection.loadTransferable(type: Data.self)
-                guard let data, let uiImage = UIImage(data: data) else {return}
-                profileImage = uiImage
-                let imageUrl = try await ImageManager.shared.uploadProfileImage(uid: uid, image: uiImage)
+                profileImage = selection
+                let imageUrl = try await ImageManager.shared.uploadProfileImage(uid: uid, image: selection)
                 try await DataService.shared.updateImageUrl(url: imageUrl)
                 await MainActor.run(body: {
                     self.profileUrl = imageUrl
@@ -267,8 +273,8 @@ extension StreetPassViewModel {
             return
         }
         
-        if username.count < 3 {
-            errorMessage = "Username should be at least 3 characters 😤"
+        if username.isEmpty {
+            errorMessage = "Please create a username 😤"
             showError.toggle()
             isUploading = false
             return

@@ -18,6 +18,10 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var isSearching: Bool = false
     @Published var searchQuery: String = ""
     
+    @Published var showActionSheet: Bool = false 
+    @Published var showPicker: Bool = false
+    @Published var sourceType: UIImagePickerController.SourceType = .camera
+    
     @Published var currentLocation: CLLocationCoordinate2D?
     @Published var mapItems: [MKMapItem] = []
     @Published var annotations: [MKPointAnnotation] = []
@@ -27,7 +31,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var showForm: Bool = false
     @Published var keyboardHeight: CGFloat = 0
 
-    
     @Published var showAlert: Bool = false
     @Published var alertMessage: String = ""
     @Published var completeForm: Bool = false
@@ -40,8 +43,12 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     //MARK: PROPERTIES FOR POSTING
     @Published var spotName: String = ""
     @Published var spotDescription: String = ""
-    @Published var hashtags: String = ""
     @Published var isPosting: Bool = false
+    @Published var longitude: Double = 0
+    @Published var latitude: Double = 0
+    @Published var city: String = ""
+    @Published var address: String = ""
+    
     @Published var imageSelection: PhotosPickerItem? = nil {
         didSet {
             setImage(from: imageSelection)
@@ -99,11 +106,7 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func setupSubscribers() {
-      manager.$userLocation
-            .sink { location in
-                self.currentLocation = location
-            }
-            .store(in: &cancellables)
+     
         
         $searchQuery
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
@@ -112,11 +115,6 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             .store(in: &cancellables)
         
-        manager.$region
-            .sink { region in
-                self.region = region
-            }
-            .store(in: &cancellables)
     }
     
     fileprivate func listenForKeyboardNotification() {
@@ -164,30 +162,6 @@ extension MapViewModel {
         }
     }
     
-    private func convertoHashTags() {
-        var newWords: [String] = []
-        let wordsArray = hashtags.components(separatedBy: " ")
-        
-        wordsArray.forEach {
-            if $0.count > 0 {
-                if $0.contains("#") {
-                    let newWord = $0.replacingOccurrences(of: "#", with: "")
-                    newWords.append("#\(newWord.capitalizingFirstLetter())")
-                } else {
-                    let newWord = "#\($0.capitalizingFirstLetter())"
-                    newWords.append(newWord)
-                }
-            }
-        }
-        self.hashtags = ""
-        var count = 1
-        newWords.forEach {
-            if count == 3 {return}
-            self.hashtags += "\($0)"
-            count += 1
-        }
-    }
-    
     func submitLocation() {
         isPosting = true 
         if spotName.count < 4 {
@@ -197,7 +171,7 @@ extension MapViewModel {
             return
         }
         
-        if description.count < 10 {
+        if spotDescription.count < 10 {
             alertMessage = "Description needs to be at least 10 characters long"
             showAlert.toggle()
             isPosting.toggle()
@@ -211,24 +185,24 @@ extension MapViewModel {
             return
         }
         
-        if hashtags.count > 3 {
-            alertMessage = "Please add a hashtag at least 3 characters long"
-            showAlert.toggle()
-            isPosting.toggle()
-            return
-        }
+       
+     
         guard let image = selectedImage, let mapitem = selectedMapItem else {return}
+        let city = mapitem.getCity()
+        let address = mapitem.getAddress()
+        
         Task {
             do {
-                try await  DataService.shared
-                                    .createLocation(name: spotName,
-                                                    description: description,
-                                                    hashtag: hashtags,
-                                                    image: image, mapItem: mapitem)
+                try await DataService.shared.createLocation(name: spotName, description: spotDescription,
+                                                            longitude: longitude, latitude: latitude,
+                                                            address: address, city: city, image: image)
                isPosting = false
-               completeForm = true
+               showForm = false
+               showCongrats = true
+               searchQuery = ""
             } catch {
                 errorMessage = error.localizedDescription
+                print("Error posting location", error.localizedDescription)
                 showAlert.toggle()
                 isPosting.toggle()
                 return

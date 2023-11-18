@@ -27,10 +27,6 @@ struct PublicStreetPass: View {
                 StreetPassHeader()
                 UserDot()
                 Spacer()
-                    .frame(height: 80)
-                TextMessage()
-                WaveButton()
-                Spacer()
                 
             }
             .frame(width: size.width, height: size.height)

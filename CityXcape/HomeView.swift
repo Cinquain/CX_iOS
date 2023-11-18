@@ -11,8 +11,6 @@ struct HomeView: View {
     @EnvironmentObject private var vm: LocationsViewModel
     @StateObject var mapVM = MapViewModel()
     @StateObject var spVM = StreetPassViewModel()
-    @StateObject var mesVM = MessageViewModel()
-    @StateObject var waveVM = WaveViewModel()
 
     @State var selection: Int = 0
     @State var currentSpot: Location?
@@ -40,32 +38,12 @@ struct HomeView: View {
                     Image(systemName: Tab.post.rawValue)
                     Text(Tab.post.title)
                 }
-            
-            ConnectionView(tabIndex: $selection, vm: waveVM)
-                .tag(2)
-                .badge(waveVM.messages.count)
-                .tabItem {
-                    Image(Tab.waves.rawValue)
-                        .renderingMode(.template)
-                        .foregroundColor(.white)
-                        
-                    Text(Tab.waves.title)
-                }
-            
-            
-            MessagesView()
-                .tag(3)
-                .badge(mesVM.messages.count)
-                .environmentObject(mesVM)
-                .tabItem {
-                    Image(systemName: Tab.messages.rawValue)
-                    Text(Tab.messages.title)
-                }
-            
+          
            
             StreetPass()
-                .tag(4)
+                .tag(2)
                 .environmentObject(spVM)
+                .environmentObject(vm)
                 .tabItem {
                     Image(systemName: Tab.profile.rawValue)
                     Text(Tab.profile.title)

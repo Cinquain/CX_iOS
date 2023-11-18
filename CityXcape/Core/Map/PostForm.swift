@@ -24,24 +24,50 @@ struct PostForm: View {
                         return Alert(title: Text(vm.alertMessage))
                     }
                 
-                TextField("#hashtag", text: $vm.hashtags)
                 
                 Section("\(Image(systemName: "photo")) Location Image (Portrait)") {
                 
-                    PhotosPicker(selection: $vm.imageSelection, matching: .images) {
+                    Button {
+                        vm.showActionSheet.toggle()
+                    } label: {
                         PickerLabel()
                     }
-                    .listRowInsets(EdgeInsets())
+                    .sheet(isPresented: $vm.showPicker) {
+                        ImagePicker(imageSelected: $vm.selectedImage, sourceType: $vm.sourceType)
+                            .colorScheme(.dark)
+                    }
+
                     
                 }
                 
                 Section("Address") {
                     locationView()
-                        .fullScreenCover(isPresented: $vm.showCongrats, onDismiss: {
-                            dismiss()
-                        }) {
-                            CongratsView(vm: vm)
+                        .actionSheet(isPresented: $vm.showActionSheet) {
+                            ActionSheet(title: Text("Source Options"), buttons: [
+                                .default(Text("Camera"), action: {
+                                    vm.sourceType = .camera
+                                    vm.showPicker.toggle()
+                                }),
+                                .destructive(Text("Photo Library"), action: {
+                                    vm.sourceType = .photoLibrary
+                                    vm.showPicker.toggle()
+                                }),
+                                .cancel()
+                            ])
                         }
+                }
+                
+                Section("Coordinates") {
+                    HStack {
+                        Text("Longitude: \(vm.longitude)")
+                            .font(.caption)
+                            .fontWeight(.thin)
+                        Spacer()
+                        Text("Latitude: \(vm.latitude)")
+                            .font(.caption)
+                            .fontWeight(.thin)
+                    }
+                    .foregroundColor(.white)
                 }
                 
                 Section("Finish") {
@@ -102,7 +128,7 @@ struct PostForm: View {
                       .scaledToFit()
                       .frame(height: 20)
                   
-            Text(vm.selectedMapItem?.getAddress() ?? "")
+            Text(vm.address)
                       .multilineTextAlignment(.center)
                       .lineLimit(1)
                  Spacer()

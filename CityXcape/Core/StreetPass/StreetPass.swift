@@ -16,7 +16,6 @@ struct StreetPass: View {
 
     @EnvironmentObject private var vm: StreetPassViewModel
 
-    
     var body: some View {
         
             VStack {
@@ -66,6 +65,20 @@ struct StreetPass: View {
 
             Spacer()
             Menu {
+                
+                Button {
+                    openCustomUrl(link: "https://www.cityxcape.com/privacy_policy")
+                } label: {
+                    Label("Privacy Policy", systemImage: "hand.raised.circle.fill")
+                }
+                
+                Button {
+                    openCustomUrl(link: "https://www.cityxcape.com/terms")
+                } label: {
+                    Label("Terms & Conditions", systemImage: "doc.text.magnifyingglass")
+                }
+                
+                
                 Button(action: vm.editStreetPass) {
                        Label("Edit StreetPass", systemImage: "pencil.circle")
                    }
@@ -78,11 +91,13 @@ struct StreetPass: View {
                        Label("Delete Account", systemImage: "power.circle")
                    }
              
-            } label: {
-                Image(systemName: "gearshape.fill")
-                    .font(.title2)
-                    .foregroundColor(.white.opacity(0.5))
-            }
+                } label: {
+                    Image(systemName: "gearshape.fill")
+                        .font(.title2)
+                        .foregroundColor(.white.opacity(0.5))
+                }
+       
+
 
         }
         .padding(.horizontal, 25)
@@ -91,7 +106,9 @@ struct StreetPass: View {
     @ViewBuilder
     func UserDot() -> some View {
         
-        PhotosPicker(selection: $vm.selectedItem, matching: .images) {
+        Button {
+            vm.showPicker.toggle()
+        } label: {
             VStack(spacing: 3) {
                 BubbleView(width: 300, imageUrl: profileUrl ?? "", type: .personal)
                 
@@ -103,6 +120,10 @@ struct StreetPass: View {
             }
             .padding(.top, 20)
         }
+        .sheet(isPresented: $vm.showPicker) {
+            ImagePicker(imageSelected: $vm.selectedItem, sourceType: $vm.sourceType)
+                .colorScheme(.dark)
+        }
         
     }
     
@@ -110,11 +131,33 @@ struct StreetPass: View {
     func MyJourney() -> some View {
   
         VStack(alignment: .leading, spacing: 20) {
+            
+            Button {
+                vm.fetchStamps()
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: "book.circle")
+                        .font(.title)
+                        .foregroundColor(.white)
+                    
+                    Text("Passport")
+                        .font(.title3)
+                        .foregroundColor(.white)
+                        .fontWeight(.thin)
+
+                }
+                .fullScreenCover(isPresented: $vm.showDiary) {
+                    TravelDiary(stamps: vm.stamps)
+                }
+                
+            }
+            
             Button {
                 vm.fetchBucketList()
             } label: {
-                HStack {
-                    Image(systemName: "list.bullet.circle.fill")
+                HStack(spacing: 10) {
+                    
+                    Image(systemName: "bookmark.circle.fill")
                         .font(.title)
                         .foregroundColor(.white)
                     
@@ -129,40 +172,25 @@ struct StreetPass: View {
                         .presentationDetents([.medium])
 
                 }
+
             }
-            
-            Button {
-                vm.fetchStamps()
-            } label: {
-                HStack {
-                    Image(systemName: "book.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.white)
-                    Text("Travel Diary")
-                        .font(.title3)
-                        .foregroundColor(.white)
-                        .fontWeight(.thin)
-                }
-                .fullScreenCover(isPresented: $vm.showDiary) {
-                    TravelDiary(stamps: vm.stamps)
-                }
-                
-            }
-            
+     
             
             Button {
                 vm.fetchUploads()
             } label: {
-                HStack {
+                HStack(spacing: 10) {
                     Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                         .font(.title)
                         .foregroundColor(.white)
+                    
                     
                     Text("Analytics")
                         .font(.title3)
                         .foregroundColor(.white)
                         .fontWeight(.thin)
                 }
+
             }
             .fullScreenCover(isPresented: $vm.showStreetRep) {
                 StreetReportCard(vm: vm)
@@ -176,7 +204,12 @@ struct StreetPass: View {
     }
     
 
-    
+    func openCustomUrl(link: String) {
+        guard let url = URL(string: link) else {return}
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
     
 }
 

@@ -22,6 +22,9 @@ struct MapView: View {
                   
                 
                 SearchResultView()
+                    .fullScreenCover(isPresented: $vm.showCongrats) {
+                        CongratsView(vm: vm)
+                    }
                 
                 Spacer()
                     .frame(height: vm.keyboardHeight)
@@ -56,6 +59,9 @@ struct MapView: View {
                     Button {
                         vm.selectedMapItem = mapItem
                         vm.spotName = mapItem.name ?? ""
+                        vm.longitude = mapItem.placemark.coordinate.longitude
+                        vm.latitude = mapItem.placemark.coordinate.latitude
+                        vm.address = mapItem.getAddress()
                         vm.showForm.toggle()
                     } label: {
                         VStack(alignment: .leading, spacing: 4) {

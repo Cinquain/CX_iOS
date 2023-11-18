@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TravelDiary: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var vm: StreetPassViewModel
 
     @State var stamps: [Stamp]
     @State var currentStamp: Stamp?
@@ -30,19 +31,23 @@ struct TravelDiary: View {
     @ViewBuilder
     func header() -> some View {
         HStack {
-            Image(systemName: "airplane.departure")
-                .font(.title)
-                .foregroundColor(.white)
+            Image("passport")
+                .resizable()
+                .renderingMode(.template)
+                .scaledToFit()
+                .frame(height: 40)
+                .foregroundColor(.black)
             
             VStack(alignment: .leading) {
                 Text("My Journey")
                     .font(.title)
-                    .fontWeight(.thin)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.black)
                 Text("\(stamps.count) Locations")
-                    .fontWeight(.thin)
+                    .fontWeight(.semibold)
                     .font(.caption)
+                    .foregroundColor(.black)
             }
-            .foregroundColor(.white)
             Spacer()
             
             Button {
@@ -50,8 +55,8 @@ struct TravelDiary: View {
             } label: {
                 Image(systemName: "xmark.square.fill")
                     .font(.title2)
+                    .foregroundColor(.black)
             }
-            .foregroundColor(.white)
 
         }
         .padding(.horizontal, 20)
@@ -74,11 +79,12 @@ struct TravelDiary: View {
                 ForEach(stamps) { stamp in
                     Button {
                         currentStamp = stamp
+                        vm.stampImageUrl = stamp.imageUrl
                     } label: {
                         stampView(stamp: stamp)
                     }
                     .sheet(item: $currentStamp) { stamp in
-                        StampDetail(stamp: stamp)
+                        StampDetail(stamp: stamp, imageUrl: stamp.imageUrl)
                             .presentationDetents([.medium])
                     }
 
@@ -100,7 +106,7 @@ struct TravelDiary: View {
                     .frame(height: 15)
                 Text(stamp.spotName)
                     .foregroundColor(.black)
-                    .fontWeight(.thin)
+                    .fontWeight(.semibold)
                     .font(.caption)
             }
             .frame(width: 180)

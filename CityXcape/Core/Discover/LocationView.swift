@@ -29,9 +29,7 @@ struct LocationView: View {
                     if vm.showStamp {
                         StampView(spot: spot)
                             .padding(.bottom, 20)
-                            .fullScreenCover(isPresented: $vm.showCheckinList) {
-                                DigitalLobby(spot: spot, vm: vm)
-                            }
+                          
                     }
                     
                     ZStack {
@@ -55,11 +53,12 @@ struct LocationView: View {
                 )
                 .onAppear {
                     vm.updateViewCount(id: spot.id)
+                    vm.getOwnerInfo(uid: spot.id)
                 }
                 .onDisappear {
                     vm.showStamp = false
                     vm.statuses[2] = false
-                    vm.showCheckinList = false 
+                    vm.user = nil
                 }
         
         
@@ -97,6 +96,7 @@ struct LocationView: View {
                
             CheckInButton()
             
+            
             if vm.showDetails {
                 VStack(alignment: .leading, spacing: 10) {
                     Text(spot.description)
@@ -116,12 +116,12 @@ struct LocationView: View {
                         .animation(.easeIn(duration: 0.5), value: vm.opacity)
                        
 
-
                 }
                 .padding(20)
             }
             
-       
+            ownerDetails()
+
             
             Spacer()
         }
@@ -166,6 +166,43 @@ struct LocationView: View {
                 .padding(.top, size.height / 18)
         }
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    @ViewBuilder
+    func ownerDetails() -> some View {
+        HStack {
+       
+
+            
+            Button {
+                vm.getOwnerInfo(uid: spot.ownerId)
+            } label: {
+                VStack(alignment: .leading, spacing: 2) {
+                    UserDot(width: 50, imageUrl: spot.ownerImageUrl)
+                    Text("Posted by")
+                        .foregroundColor(.white)
+                        .fontWeight(.thin)
+                        .font(.caption)
+                }
+            }
+            .sheet(item: $vm.user) { user in
+                PublicStreetPass(user: user)
+            }
+            
+            Spacer()
+
+            VStack {
+                Image(systemName: "eye.fill")
+                    .font(.title2)
+                Text("\(spot.viewCount) wiews")
+                    .font(.callout)
+                .fontWeight(.thin)
+            }
+            .foregroundColor(.white)
+
+           
+        }
+        .padding(.horizontal)
     }
     
     @ViewBuilder

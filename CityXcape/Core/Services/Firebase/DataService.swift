@@ -72,18 +72,14 @@ final class DataService {
         
     }
     
-    func createLocation(name: String, description: String, hashtag: String, image: UIImage, mapItem: MKMapItem) async throws {
+    func createLocation(name: String, description: String, longitude: Double, latitude: Double, address: String, city: String, image: UIImage) async throws {
         let spotRef = locationsRef.document()
         let spotId = spotRef.documentID
         let increment: Double = 1
-        let address = mapItem.getAddress()
-        let longitude = mapItem.placemark.coordinate.longitude
-        let latitude = mapItem.placemark.coordinate.latitude
-        let city = mapItem.getCity()
         
         let userId = Auth.auth().currentUser?.uid ?? ""
         let userRef = usersRef.document(userId)
-        let userRecordsRef = privatesRef.document(userId).collection(Server.privates).document(spotId)
+        let userRecordsRef = privatesRef.document(userId).collection(Server.uploads).document(spotId)
     
         let streetcredData: [String: Any] = [
             User.CodingKeys.streetCred.rawValue: FieldValue.increment(increment),
@@ -93,20 +89,21 @@ final class DataService {
             Location.CodingKeys.id.rawValue: spotId,
             Location.CodingKeys.timestamp.rawValue: Timestamp()
         ]
-   
         
-        let imageURL = try await ImageManager.shared.uploadLocationImage(id: spotId, image: image)
+        let imageUrl = try await ImageManager.shared.uploadLocationImage(id: spotId, image: image)
+        
         let data: [String: Any] = [
             Location.CodingKeys.id.rawValue: spotId,
             Location.CodingKeys.name.rawValue: name,
             Location.CodingKeys.description.rawValue: description,
-            Location.CodingKeys.hashtags.rawValue: hashtag,
-            Location.CodingKeys.imageUrl.rawValue : imageURL,
+            Location.CodingKeys.imageUrl.rawValue : imageUrl,
             Location.CodingKeys.longitude.rawValue: longitude,
             Location.CodingKeys.latitude.rawValue: latitude,
             Location.CodingKeys.address.rawValue: address,
             Location.CodingKeys.city.rawValue: city,
-            Location.CodingKeys.ownerId.rawValue: userId
+            Location.CodingKeys.ownerId.rawValue: userId,
+            Location.CodingKeys.ownerImageUrl.rawValue: profileUrl ?? "",
+            Location.CodingKeys.ownerUsername.rawValue: username ?? ""
         ]
         
         try await spotRef.setData(data)
@@ -313,7 +310,6 @@ final class DataService {
         guard let uid = Auth.auth().currentUser?.uid else {return}
        
         let userStampsCollectionRef = privatesRef.document(uid).collection(Server.stamps).document(spot.id)
-        let spotCheckinsRef = spotRef.collection(Server.checkIns).document(uid)
         let spotHistoryRef = spotRef.collection(Server.history).document(uid)
         
         //Save the stamp to user stamp archives
@@ -329,18 +325,7 @@ final class DataService {
             Stamp.CodingKeys.displayName.rawValue: username ?? ""
         ]
         
-        let message: [String: Any] = [
-            Message.CodingKeys.id.rawValue: uid,
-            Message.CodingKeys.toId.rawValue: spot.id,
-            Message.CodingKeys.fromId.rawValue: uid,
-            Message.CodingKeys.timestamp.rawValue: Timestamp(),
-            Message.CodingKeys.spotId.rawValue: spot.id,
-            Message.CodingKeys.location.rawValue: spot.name,
-            Message.CodingKeys.profileUrl.rawValue: profileUrl ?? "",
-            Message.CodingKeys.displayName.rawValue: username ?? "",
-            Message.CodingKeys.content.rawValue: "\(username ?? "") checked in \(spot.name)"
-        ]
-                
+            
         //Adds the location to user collection if it does not exist
         if try await !userStampsCollectionRef.getDocument().exists {
             try await userStampsCollectionRef.setData(data)
@@ -352,8 +337,6 @@ final class DataService {
             try await updateCheckinCount(spotId: spot.id)
         }
        
-        try await spotCheckinsRef.setData(message)
-        try await updateLiveCount(spotId: spot.id, increment: 1)
     }
     
     func checkoutLocation(spot: Location) async throws {
@@ -406,6 +389,14 @@ final class DataService {
             users.append(user)
         }
         return users
+    }
+    
+    func getUserFrom(id: String) async throws -> User {
+        let ref = usersRef
+        let snapshot = try await ref.document(id).getDocument()
+        guard let data = snapshot.data() else {throw CustomError.badData}
+        let user = User(data: data)
+        return user
     }
     
     
@@ -792,6 +783,17 @@ final class DataService {
             stamps.append(stamp)
         }
         return stamps
+    }
+    
+    func updateStampImage(image: UIImage, stampId: String) async throws -> String{
+        guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
+        let ref = privatesRef.document(uid).collection(Server.stamps).document(stampId)
+        let url = try await ImageManager.shared.uploadStampImage(uid: uid, spotId: stampId, image: image)
+        let data: [String: Any] = [
+            Stamp.CodingKeys.imageUrl.rawValue: url
+        ]
+        try await ref.updateData(data)
+        return url
     }
     
     

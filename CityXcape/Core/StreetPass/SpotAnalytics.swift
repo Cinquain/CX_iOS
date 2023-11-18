@@ -76,31 +76,38 @@ struct SpotAnalytics: View {
             }
         }
     }
+    
     @ViewBuilder
     func imageThumb() -> some View {
-            PhotosPicker(selection: $vm.imageSelection, matching: .images) {
-                ZStack {
-                    if let image = vm.spotImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .cornerRadius(12)
-                            .clipped()
-                        
-                    } else {
-                        WebImage(url: URL(string: spot.imageUrl))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: .infinity)
-                            .frame(maxHeight: 300)
-                            .clipped()
-                    }
-                    ProgressView()
-                        .opacity(vm.isUploading ? 1 : 0)
-                        .scaleEffect(3)
+        Button {
+            vm.showPicker.toggle()
+        } label: {
+            ZStack {
+                if let image = vm.spotImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .cornerRadius(12)
+                        .clipped()
+                    
+                } else {
+                    WebImage(url: URL(string: spot.imageUrl))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: .infinity)
+                        .frame(maxHeight: 300)
+                        .clipped()
                 }
-               
+                ProgressView()
+                    .opacity(vm.isUploading ? 1 : 0)
+                    .scaleEffect(3)
             }
+        }
+        .fullScreenCover(isPresented: $vm.showPicker) {
+            ImagePicker(imageSelected: $vm.spotImage, sourceType: $vm.sourceType)
+                .colorScheme(.dark)
+        }
+
            
     }
  

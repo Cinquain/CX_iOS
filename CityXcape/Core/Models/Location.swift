@@ -22,7 +22,9 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let address: String?
     let timestamp: Date
     let ownerId: String
-    let hashtags: String
+    let ownerImageUrl: String
+    let ownerUsername: String
+    
     //Social Component
     let saveCount: Int
     let likeCount: Int
@@ -31,11 +33,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let checkinCount: Int
     let commentCount: Int
     let connections: Int
-    
-    //World Component
-    let worldId: String?
-    let worldName: String?
-    let worldImageUrl: String?
+
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -51,14 +49,15 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
             if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
                 let destination = CLLocation(latitude: latitude, longitude: longitude)
                 let userlocation = CLLocation(latitude: (manager.location?.coordinate.latitude) ?? 0, longitude: (manager.location?.coordinate.longitude) ?? 0)
-                let distance = userlocation.distance(from: destination) * 0.000621
-                let distanceinFt = distance * 3.28084
-                let roundedDistance = String(format: "%.0f", distance)
-                let roundedDistanceInFt  = String(format: "%.0f", distanceinFt)
-                if distance > 1 {
+                let distance = userlocation.distance(from: destination)
+                let distanceinMi =  distance * 0.000621
+                let distanceinFt =  distance * 3.28084
+                let roundedDistance = String(format: "%.0f", distanceinMi)
+                let roundedDistanceMeters  = String(format: "%.2f", distanceinMi)
+                if distanceinMi > 1 {
                     return "\(roundedDistance) mi"
                 } else {
-                    return "\(roundedDistanceInFt) ft"
+                    return "\(roundedDistanceMeters) mi"
                 }
             } else {
                 manager.requestWhenInUseAuthorization()
@@ -73,9 +72,22 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
             let destination = CLLocation(latitude: latitude, longitude: longitude)
             let userlocation = CLLocation(latitude: (manager.location?.coordinate.latitude) ?? 0, longitude: (manager.location?.coordinate.longitude) ?? 0)
+            let distance = userlocation.distance(from: destination) * 3.28084
+            return distance
+        } else {
+            manager.requestWhenInUseAuthorization()
+            return 1000
+        }
+    }
+    
+    var distanceFromUserinMiles: Double {
+        let manager = LocationService.shared.manager
+        
+        if manager.authorizationStatus == .authorizedWhenInUse || manager.authorizationStatus == .authorizedAlways {
+            let destination = CLLocation(latitude: latitude, longitude: longitude)
+            let userlocation = CLLocation(latitude: (manager.location?.coordinate.latitude) ?? 0, longitude: (manager.location?.coordinate.longitude) ?? 0)
             let distance = userlocation.distance(from: destination) * 0.000621
-            let distanceinFt = distance * 3.28084
-            return distanceinFt
+            return distance
         } else {
             manager.requestWhenInUseAuthorization()
             return 1000
@@ -83,12 +95,12 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     }
     
     
+    
     init(data: [String: Any]) {
         self.id = data[Location.CodingKeys.id.rawValue] as? String ?? ""
         self.name = data[Location.CodingKeys.name.rawValue] as? String ?? ""
         self.description = data[Location.CodingKeys.description.rawValue] as? String ?? ""
         self.imageUrl = data[Location.CodingKeys.imageUrl.rawValue] as? String ?? ""
-        self.hashtags = data[Location.CodingKeys.hashtags.rawValue] as? String ?? ""
         self.latitude = data[Location.CodingKeys.latitude.rawValue] as? Double ?? 0
         self.longitude = data[Location.CodingKeys.longitude.rawValue] as? Double ?? 0
         self.city = data[Location.CodingKeys.city.rawValue] as? String ?? ""
@@ -99,13 +111,12 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.commentCount = data[Location.CodingKeys.commentCount.rawValue] as? Int ?? 0
         self.likeCount = data[Location.CodingKeys.likeCount.rawValue] as? Int ?? 0
         self.checkinCount = data[Location.CodingKeys.checkinCount.rawValue] as? Int ?? 0
-        self.worldId = data[Location.CodingKeys.worldId.rawValue] as? String ?? nil
-        self.worldName = data[Location.CodingKeys.worldName.rawValue] as? String ?? nil
-        self.worldImageUrl = data[Location.CodingKeys.worldImageUrl.rawValue] as? String ?? nil
         self.ownerId = data[Location.CodingKeys.ownerId.rawValue] as? String ?? ""
         self.connections = data[Location.CodingKeys.connections.rawValue] as? Int ?? 0
         self.viewCount = data[Location.CodingKeys.viewCount.rawValue] as? Int ?? 0
         self.liveCount = data[Location.CodingKeys.liveCount.rawValue] as? Int ?? 0
+        self.ownerImageUrl = data[Location.CodingKeys.ownerImageUrl.rawValue] as? String ?? ""
+        self.ownerUsername = data[Location.CodingKeys.ownerUsername.rawValue] as? String ?? ""
     }
 
     
@@ -121,16 +132,14 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case timestamp
         case connections
         case address
-        case hashtags
         case liveCount
         case ownerId 
         case saveCount = "save_count"
         case checkinCount = "checkin_count"
         case commentCount = "comment_count"
-        case worldName = "world_name"
-        case worldId = "world_id"
         case viewCount = "view_count"
-        case worldImageUrl =  "world_imageUrl"
+        case ownerImageUrl
+        case ownerUsername
   
     }
     
@@ -146,10 +155,11 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.timestamp.rawValue: Date(),
         Location.CodingKeys.likeCount.rawValue: 322,
         Location.CodingKeys.saveCount.rawValue: 100,
-        Location.CodingKeys.hashtags.rawValue: "Street Art",
         Location.CodingKeys.checkinCount.rawValue: 34,
         Location.CodingKeys.commentCount.rawValue: 40,
-        Location.CodingKeys.viewCount.rawValue: 423
+        Location.CodingKeys.viewCount.rawValue: 423,
+        Location.CodingKeys.ownerImageUrl.rawValue: "https://firebasestorage.googleapis.com:443/v0/b/cityxcape-8888.appspot.com/o/users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2FprofileImage?alt=media&token=aafa276b-f77c-48a5-901b-66d80c56023d",
+        Location.CodingKeys.ownerUsername.rawValue: "Janelle"
     ]
     
     static let data1: [String: Any] = [
@@ -164,10 +174,12 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.timestamp.rawValue: Date(),
         Location.CodingKeys.likeCount.rawValue: 21,
         Location.CodingKeys.saveCount.rawValue: 10,
-        Location.CodingKeys.hashtags.rawValue: "Nightlife",
         Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4,
-        Location.CodingKeys.viewCount.rawValue: 1485
+        Location.CodingKeys.viewCount.rawValue: 1485,
+        Location.CodingKeys.ownerImageUrl.rawValue: "https://firebasestorage.googleapis.com:443/v0/b/cityxcape-8888.appspot.com/o/users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2FprofileImage?alt=media&token=aafa276b-f77c-48a5-901b-66d80c56023d",
+        Location.CodingKeys.ownerUsername.rawValue: "Janelle"
+
     ]
     
     static let data2: [String: Any] = [
@@ -182,10 +194,11 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.timestamp.rawValue: Date(),
         Location.CodingKeys.saveCount.rawValue: 10,
         Location.CodingKeys.likeCount.rawValue: 60,
-        Location.CodingKeys.hashtags.rawValue: "Foodie",
         Location.CodingKeys.checkinCount.rawValue: 3,
         Location.CodingKeys.commentCount.rawValue: 4,
-        Location.CodingKeys.viewCount.rawValue: 25485
+        Location.CodingKeys.viewCount.rawValue: 25485,
+        Location.CodingKeys.ownerImageUrl.rawValue: "https://firebasestorage.googleapis.com:443/v0/b/cityxcape-8888.appspot.com/o/users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2FprofileImage?alt=media&token=aafa276b-f77c-48a5-901b-66d80c56023d",
+        Location.CodingKeys.ownerUsername.rawValue: "Janelle"
     ]
     
     static let demo = Location(data: data)

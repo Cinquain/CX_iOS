@@ -10,41 +10,61 @@ import SDWebImageSwiftUI
 
 struct StampDetail: View {
     @State var stamp: Stamp
+    @State var showPicker: Bool = false
+    @State var source: UIImagePickerController.SourceType = .photoLibrary
+    @State var imageUrl: String
+    @State var stampImage: UIImage?
     
+    @State var errorMessage: String = ""
+    @State var showError: Bool = false
+
     var body: some View {
         VStack {
             postalStamp()
             title()
             passportSeal()
         }
-        .background(Color.vintage)
+        .background(background())
     }
     
     @ViewBuilder
     func postalStamp() -> some View {
         HStack {
-            ZStack {
-                Image("postmark")
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(.white)
-                    .frame(width: 200)
-                    .offset(x: 120, y: -22)
-                Image("postal")
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(.white)
-                    .frame(height: 200)
-                    .overlay(
-                        WebImage(url: URL(string: stamp.imageUrl))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: 180, maxHeight: 180)
-                            .clipped()
-                )
+            Button {
+                showPicker.toggle()
+            } label: {
+                ZStack {
+                    Image("postmark")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.white)
+                        .frame(width: 200)
+                        .offset(x: 120, y: -22)
+                    
+                    Image("postal")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.white)
+                        .frame(height: 200)
+                        .overlay(
+                            WebImage(url: URL(string: imageUrl))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: 180, maxHeight: 180)
+                                .clipped()
+                    )
+                }
             }
+            .sheet(isPresented: $showPicker, onDismiss: {
+                setStampImage()
+            }) {
+                ImagePicker(imageSelected: $stampImage, sourceType: $source)
+                    .colorScheme(.dark)
+            }
+
+
             Spacer()
         }
         .padding(.horizontal,20)
@@ -58,6 +78,9 @@ struct StampDetail: View {
                 .resizable()
                 .scaledToFit()
                 .frame(height: 25)
+                .alert(isPresented: $showError) {
+                    return Alert(title: Text(errorMessage))
+                }
             
             Text(stamp.spotName)
                 .font(.title3)
@@ -66,6 +89,7 @@ struct StampDetail: View {
             Spacer()
         }
         .padding(.horizontal, 20)
+      
     }
     
     @ViewBuilder
@@ -78,19 +102,37 @@ struct StampDetail: View {
     }
     
     @ViewBuilder
-    func Background() -> some View {
+    func background() -> some View {
         ZStack {
             Color.black
-            Image("street-paths")
+            Image("America")
                 .resizable()
                 .scaledToFill()
+                .opacity(0.6)
         }
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    func setStampImage() {
+        print("Setting stamp image")
+
+        guard let image = stampImage else {return}
+        Task {
+            do {
+                let url = try await DataService.shared.updateStampImage(image: image, stampId: stamp.id)
+                self.imageUrl = url
+                } catch {
+                    print("error upload stamp image", error.localizedDescription)
+                errorMessage = error.localizedDescription
+                showError.toggle()
+            }
+        }
+        
     }
 }
 
 struct StampDetail_Previews: PreviewProvider {
     static var previews: some View {
-        StampDetail(stamp: Stamp.demo)
+        StampDetail(stamp: Stamp.demo, imageUrl: "")
     }
 }

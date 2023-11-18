@@ -28,6 +28,7 @@
 		21AE60802AA7430C0001BB48 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE607F2AA7430C0001BB48 /* Message.swift */; };
 		21AE60822AA7462C0001BB48 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AE60812AA7462C0001BB48 /* MessageBubble.swift */; };
 		21AED6872A8F150D000A1649 /* SpotThumbnail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AED6862A8F150D000A1649 /* SpotThumbnail.swift */; };
+		21B17AC02B016ADB0066DA83 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B17ABF2B016ADB0066DA83 /* ImagePicker.swift */; };
 		21B295FB2A8D3802007CF130 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */; };
 		21B3A70A2ABB0CFC0041F217 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3A7092ABB0CFC0041F217 /* CardViewModel.swift */; };
 		21B3A70C2ABB1EB40041F217 /* WaveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B3A70B2ABB1EB40041F217 /* WaveViewModel.swift */; };
@@ -113,6 +114,7 @@
 		21AE607F2AA7430C0001BB48 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		21AE60812AA7462C0001BB48 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		21AED6862A8F150D000A1649 /* SpotThumbnail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotThumbnail.swift; sourceTree = "<group>"; };
+		21B17ABF2B016ADB0066DA83 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		21B295F92A8D3674007CF130 /* CityXcape.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CityXcape.entitlements; sourceTree = "<group>"; };
 		21B295FA2A8D3802007CF130 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		21B3A7092ABB0CFC0041F217 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				21BCDB4B2ACB059500E316BF /* PinView.swift */,
 				21F0F2A22ACDD96A002AF144 /* StampThumbnail.swift */,
 				21AD9C6A2ACF235600BBECB9 /* StampDetail.swift */,
+				21B17ABF2B016ADB0066DA83 /* ImagePicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -596,6 +599,7 @@
 				21BCDB4A2ACAFEBF00E316BF /* BucketList.swift in Sources */,
 				21F0F2A32ACDD96A002AF144 /* StampThumbnail.swift in Sources */,
 				21D4676B2A83EC9800973AB9 /* Extensions.swift in Sources */,
+				21B17AC02B016ADB0066DA83 /* ImagePicker.swift in Sources */,
 				21B5FF382A998428005DA658 /* PublicStreetPass.swift in Sources */,
 				21CDB6172A82A9DC00A2E1FD /* World.swift in Sources */,
 				21DAF7EA2A939C3600AC1C28 /* Helpers.swift in Sources */,

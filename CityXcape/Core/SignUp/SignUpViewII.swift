@@ -17,11 +17,19 @@ struct SignUpViewII: View {
             StreetPassHeader()
                 Spacer()
             ZStack {
-                PhotosPicker(selection: $vm.selectedItem) {
+             
+                Button {
+                    vm.showPicker.toggle()
+                } label: {
                     BubbleView(width: 300,
                                imageUrl: vm.profileUrl,
                                type: .personal)
                 }
+                .fullScreenCover(isPresented: $vm.showPicker) {
+                    ImagePicker(imageSelected: $vm.selectedItem, sourceType: $vm.sourceType)
+                        .colorScheme(.dark)
+                }
+
                
                 if vm.profileUrl == "" {
                     Image(systemName: "person.fill")

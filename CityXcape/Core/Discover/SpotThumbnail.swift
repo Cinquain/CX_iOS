@@ -30,7 +30,7 @@ struct SpotThumbnail: View {
                         .padding(.top, 5)
                 
                 HStack(spacing: 3) {
-                    Image(systemName: "heart.fill")
+                    Image(systemName: "bookmark.circle.fill")
                         .foregroundColor(.gray)
                     Text("\(spot.saveCount)")
                         .foregroundColor(.gray)
@@ -41,7 +41,7 @@ struct SpotThumbnail: View {
                         .foregroundColor(.gray)
                         .padding(.leading, 5)
                     
-                    Text("\(spot.liveCount)")
+                    Text("\(spot.checkinCount)")
                         .font(.callout)
                         .foregroundColor(.white)
                         .fontWeight(.thin)

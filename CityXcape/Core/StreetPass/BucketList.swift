@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BucketList: View {
     @State var locations: [Location]
+    @EnvironmentObject private var vm: LocationsViewModel
+    @State private var currentSpot: Location?
     
     @State var errorMessage: String = ""
     @State var showAlert: Bool = false
@@ -63,10 +65,16 @@ struct BucketList: View {
     func spotList() -> some View {
             ForEach(locations) { spot in
                 HStack {
-                    PinView(height: 40, url: spot.imageUrl)
-                    Text(spot.name)
-                        .fontWeight(.thin)
-                        .foregroundColor(.white)
+                    Button {
+                        currentSpot = spot
+                    } label: {
+                        PinView(height: 40, url: spot.imageUrl)
+                        Text(spot.name)
+                            .fontWeight(.thin)
+                            .foregroundColor(.white)
+                    }
+
+                    
                     Spacer()
                     Button {
                         delete(spot: spot)
@@ -79,6 +87,10 @@ struct BucketList: View {
                     
                 }
                 .padding(.horizontal, 20)
+                .fullScreenCover(item: $currentSpot) { spot in
+                    LocationView(spot: spot)
+                }
+               
                 Divider()
                     .foregroundColor(.white)
                     .frame(height: 0.5)
