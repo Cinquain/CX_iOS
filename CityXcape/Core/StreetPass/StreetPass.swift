@@ -52,6 +52,10 @@ struct StreetPass: View {
                     .fontWeight(.thin)
                     .tracking(4)
                     .opacity(0.7)
+                    .alert(isPresented: $vm.showError) {
+                        return Alert(title: Text(vm.errorMessage))
+                    }
+                
                 Text("STC Balance: \(streetcred ?? 0)")
                     .font(.caption)
                     .fontWeight(.thin)

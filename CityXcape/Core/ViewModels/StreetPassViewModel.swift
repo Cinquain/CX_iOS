@@ -63,6 +63,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
     
     
     @Published var stampImageUrl = ""
+    @Published var spotImageUrl = ""
     @Published var imageSelection: UIImage?  = nil {
         didSet {
             setSpotImage(from: imageSelection)
@@ -94,6 +95,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
                 showStreetRep.toggle()
             } catch {
                 errorMessage = error.localizedDescription
+                
                 showError.toggle()
             }
         }
@@ -151,7 +153,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
         isUploading = true
         Task {
             do {
-                let _ = try await ImageManager.shared.uploadLocationImage(id: spotId, image: selection)
+                spotImageUrl = try await ImageManager.shared.uploadLocationImage(id: spotId, image: selection)
                 spotImage = selection
                 isUploading = false
             } catch {
@@ -307,6 +309,7 @@ extension StreetPassViewModel {
         Task {
             do {
                 try await DataService.shared.deleteUser()
+                try AuthService.shared.signOut()
             } catch {
                 errorMessage = error.localizedDescription
                 showError.toggle()

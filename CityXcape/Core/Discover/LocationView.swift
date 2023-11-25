@@ -115,12 +115,12 @@ struct LocationView: View {
                         .opacity(vm.opacity)
                         .animation(.easeIn(duration: 0.5), value: vm.opacity)
                        
+                    ownerDetails()
 
                 }
                 .padding(20)
             }
             
-            ownerDetails()
 
             
             Spacer()

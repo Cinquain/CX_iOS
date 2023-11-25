@@ -12,9 +12,14 @@ import SDWebImageSwiftUI
 
 struct SpotAnalytics: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var vm: StreetPassViewModel
 
     let spot: Location
-    @StateObject var vm: StreetPassViewModel
+    
+    
+    @State var showPicker: Bool = false
+    @State var spotImage: UIImage?
+    @State var source: UIImagePickerController.SourceType = .photoLibrary
     
     @State var data: [(name: String, value: Int)] = []
     @State var title: String = ""
@@ -91,7 +96,7 @@ struct SpotAnalytics: View {
                         .clipped()
                     
                 } else {
-                    WebImage(url: URL(string: spot.imageUrl))
+                    WebImage(url: URL(string: vm.spotImageUrl))
                         .resizable()
                         .scaledToFill()
                         .frame(width: .infinity)
@@ -103,8 +108,10 @@ struct SpotAnalytics: View {
                     .scaleEffect(3)
             }
         }
-        .fullScreenCover(isPresented: $vm.showPicker) {
-            ImagePicker(imageSelected: $vm.spotImage, sourceType: $vm.sourceType)
+        .sheet(isPresented: $showPicker, onDismiss: {
+            vm.setSpotImage(from: spotImage)
+        }) {
+            ImagePicker(imageSelected: $spotImage, sourceType: $source)
                 .colorScheme(.dark)
         }
 
@@ -183,6 +190,7 @@ struct SpotAnalytics: View {
 
 struct SpotAnalytics_Previews: PreviewProvider {
     static var previews: some View {
-        SpotAnalytics(spot: Location.demo, vm: StreetPassViewModel())
+        SpotAnalytics(spot: Location.demo)
+            .environmentObject(StreetPassViewModel())
     }
 }

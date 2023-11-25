@@ -481,6 +481,8 @@ final class DataService {
         UserDefaults.standard.removeObject(forKey: AppUserDefaults.profileUrl)
         UserDefaults.standard.removeObject(forKey: AppUserDefaults.streetcred)
         UserDefaults.standard.removeObject(forKey: AppUserDefaults.spotId)
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.location)
+        UserDefaults.standard.removeObject(forKey: AppUserDefaults.fcmToken)
     }
     
     

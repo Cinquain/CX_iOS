@@ -74,6 +74,7 @@ struct StreetReportCard: View {
         ForEach(vm.uploads.sorted(by: {$0.viewCount > $1.viewCount})) { spot in
             Button(action: {
                 vm.spotId = spot.id
+                vm.spotImageUrl = spot.imageUrl
                 vm.currentSpot = spot
             }, label: {
                 HStack {
@@ -91,7 +92,7 @@ struct StreetReportCard: View {
             })
             .padding(.horizontal, 20)
             .fullScreenCover(item: $vm.currentSpot) { spot in
-                SpotAnalytics(spot: spot, vm: vm)
+                SpotAnalytics(spot: spot)
             }
             
             Divider()

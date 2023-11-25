@@ -123,13 +123,16 @@ class LocationsViewModel: ObservableObject {
         }
         
 //        Check if user distance is at location
+        
         guard spot.distanceFromUser < 100 else {
             alertMessage = "You Need to be Inside to Checkin"
             print("Distance from user is: \(spot.distanceFromUser)")
             showAlert.toggle()
             return
         }
+        
         print("Distance from user is: \(spot.distanceFromUser)")
+        
         //Give User a Stamp
         //Increment Wave Count On User Object
         Task {
