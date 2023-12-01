@@ -372,7 +372,12 @@ final class DataService {
     
     func checkIfUserExist(uid: String) async -> Bool {
         do {
-            return try await usersRef.document(uid).getDocument().exists
+            if try await usersRef.document(uid).getDocument().exists {
+                try await loginUser(uid: uid)
+                return true
+            } else {
+                return false
+            }
         } catch (let error) {
             print(error.localizedDescription)
             return false
@@ -397,6 +402,15 @@ final class DataService {
         guard let data = snapshot.data() else {throw CustomError.badData}
         let user = User(data: data)
         return user
+    }
+    
+    func loginUser(uid: String) async throws {
+        let user = try await getUserFrom(id: uid)
+        UserDefaults.standard.set(user.id, forKey: AppUserDefaults.uid)
+        UserDefaults.standard.set(user.imageUrl, forKey: AppUserDefaults.profileUrl)
+        UserDefaults.standard.set(user.username, forKey: AppUserDefaults.username)
+        UserDefaults.standard.set(user.fcmToken ?? "", forKey: AppUserDefaults.fcmToken)
+        UserDefaults.standard.set(user.streetCred, forKey: AppUserDefaults.streetcred)
     }
     
     
@@ -476,6 +490,8 @@ final class DataService {
         try await ImageManager.shared.deleteUserProfile(uid: uid)
         try await usersRef.document(uid).delete()
         try await Auth.auth().currentUser?.delete()
+        try AuthService.shared.signOut()
+
         UserDefaults.standard.removeObject(forKey: AppUserDefaults.uid)
         UserDefaults.standard.removeObject(forKey: AppUserDefaults.username)
         UserDefaults.standard.removeObject(forKey: AppUserDefaults.profileUrl)

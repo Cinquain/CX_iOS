@@ -10,8 +10,7 @@ import AsyncButton
 
 struct SignUpView: View {
     
-    @Environment(\.dismiss) private var dismiss
-    @State private var createStreetPass: Bool = false
+    @Environment(\.dismiss) var dismiss
     @State private var showError: Bool = false
     @State private var errorMessage: String = ""
     @EnvironmentObject private var spM: StreetPassViewModel
@@ -34,11 +33,14 @@ struct SignUpView: View {
                 }
                 .frame(width: size.width, height: size.height)
                 .edgesIgnoringSafeArea(.bottom)
+            
               
         }
         .background(Color.black)
+       
     }
-    
+   
+
     @ViewBuilder
     func HeaderView() -> some View {
         VStack {
@@ -48,9 +50,7 @@ struct SignUpView: View {
                 .frame(width: 300)
                 .clipShape(Circle())
                 .shadow(color: .orange, radius:10)
-                .fullScreenCover(isPresented: $createStreetPass) {
-                    SignUpViewII(vm: spM)
-                }
+              
                 
             Text("SIGN IN WITH")
                 .foregroundColor(.white)
@@ -63,13 +63,15 @@ struct SignUpView: View {
     @ViewBuilder
     func SignInButtons() -> some View {
         HStack {
-            AsyncButton {
-                do {
-                    try await AuthService.shared.startSignInWithGoogleFlow()
-                    createStreetPass = true
-                } catch {
-                    errorMessage = error.localizedDescription
-                    showError.toggle()
+            Button {
+                Task {
+                    do {
+                        let result = try await AuthService.shared.startSignInWithGoogleFlow()
+                        if result { dismiss()}
+                    } catch {
+                        errorMessage = error.localizedDescription
+                        showError.toggle()
+                    }
                 }
                  
             } label: {
@@ -81,8 +83,7 @@ struct SignUpView: View {
             }
             
             Button {
-                    AuthService.shared.startSignInWithAppleFlow()
-                    createStreetPass = true
+                    AuthService.shared.startSignInWithAppleFlow(view: self)
             } label: {
                 Image("apple-emblem")
                     .resizable()

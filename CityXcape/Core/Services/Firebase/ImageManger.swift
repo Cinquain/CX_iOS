@@ -73,13 +73,13 @@ class ImageManager: NSObject {
     
     //MARK: DELETE FUNCTIONS
     func deleteUserProfile(uid: String) async throws {
-        let userPath = "users/\(uid)"
+        let userPath = "Users/\(uid)/profileImage"
         let path = storageRef.reference(withPath: userPath)
         try await path.delete()
     }
     
     func deleteSpotImage(spotId: String) async throws {
-        let locationPath = "posts/\(spotId)"
+        let locationPath = "Locations/\(spotId)/mainImage"
         let path = storageRef.reference(withPath: locationPath)
         try await path.delete()
     }

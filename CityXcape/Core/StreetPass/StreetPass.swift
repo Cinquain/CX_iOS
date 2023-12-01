@@ -21,6 +21,7 @@ struct StreetPass: View {
             VStack {
                 StreetPassHeader()
                 UserDot()
+                usernameField()
                 Spacer()
                     .frame(height: 70)
                 MyJourney()
@@ -115,11 +116,6 @@ struct StreetPass: View {
         } label: {
             VStack(spacing: 3) {
                 BubbleView(width: 300, imageUrl: profileUrl ?? "", type: .personal)
-                
-                Text(username ?? "Create Username")
-                    .font(.title2)
-                    .foregroundColor(.white)
-                    .fontWeight(.thin)
                   
             }
             .padding(.top, 20)
@@ -128,8 +124,18 @@ struct StreetPass: View {
             ImagePicker(imageSelected: $vm.selectedItem, sourceType: $vm.sourceType)
                 .colorScheme(.dark)
         }
-        
     }
+    
+    @ViewBuilder
+    func usernameField() -> some View {
+      
+        Text(username ?? "No Username")
+            .font(.title3)
+            .foregroundColor(.white)
+            .fontWeight(.thin)
+            
+    }
+    
     
     @ViewBuilder
     func MyJourney() -> some View {

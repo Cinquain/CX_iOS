@@ -163,7 +163,15 @@ extension MapViewModel {
     }
     
     func submitLocation() {
-        isPosting = true 
+        isPosting = true
+        
+        if AuthService.shared.uid == nil {
+            alertMessage = "You need an account to post a location"
+            showAlert.toggle()
+            isPosting.toggle()
+            return
+        }
+        
         if spotName.count < 4 {
             alertMessage = "Name needs at least four characters"
             showAlert.toggle()

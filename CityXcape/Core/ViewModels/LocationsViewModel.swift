@@ -32,7 +32,7 @@ class LocationsViewModel: ObservableObject {
     @Published var opacity: Double = 0
     @Published var basicAlert: Bool = false
     
-    @Published var checkins: [Message] = [Message.demo, Message.demo2, Message.demo3]
+    @Published var checkins: [Message] = []
     @Published private(set) var locations: [Location] = []
     @Published var saves: [Location] = []
     @Published var chatInput: String = ""

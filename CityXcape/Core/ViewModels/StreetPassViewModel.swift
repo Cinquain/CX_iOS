@@ -24,8 +24,8 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var errorMessage: String = ""
     @Published var showError: Bool = false
     @Published var isUploading: Bool = false
-    @Published var editSP: Bool = false 
-  
+    @Published var editSP: Bool = false
+    
     var username: String = ""
     @Published var profileUrl: String = ""
     @Published var bio: String = ""
@@ -33,13 +33,13 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var changedAge: Bool = false
     @Published var changedStatus: Bool = false
     @Published var success: Bool = false
-
+    
     @Published var showBucketList: Bool = false
     @Published var bucketList: [Location] = []
     
     @Published var showPicker: Bool = false
     @Published var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    @Published var showActionSheet: Bool = false 
+    @Published var showActionSheet: Bool = false
     
     
     @Published var showDiary: Bool = false
@@ -49,7 +49,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var uploads: [Location] = []
     @Published var currentSpot: Location?
     @Published var data: [(name: String, count: Int)] = []
-
+    
     @Published var metricsCategory: MetricCategory = .Views
     @Published var spotMetric: SpotMetric = .Metrics
     @Published var users: [User] = []
@@ -145,7 +145,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
     func editStreetPass() {
         editSP.toggle()
     }
-   
+    
     
     //MARK: LOCATION EDIT FUNCTIONS
     func setSpotImage(from selection: UIImage?) {
@@ -159,7 +159,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
             } catch {
                 errorMessage = error.localizedDescription
                 showError.toggle()
-                isUploading = false 
+                isUploading = false
                 return
             }
         }
@@ -220,7 +220,7 @@ class StreetPassViewModel: NSObject, ObservableObject {
                 showError.toggle()
             }
         }
-
+        
     }
     
     func changeLat(id: String) {
@@ -235,12 +235,12 @@ class StreetPassViewModel: NSObject, ObservableObject {
                 showError.toggle()
             }
         }
-
+        
     }
     
-
     
-   
+    
+    
     
 }
 
@@ -266,118 +266,123 @@ extension StreetPassViewModel {
         }
     }
     
-    func createStreetPass() {
+    func createStreetPass() async throws {
         isUploading = true
         if profileImage == nil {
             errorMessage = "Upload a photo for your Street ID Card"
             showError.toggle()
             isUploading = false
-            return
         }
         
         if username.isEmpty {
             errorMessage = "Please create a username 😤"
             showError.toggle()
             isUploading = false
-            return
         }
         
         Task {
-            do {
-                try await DataService.shared.uploadStreetPass(imageUrl: profileUrl, username: username)
-                self.success = true 
-            } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
-            }
+            try await DataService.shared.uploadStreetPass(imageUrl: profileUrl, username: username)
+            success = true
         }
-      
         
     }
     
-    func signOut() {
-        //Sign out & clear user defaults
-        do {
-            try AuthService.shared.signOut()
-        } catch {
-            errorMessage = error.localizedDescription
-            showError.toggle()
+    func updateUsername() {
+        if !username.isEmpty {
+            let data: [String: Any] = [
+                User.CodingKeys.username.rawValue: username
+            ]
+            updateData(data: data)
+            UserDefaults.standard.set(username, forKey: AppUserDefaults.username)
+            username = ""
         }
     }
-    
-    func deleteAccount() {
-        Task {
+        
+        func signOut() {
+            //Sign out & clear user defaults
             do {
-                try await DataService.shared.deleteUser()
                 try AuthService.shared.signOut()
             } catch {
                 errorMessage = error.localizedDescription
                 showError.toggle()
             }
         }
-    }
-    
-    
-    func submitProfileChanges() {
         
-        if !username.isEmpty {
-            UserDefaults.standard.set(username, forKey: AppUserDefaults.username)
-            let data: [String: Any] = [
-                User.CodingKeys.username.rawValue: username
-            ]
-            updateData(data: data)
-            username = ""
-        }
-        if !bio.isEmpty {
-            UserDefaults.standard.set(bio, forKey: AppUserDefaults.bio)
-            let data: [String: Any] = [
-                User.CodingKeys.bio.rawValue: bio
-            ]
-            updateData(data: data)
-            bio = ""
-        }
-        
-        if changedStatus {
-            let data: [String: Any] = [
-                "single": single
-            ]
-            updateData(data: data)
-            changedStatus = false 
-        }
-        
-        if changedGender {
-            let data: [String: Any] = [
-                "isMale": isMale
-            ]
-            updateData(data: data)
-            changedGender = false
-        }
-        
-        if changedAge {
-            UserDefaults.standard.set(age, forKey: AppUserDefaults.age)
-            let data: [String: Any] = [
-                "Age": age
-            ]
-            updateData(data: data)
-            age = 0
-            changedAge = false
-        }
-      
-    }
-    
-    func updateData(data: [String: Any]) {
-        Task {
-            do {
-                try await DataService.shared.updateStreetPass(data: data)
-                errorMessage = "StreetPass Successfully Updated!"
-                showError.toggle()
-            } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+        func deleteAccount() {
+            Task {
+                do {
+                    try await DataService.shared.deleteUser()
+                } catch {
+                    errorMessage = error.localizedDescription
+                    showError.toggle()
+                }
             }
         }
+        
+        
+        func submitProfileChanges() {
+            
+            if !username.isEmpty {
+                UserDefaults.standard.set(username, forKey: AppUserDefaults.username)
+                let data: [String: Any] = [
+                    User.CodingKeys.username.rawValue: username
+                ]
+                updateData(data: data)
+                username = ""
+            }
+            if !bio.isEmpty {
+                UserDefaults.standard.set(bio, forKey: AppUserDefaults.bio)
+                let data: [String: Any] = [
+                    User.CodingKeys.bio.rawValue: bio
+                ]
+                updateData(data: data)
+                bio = ""
+            }
+            
+            if changedStatus {
+                let data: [String: Any] = [
+                    "single": single
+                ]
+                updateData(data: data)
+                changedStatus = false
+            }
+            
+            if changedGender {
+                let data: [String: Any] = [
+                    "isMale": isMale
+                ]
+                updateData(data: data)
+                changedGender = false
+            }
+            
+            if changedAge {
+                UserDefaults.standard.set(age, forKey: AppUserDefaults.age)
+                let data: [String: Any] = [
+                    "Age": age
+                ]
+                updateData(data: data)
+                age = 0
+                changedAge = false
+            }
+            
+        }
+        
+        func updateData(data: [String: Any]) {
+            Task {
+                do {
+                    try await DataService.shared.updateStreetPass(data: data)
+                    errorMessage = "StreetPass Successfully Updated!"
+                    showError.toggle()
+                } catch {
+                    errorMessage = error.localizedDescription
+                    showError.toggle()
+                }
+            }
+        }
+        
+        
+        
     }
     
     
-    
-}
+

@@ -11,10 +11,11 @@ import GoogleSignIn
 import SwiftUI
 import AuthenticationServices
 
-final class AuthService: NSObject {
+final class AuthService: NSObject, ObservableObject {
     
     static let shared = AuthService()
     private override init() {}
+    var onboardingView: SignUpView!
 
     
     @Published var didSignIn: Bool = false
@@ -32,32 +33,32 @@ final class AuthService: NSObject {
         UserDefaults.standard.removeObject(forKey: AppUserDefaults.profileUrl)
     }
     
-    func signInWithGoogle(credentials: AuthCredential) async throws {
+    func signInWithGoogle(credentials: AuthCredential) async throws -> Bool {
         let authResult = try await Auth.auth().signIn(with: credentials)
         let uid = authResult.user.uid
         if await DataService.shared.checkIfUserExist(uid: uid) {
-            //User is already exist, set uid in User Defaults
-            UserDefaults.standard.setValue(uid, forKey: AppUserDefaults.uid)
-            print("User is brand spanking new")
+            //User  already exist, set uid in User Defaults
+            return true
         } else {
             //User does not exist
-            print("User already exist")
+            print("User is brand spanking new")
             DataService.shared.createUserInDB(result: authResult)
+            return false
         }
     }
     
-    func signInWithAppe(credentials: AuthCredential) async throws {
+    func signInWithAppe(credentials: AuthCredential) async throws -> Bool {
         
        let appleResult = try await Auth.auth().signIn(with: credentials)
        let uid = appleResult.user.uid
         if await DataService.shared.checkIfUserExist(uid: uid) {
             //User is already exist, set uid in User Defaults
-            UserDefaults.standard.setValue(uid, forKey: AppUserDefaults.uid)
-            print("User is brand spanking new")
+            return true
         } else {
             //User does not exist
-            print("User already exist")
+            print("User is brand spanking new")
             DataService.shared.createUserInDB(result: appleResult)
+            return false
         }
     }
     
@@ -69,18 +70,18 @@ final class AuthService: NSObject {
 extension AuthService {
     
     @MainActor
-    func startSignInWithGoogleFlow() async throws {
+    func startSignInWithGoogleFlow() async throws -> Bool {
         guard let view = Utilities.shared.topViewController() else
         {
-            print("Cant Find View Conroller")
-            return}
+            print("Error authenticating, Cant Find View Conroller")
+            throw CustomError.authFailed}
 
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        guard let clientID = FirebaseApp.app()?.options.clientID else { throw CustomError.authFailed }
         // Create Google Sign In configuration object.
         let config = GIDConfiguration(clientID: clientID)
         let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: view)
         
-        guard let idToken = result.user.idToken?.tokenString else {return}
+        guard let idToken = result.user.idToken?.tokenString else { throw CustomError.authFailed}
         let accessToken = result.user.accessToken.tokenString
 
             
@@ -88,16 +89,18 @@ extension AuthService {
                                                            accessToken: accessToken)
         
         do {
-            try await signInWithGoogle(credentials: credential)
+            return try await signInWithGoogle(credentials: credential)
         } catch {
             print("Error signing with Google", error.localizedDescription)
+            throw CustomError.authFailed
         }
     }
     
 
     @available(iOS 13, *)
-    func startSignInWithAppleFlow() {
+    func startSignInWithAppleFlow(view: SignUpView) {
         guard let topVC = Utilities.shared.topViewController() else {return}
+          self.onboardingView = view
           let nonce = randomNonceString()
           currentNonce = nonce
           let appleIDProvider = ASAuthorizationAppleIDProvider()
@@ -171,8 +174,8 @@ extension AuthService: ASAuthorizationControllerDelegate {
           // Sign in with Firebase.
             Task {
                 do {
-                    try await signInWithAppe(credentials: credential)
-                // User is signed in to Firebase with Apple.
+                   let result = try await signInWithAppe(credentials: credential)
+                    await onboardingView.dismiss()
                 } catch let error {
                     print("Failed to sign in with Apple", error.localizedDescription)
                 }

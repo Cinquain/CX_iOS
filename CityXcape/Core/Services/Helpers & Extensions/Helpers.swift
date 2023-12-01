@@ -70,6 +70,7 @@ enum CustomError: Error {
     case uidNotFound
     case badData
     case failedPurchase
+    case authFailed
 }
 
 enum MetricCategory: String, CaseIterable, Identifiable {
@@ -97,6 +98,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Bad Data", comment: "Data not found or formatted incorrectly")
         case .failedPurchase:
             return NSLocalizedString("Failed Purchase", comment: "Purchase transaction did not go through")
+        case .authFailed:
+            return NSLocalizedString("Failed Authentication", comment: "Authentication did not go through")
         }
     }
 }
