@@ -129,10 +129,10 @@ struct AnimationContainer: View {
     }
 }
 
-struct Animation_Preview: PreviewProvider {
-    
-    static var previews: some View {
-        AnimationContainer()
-    }
-    
-}
+//struct Animation_Preview: PreviewProvider {
+//
+//    static var previews: some View {
+//        AnimationContainer()
+//    }
+//
+//}

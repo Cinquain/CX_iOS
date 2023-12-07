@@ -66,6 +66,9 @@ struct PostForm: View {
                         Text("Latitude: \(vm.latitude)")
                             .font(.caption)
                             .fontWeight(.thin)
+                            .fullScreenCover(isPresented: $vm.showSignUp) {
+                                SignUpView()
+                            }
                     }
                     .foregroundColor(.white)
                 }

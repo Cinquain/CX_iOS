@@ -30,9 +30,9 @@ struct SpotThumbnail: View {
                         .padding(.top, 5)
                 
                 HStack(spacing: 3) {
-                    Image(systemName: "bookmark.circle.fill")
+                    Image(systemName: "suit.heart.fill")
                         .foregroundColor(.gray)
-                    Text("\(spot.saveCount)")
+                    Text("\(spot.likeCount)")
                         .foregroundColor(.gray)
                         .font(.callout)
                     

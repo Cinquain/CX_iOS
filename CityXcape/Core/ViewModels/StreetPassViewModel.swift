@@ -19,10 +19,11 @@ class StreetPassViewModel: NSObject, ObservableObject {
     }
     
     @Published var stampSelection: UIImage?
+    @Published var showSignUp: Bool = false
     
     @Published var profileImage: UIImage?
-    @Published var errorMessage: String = ""
-    @Published var showError: Bool = false
+    @Published var alertMessage: String = ""
+    @Published var showAlert: Bool = false
     @Published var isUploading: Bool = false
     @Published var editSP: Bool = false
     
@@ -94,9 +95,9 @@ class StreetPassViewModel: NSObject, ObservableObject {
                 self.calculateAnalytics()
                 showStreetRep.toggle()
             } catch {
-                errorMessage = error.localizedDescription
+                alertMessage = error.localizedDescription
                 
-                showError.toggle()
+                showAlert.toggle()
             }
         }
     }
@@ -122,8 +123,8 @@ class StreetPassViewModel: NSObject, ObservableObject {
                     self.showBucketList.toggle()
                 }
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
             }
         }
     }
@@ -136,14 +137,18 @@ class StreetPassViewModel: NSObject, ObservableObject {
                     self.showDiary.toggle()
                 }
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
             }
         }
     }
     
     func editStreetPass() {
         editSP.toggle()
+    }
+    
+    func showSignup() {
+        showSignUp.toggle()
     }
     
     
@@ -157,8 +162,8 @@ class StreetPassViewModel: NSObject, ObservableObject {
                 spotImage = selection
                 isUploading = false
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
                 isUploading = false
                 return
             }
@@ -184,12 +189,12 @@ class StreetPassViewModel: NSObject, ObservableObject {
         Task {
             do {
                 try await DataService.shared.updateTitle(spotId: id, title: editTitle)
-                errorMessage = "Updated Successfully"
+                alertMessage = "Updated Successfully"
                 editTitle = ""
-                showError.toggle()
+                showAlert.toggle()
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
             }
         }
     }
@@ -198,12 +203,12 @@ class StreetPassViewModel: NSObject, ObservableObject {
         Task {
             do {
                 try await DataService.shared.updateDetail(spotId: id, detail: editDetails)
-                errorMessage = "Updated Successfully"
+                alertMessage = "Updated Successfully"
                 editDetails = ""
-                showError.toggle()
+                showAlert.toggle()
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
             }
         }
     }
@@ -212,12 +217,12 @@ class StreetPassViewModel: NSObject, ObservableObject {
         Task {
             do {
                 try await DataService.shared.updateLongitude(spotId: id, longitude: longitude)
-                errorMessage = "Longitude Changed Successfully"
+                alertMessage = "Longitude Changed Successfully"
                 longitude = ""
-                showError.toggle()
+                showAlert.toggle()
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
             }
         }
         
@@ -227,12 +232,12 @@ class StreetPassViewModel: NSObject, ObservableObject {
         Task {
             do {
                 try await DataService.shared.updateLatitude(spotId: id, latitude: latitude)
-                errorMessage = "Title Latitude Successfully"
+                alertMessage = "Title Latitude Successfully"
                 latitude = ""
-                showError.toggle()
+                showAlert.toggle()
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
             }
         }
         
@@ -259,8 +264,8 @@ extension StreetPassViewModel {
                     self.profileUrl = imageUrl
                 })
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
                 return
             }
         }
@@ -269,14 +274,14 @@ extension StreetPassViewModel {
     func createStreetPass() async throws {
         isUploading = true
         if profileImage == nil {
-            errorMessage = "Upload a photo for your Street ID Card"
-            showError.toggle()
+            alertMessage = "Upload a photo for your Street ID Card"
+            showAlert.toggle()
             isUploading = false
         }
         
         if username.isEmpty {
-            errorMessage = "Please create a username 😤"
-            showError.toggle()
+            alertMessage = "Please create a username 😤"
+            showAlert.toggle()
             isUploading = false
         }
         
@@ -303,8 +308,8 @@ extension StreetPassViewModel {
             do {
                 try AuthService.shared.signOut()
             } catch {
-                errorMessage = error.localizedDescription
-                showError.toggle()
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
             }
         }
         
@@ -313,8 +318,8 @@ extension StreetPassViewModel {
                 do {
                     try await DataService.shared.deleteUser()
                 } catch {
-                    errorMessage = error.localizedDescription
-                    showError.toggle()
+                    alertMessage = error.localizedDescription
+                    showAlert.toggle()
                 }
             }
         }
@@ -371,11 +376,12 @@ extension StreetPassViewModel {
             Task {
                 do {
                     try await DataService.shared.updateStreetPass(data: data)
-                    errorMessage = "StreetPass Successfully Updated!"
-                    showError.toggle()
+                    alertMessage = "StreetPass Successfully Updated!"
+                    Analytic.shared.editStreetPass()
+                    showAlert.toggle()
                 } catch {
-                    errorMessage = error.localizedDescription
-                    showError.toggle()
+                    alertMessage = error.localizedDescription
+                    showAlert.toggle()
                 }
             }
         }

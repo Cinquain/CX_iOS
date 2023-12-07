@@ -220,7 +220,7 @@ final class DataService {
         try await spotsRef.updateData(countData)
         try await userSavesRef.setData(spotData)
         try await spotsRef.collection(Server.saves).document(uid).setData(userData)
-      
+        Analytic.shared.savedLocation()
     }
     
     func unsaveLocation(spotId: String) async throws {
@@ -279,12 +279,13 @@ final class DataService {
         ]
         let spotData: [String: Any] = [
             Location.CodingKeys.id.rawValue: spot.id,
+            Location.CodingKeys.name.rawValue: spot.name,
             Location.CodingKeys.timestamp.rawValue: Timestamp()
         ]
         try await spotRef.updateData(data)
         try await userLikesRef.setData(spotData)
         try await spotRef.collection(Server.likes).document(uid).setData(likeData)
-        
+        Analytic.shared.likedLocation()
     }
     
     func dislike(spot: Location) async throws {
@@ -330,6 +331,7 @@ final class DataService {
         if try await !userStampsCollectionRef.getDocument().exists {
             try await userStampsCollectionRef.setData(data)
             try await updateStreetCred(counter: 5)
+            Analytic.shared.newStamp()
         }
         //Adds it to check in history of location if it's user's first time
         if try await !spotHistoryRef.getDocument().exists {

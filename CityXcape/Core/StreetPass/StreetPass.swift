@@ -25,7 +25,11 @@ struct StreetPass: View {
                 Spacer()
                     .frame(height: 70)
                 MyJourney()
+                    .fullScreenCover(isPresented: $vm.showSignUp) {
+                        SignUpView()
+                    }
                  
+                
                 Spacer()
             }
             .background(Background())
@@ -53,8 +57,8 @@ struct StreetPass: View {
                     .fontWeight(.thin)
                     .tracking(4)
                     .opacity(0.7)
-                    .alert(isPresented: $vm.showError) {
-                        return Alert(title: Text(vm.errorMessage))
+                    .alert(isPresented: $vm.showAlert) {
+                        return Alert(title: Text(vm.alertMessage))
                     }
                 
                 Text("STC Balance: \(streetcred ?? 0)")
@@ -71,6 +75,14 @@ struct StreetPass: View {
             Spacer()
             Menu {
                 
+                Button(action: vm.showSignup) {
+                       Label("Login/Signup", systemImage: "person.crop.circle.fill.badge.checkmark")
+                   }
+                
+                Button(action: vm.editStreetPass) {
+                       Label("Edit StreetPass", systemImage: "pencil.circle")
+                   }
+                
                 Button {
                     openCustomUrl(link: "https://www.cityxcape.com/privacy_policy")
                 } label: {
@@ -83,17 +95,15 @@ struct StreetPass: View {
                     Label("Terms & Conditions", systemImage: "doc.text.magnifyingglass")
                 }
                 
-                
-                Button(action: vm.editStreetPass) {
-                       Label("Edit StreetPass", systemImage: "pencil.circle")
-                   }
                 //Sign out user
                 Button(action: vm.signOut) {
                        Label("Signout", systemImage: "point.filled.topleft.down.curvedto.point.bottomright.up")
                    }
                 
+                
+                
                 Button(action: vm.deleteAccount) {
-                       Label("Delete Account", systemImage: "power.circle")
+                       Label("Delete Account", systemImage: "person.crop.circle.fill.badge.minus")
                    }
              
                 } label: {
@@ -101,6 +111,7 @@ struct StreetPass: View {
                         .font(.title2)
                         .foregroundColor(.white.opacity(0.5))
                 }
+            
        
 
 

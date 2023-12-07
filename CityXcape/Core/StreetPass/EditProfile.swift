@@ -21,8 +21,8 @@ struct EditProfile: View {
             TextField(username ?? "Edit Username", text: $vm.username)
             
             TextField(bio ?? "Add Short Bio", text: $vm.bio)
-                .alert(isPresented: $vm.showError) {
-                    return Alert(title: Text(vm.errorMessage))
+                .alert(isPresented: $vm.showAlert) {
+                    return Alert(title: Text(vm.alertMessage))
                 }
             
             Section("Gender") {
@@ -55,6 +55,7 @@ struct EditProfile: View {
             
         }
         .colorScheme(.dark)
+        
     }
 
 }

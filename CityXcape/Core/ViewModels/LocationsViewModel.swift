@@ -47,6 +47,7 @@ class LocationsViewModel: ObservableObject {
         
         //Animation the view
         self.opacity = showDetails ? 1 : 0
+        Analytic.shared.viewedSpotInfo()
     }
     
     func getOwnerInfo(uid: String) {
@@ -125,7 +126,7 @@ class LocationsViewModel: ObservableObject {
 //        Check if user distance is at location
         
         guard spot.distanceFromUser < 100 else {
-            alertMessage = "You Need to be Inside to Checkin"
+            alertMessage = "You need to be Inside to Checkin"
             print("Distance from user is: \(spot.distanceFromUser)")
             showAlert.toggle()
             return

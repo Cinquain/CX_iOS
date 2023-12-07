@@ -169,6 +169,7 @@ extension MapViewModel {
             alertMessage = "You need an account to post a location"
             showAlert.toggle()
             isPosting.toggle()
+            showSignUp.toggle()
             return
         }
         
@@ -207,7 +208,8 @@ extension MapViewModel {
                isPosting = false
                showForm = false
                showCongrats = true
-               searchQuery = ""
+               spotName = ""; spotDescription = ""; selectedImage = nil;
+               
             } catch {
                 errorMessage = error.localizedDescription
                 print("Error posting location", error.localizedDescription)

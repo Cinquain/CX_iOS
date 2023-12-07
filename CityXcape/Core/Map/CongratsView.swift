@@ -55,6 +55,7 @@ struct CongratsView: View {
         .background(Background())
         .onAppear {
             angle = 360
+            Analytic.shared.postedSpot()
         }
     }
     

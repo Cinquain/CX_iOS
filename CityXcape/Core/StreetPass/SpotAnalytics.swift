@@ -67,8 +67,8 @@ struct SpotAnalytics: View {
                 .font(.title2)
                 .foregroundColor(.white)
                 .fontWeight(.thin)
-                .alert(isPresented: $vm.showError) {
-                    return Alert(title: Text(vm.errorMessage))
+                .alert(isPresented: $vm.showAlert) {
+                    return Alert(title: Text(vm.alertMessage))
                 }
             
             Spacer()
