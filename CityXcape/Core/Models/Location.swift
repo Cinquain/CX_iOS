@@ -24,6 +24,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
     let ownerId: String
     let ownerImageUrl: String
     let ownerUsername: String
+    let extraImages: [String]
     
     //Social Component
     let saveCount: Int
@@ -117,6 +118,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         self.liveCount = data[Location.CodingKeys.liveCount.rawValue] as? Int ?? 0
         self.ownerImageUrl = data[Location.CodingKeys.ownerImageUrl.rawValue] as? String ?? ""
         self.ownerUsername = data[Location.CodingKeys.ownerUsername.rawValue] as? String ?? ""
+        self.extraImages = data[Location.CodingKeys.extraImages.rawValue] as? [String] ?? []
     }
 
     
@@ -140,6 +142,7 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         case viewCount = "view_count"
         case ownerImageUrl
         case ownerUsername
+        case extraImages
   
     }
     
@@ -178,8 +181,8 @@ struct Location: Identifiable, Equatable, Codable, Hashable {
         Location.CodingKeys.commentCount.rawValue: 4,
         Location.CodingKeys.viewCount.rawValue: 1485,
         Location.CodingKeys.ownerImageUrl.rawValue: "https://firebasestorage.googleapis.com:443/v0/b/cityxcape-8888.appspot.com/o/users%2FoVbS9qDAccXS0aqwHtWXvCYfGv62%2FprofileImage?alt=media&token=aafa276b-f77c-48a5-901b-66d80c56023d",
-        Location.CodingKeys.ownerUsername.rawValue: "Janelle"
-
+        Location.CodingKeys.ownerUsername.rawValue: "Janelle",
+        Location.CodingKeys.extraImages.rawValue: ["https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0b277eb6-0e2c-4b09-8a8e-67b44fbea63b/dfyn589-a836d5cf-8b40-49f9-a37f-88f4abcc4fdd.png/v1/fit/w_512,h_960,q_70,strp/blonde_woman_by_marcus199911_dfyn589-375w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTYwIiwicGF0aCI6IlwvZlwvMGIyNzdlYjYtMGUyYy00YjA5LThhOGUtNjdiNDRmYmVhNjNiXC9kZnluNTg5LWE4MzZkNWNmLThiNDAtNDlmOS1hMzdmLTg4ZjRhYmNjNGZkZC5wbmciLCJ3aWR0aCI6Ijw9NTEyIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.QbL-L-2hvZwA4cmPIOcxIcYraLvDQA5Hg4824dgMeXs","https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/228445e9-d455-4c04-9acb-e0a6f0601a7d/dfmdytk-81ace428-0a2a-4282-b06e-49d8de3e7cec.jpg/v1/fit/w_828,h_1242,q_70,strp/the_taste_of_transformation___tg_caption_by_c0vergirl_dfmdytk-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTUzNiIsInBhdGgiOiJcL2ZcLzIyODQ0NWU5LWQ0NTUtNGMwNC05YWNiLWUwYTZmMDYwMWE3ZFwvZGZtZHl0ay04MWFjZTQyOC0wYTJhLTQyODItYjA2ZS00OWQ4ZGUzZTdjZWMuanBnIiwid2lkdGgiOiI8PTEwMjQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.G4raTQe2Tji2ys9wOuDjOgkenyGfa6erxrPNd3RLofQ",]
     ]
     
     static let data2: [String: Any] = [

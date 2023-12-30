@@ -13,7 +13,7 @@ struct PostForm: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateObject var vm: MapViewModel
-
+    
     var body: some View {
         NavigationView {
             Form {
@@ -27,18 +27,33 @@ struct PostForm: View {
                 
                 Section("\(Image(systemName: "photo")) Location Image (Portrait)") {
                 
-                    Button {
-                        vm.showActionSheet.toggle()
-                    } label: {
-                        PickerLabel()
-                    }
-                    .sheet(isPresented: $vm.showPicker) {
-                        ImagePicker(imageSelected: $vm.selectedImage, sourceType: $vm.sourceType)
-                            .colorScheme(.dark)
-                    }
-
-                    
+                        Button {
+                            vm.thumbcase = .one
+                            vm.showActionSheet.toggle()
+                        } label: {
+                            PickerLabel(pickerImage: vm.selectedImage)
+                        }
+                        .sheet(isPresented: $vm.showPicker) {
+                            switch vm.thumbcase {
+                                case .one:
+                                    ImagePicker(imageSelected: $vm.selectedImage, sourceType: $vm.sourceType)
+                                        .colorScheme(.dark)
+                                case .two:
+                                    ImagePicker(imageSelected: $vm.extraImage, sourceType: $vm.sourceType)
+                                        .colorScheme(.dark)
+                                case .three:
+                                    ImagePicker(imageSelected: $vm.extraImageII, sourceType: $vm.sourceType)
+                                        .colorScheme(.dark)
+                            }
+                        }
+                        
                 }
+                
+                Section("Extra Images") {
+                    extraImages()
+                }
+                
+                
                 
                 Section("Address") {
                     locationView()
@@ -139,10 +154,11 @@ struct PostForm: View {
               .foregroundColor(.white)
     }
     
-    @ViewBuilder func PickerLabel() -> some View {
+    @ViewBuilder
+    func PickerLabel(pickerImage: UIImage?) -> some View {
         ZStack {
-            if let image = vm.selectedImage {
-                Image(uiImage: image)
+            if let pickerImage {
+                Image(uiImage: pickerImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)
@@ -160,6 +176,34 @@ struct PostForm: View {
                 .scaleEffect(3)
         }
     }
+    
+    @ViewBuilder
+    func extraImages() -> some View {
+        HStack {
+            Button {
+                vm.thumbcase = vm.extraImage == nil ? .two : .three
+                vm.showActionSheet.toggle()
+            } label: {
+                Image(systemName: "plus.square.fill.on.square.fill")
+                    .resizable()
+                    .foregroundColor(.gray)
+                    .scaledToFit()
+                    .frame(width: 70)
+            }
+            
+            Spacer()
+            
+                PickerLabel(pickerImage: vm.extraImage)
+            
+            Spacer()
+       
+                PickerLabel(pickerImage: vm.extraImageII)
+            
+           
+        }
+        .padding(.horizontal, 15)
+    }
+    
     
 }
 

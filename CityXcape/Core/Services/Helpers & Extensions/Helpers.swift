@@ -60,6 +60,12 @@ enum Product: String, CaseIterable, Identifiable {
     }
 }
 
+enum ImageCase {
+    case one
+    case two
+    case three
+}
+
 enum PassType {
     case stranger
     case personal

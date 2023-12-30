@@ -18,9 +18,9 @@ struct EditProfile: View {
         Form {
             Section("Edit Your Street ID Card") {
             }
-            TextField(username ?? "Edit Username", text: $vm.username)
+            TextField(username ?? "Create/Edit Username", text: $vm.username)
             
-            TextField(bio ?? "Add Short Bio", text: $vm.bio)
+            TextField(bio ?? "Add Short Biography", text: $vm.bio)
                 .alert(isPresented: $vm.showAlert) {
                     return Alert(title: Text(vm.alertMessage))
                 }
@@ -34,7 +34,8 @@ struct EditProfile: View {
             }
             
             Section("Age") {
-                Stepper("\(vm.age)", value: $vm.age)
+                TextField("\(age ?? 0)", text: $vm.age)
+                    .keyboardType(.numberPad)
             }
             
             Section {

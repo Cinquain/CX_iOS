@@ -69,10 +69,12 @@ final class DataService {
             locations.append(location)
         }
             return locations
-        
     }
     
-    func createLocation(name: String, description: String, longitude: Double, latitude: Double, address: String, city: String, image: UIImage) async throws {
+    func createLocation(name: String, description: String, longitude: Double,
+                        latitude: Double, address: String, city: String, image: UIImage,
+                        extraI: UIImage?, extraII: UIImage?) async throws {
+        
         let spotRef = locationsRef.document()
         let spotId = spotRef.documentID
         let increment: Double = 1
@@ -109,7 +111,16 @@ final class DataService {
         try await spotRef.setData(data)
         try await userRef.updateData(streetcredData)
         try await userRecordsRef.setData(personalData)
-                    
+        
+        guard let addedImage = extraI else {return}
+        let extraImageUrl = try await ImageManager.shared.uploadLocationExtraImage(id: spotId, image: addedImage)
+        let extraData: [String: Any] = [Location.CodingKeys.extraImages.rawValue: FieldValue.arrayUnion([extraImageUrl])]
+        try await spotRef.updateData(extraData)
+        
+        guard let extraddedImage = extraII else {return}
+        let extraImageUrlII = try await ImageManager.shared.uploadLocationExtraImage(id: spotId, image: extraddedImage)
+        let extraDataII: [String: Any] = [Location.CodingKeys.extraImages.rawValue: FieldValue.arrayUnion([extraImageUrlII])]
+        try await spotRef.updateData(extraDataII)
     }
     
     func updateViewCount(spotId: String) async throws {
@@ -138,7 +149,7 @@ final class DataService {
     
     func updateLatitude(spotId: String, latitude: String) async throws {
         let spotRef = locationsRef.document(spotId)
-        let lat = Int(latitude)
+        let lat = Double(latitude)
         let data: [String: Any] = [
             Location.CodingKeys.latitude.rawValue: lat ?? 0
         ]
@@ -147,7 +158,7 @@ final class DataService {
     
     func updateLongitude(spotId: String, longitude: String) async throws {
         let spotRef = locationsRef.document(spotId)
-        let long = Int(longitude)
+        let long = Double(longitude)
         let data: [String: Any] = [
             Location.CodingKeys.longitude.rawValue: long ?? 0
         ]
@@ -171,6 +182,34 @@ final class DataService {
         try await spotRef.updateData(data)
     }
     
+    func updateSpotImageUrl(spotId: String, imageUrl: String) async throws {
+        let spotRef = locationsRef.document(spotId)
+        let data: [String: Any] = [
+            Location.CodingKeys.imageUrl.rawValue: imageUrl
+        ]
+        try await spotRef.updateData(data)
+    }
+    
+    func updateSpotExtraImage(spotId: String, imageUrl: String) async throws {
+        let spotref = locationsRef.document(spotId)
+        let data: [String: Any] = [
+            Location.CodingKeys.extraImages.rawValue: FieldValue.arrayUnion([imageUrl])
+        ]
+        try await spotref.updateData(data)
+    }
+    
+    func deleteSpotExtraImage(spotId: String, imageurl: String) async throws {
+        let spotRef = locationsRef.document(spotId)
+        let url = URL(string: imageurl)
+        if let imageName = url?.pathComponents.last {
+            try await ImageManager.shared.deleteExtraImage(spotId: spotId, imageName: imageName)
+        }
+        let data: [String: Any] = [
+            Location.CodingKeys.extraImages.rawValue: FieldValue.arrayRemove([imageurl])
+        ]
+        try await spotRef.updateData(data)
+    }
+    
     func deleteLocation(spotId: String) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
         let spotRef = locationsRef.document(spotId)
@@ -185,7 +224,6 @@ final class DataService {
         try await userRecordsRef.delete()
         try await userRef.updateData(data)
     }
-    
     
     func saveLocation(spot: Location) async throws {
         guard let uid = Auth.auth().currentUser?.uid else {return}
@@ -240,7 +278,6 @@ final class DataService {
         try await spotsRef.updateData(data)
         try await userSavesRef.delete()
         try await spotsRef.collection(Server.saves).document(uid).delete()
-    
     }
     
     func fetchBucketlist() async throws -> [String] {
@@ -250,7 +287,6 @@ final class DataService {
         let ids = snapshot.documents.map({$0.documentID})
         return ids
     }
-    
     
     func fetchUserUploads() async throws -> [String] {
         guard let uid = Auth.auth().currentUser?.uid else {throw CustomError.uidNotFound}
@@ -305,6 +341,7 @@ final class DataService {
         try await userLikesRef.delete()
     }
     
+    //MARK: STAMP FUNCTIONS
     
     func checkinLocation(spot: Location) async throws {
         let spotRef = locationsRef.document(spot.id)
@@ -322,6 +359,7 @@ final class DataService {
             Stamp.CodingKeys.longitude.rawValue: spot.longitude,
             Stamp.CodingKeys.timestamp.rawValue: Timestamp(),
             Stamp.CodingKeys.imageUrl.rawValue: spot.imageUrl,
+            Stamp.CodingKeys.city.rawValue: spot.city,
             Stamp.CodingKeys.ownerImageUrl.rawValue: profileUrl ?? "",
             Stamp.CodingKeys.displayName.rawValue: username ?? ""
         ]
@@ -415,7 +453,6 @@ final class DataService {
         UserDefaults.standard.set(user.streetCred, forKey: AppUserDefaults.streetcred)
     }
     
-    
     func fetchUsersCheckedIn(spotId: String, completion: @escaping(Result<[Message], Error>) -> Void) {
         var messages: [Message] = []
         checkinListener = locationsRef
@@ -446,8 +483,6 @@ final class DataService {
                                 completion(.success(messages))
                             }
                         })
-        
-      
     }
     
     func uploadStreetPass(imageUrl: String, username: String) async throws {
@@ -484,6 +519,18 @@ final class DataService {
     func updateStreetPass(data: [String: Any]) async throws  {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         let ref = usersRef.document(uid)
+        try await ref.updateData(data)
+    }
+    
+    func updateStreetCred(counter: Int) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        let ref = usersRef.document(uid)
+        let data: [String: Any] = [
+            User.CodingKeys.streetCred.rawValue: FieldValue.increment(Double(counter))
+        ]
+        var streetcred: Int = streetcred ?? 0
+        streetcred += counter
+        UserDefaults.standard.set(streetcred, forKey: AppUserDefaults.streetcred)
         try await ref.updateData(data)
     }
     
@@ -751,18 +798,6 @@ final class DataService {
         spotRef.updateData(counterData)
         toRef.updateData(counterData)
         fromRef.updateData(counterData)
-    }
-    
-    func updateStreetCred(counter: Int) async throws {
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        let ref = usersRef.document(uid)
-        let data: [String: Any] = [
-            User.CodingKeys.streetCred.rawValue: FieldValue.increment(Double(counter))
-        ]
-        var streetcred: Int = streetcred ?? 0
-        streetcred += counter
-        UserDefaults.standard.set(streetcred, forKey: AppUserDefaults.streetcred)
-        try await ref.updateData(data)
     }
     
     

@@ -58,13 +58,15 @@ class StreetPassViewModel: NSObject, ObservableObject {
     @Published var spotId: String = ""
     @Published var editTitle: String = ""
     @Published var editDetails: String = ""
-    @Published var spotImage: UIImage?
     @Published var longitude: String = ""
     @Published var latitude: String = ""
     
-    
+    @Published var showImagePicker: Bool = false
+    @Published var thumbcase: ImageCase = .one
     @Published var stampImageUrl = ""
     @Published var spotImageUrl = ""
+    @Published var extraImage: UIImage? = nil
+    @Published var extraImageII: UIImage? = nil
     @Published var imageSelection: UIImage?  = nil {
         didSet {
             setSpotImage(from: imageSelection)
@@ -81,13 +83,19 @@ class StreetPassViewModel: NSObject, ObservableObject {
         }
     }
     
-    @Published var age: Int = 0 {
+    @Published var age: String = "" {
         didSet {
             changedAge = true
         }
     }
     
     func fetchUploads() {
+        if AuthService.shared.uid == nil {
+            alertMessage = "You need an account to view analytics"
+            showAlert.toggle()
+            return
+        }
+        
         Task {
             do {
                 let uploadIds = try await DataService.shared.fetchUserUploads()
@@ -115,6 +123,13 @@ class StreetPassViewModel: NSObject, ObservableObject {
     
     //MARK: PRIMARY ACTIONS
     func fetchBucketList() {
+        
+        if AuthService.shared.uid == nil {
+            alertMessage = "You need an account to create a bucket list"
+            showAlert.toggle()
+            return
+        }
+        
         Task {
             do {
                 let saveIds = try await DataService.shared.fetchBucketlist()
@@ -130,6 +145,13 @@ class StreetPassViewModel: NSObject, ObservableObject {
     }
     
     func fetchStamps() {
+        
+        if AuthService.shared.uid == nil {
+            alertMessage = "You need an account to get a passport"
+            showAlert.toggle()
+            return
+        }
+        
         Task {
             do {
                 self.stamps = try await DataService.shared.fetchallstamps()
@@ -159,13 +181,31 @@ class StreetPassViewModel: NSObject, ObservableObject {
         Task {
             do {
                 spotImageUrl = try await ImageManager.shared.uploadLocationImage(id: spotId, image: selection)
-                spotImage = selection
+                try await DataService.shared.updateSpotImageUrl(spotId: spotId, imageUrl: spotImageUrl)
                 isUploading = false
             } catch {
                 alertMessage = error.localizedDescription
                 showAlert.toggle()
                 isUploading = false
                 return
+            }
+        }
+    }
+    
+    func setExtraImage(from selection: UIImage?) {
+        guard let selection else {return}
+        isUploading = true
+        Task {
+            do {
+                let imageUrl = try await ImageManager.shared.uploadLocationExtraImage(id: spotId, image: selection)
+                try await DataService.shared.updateSpotExtraImage(spotId: spotId, imageUrl: imageUrl)
+                alertMessage = "Added Extra Images Successfully"
+                isUploading = false
+                showAlert.toggle()
+            } catch {
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+                isUploading = false
             }
         }
     }
@@ -183,6 +223,10 @@ class StreetPassViewModel: NSObject, ObservableObject {
         if !latitude.isEmpty {
             changeLat(id: spotId)
         }
+        
+        if let extraI = extraImage {setExtraImage(from: extraI)}
+        if let extraII = extraImageII {setExtraImage(from: extraII)}
+        
     }
     
     func changeTitle(id: String) {
@@ -243,6 +287,19 @@ class StreetPassViewModel: NSObject, ObservableObject {
         
     }
     
+    func changeSpotImageUrl(id: String, spoturl: String) {
+        Task {
+            do {
+                try await DataService.shared.updateSpotImageUrl(spotId: id, imageUrl: spoturl)
+                alertMessage = "Image Changed Successfully!"
+                showAlert.toggle()
+            } catch {
+                alertMessage = error.localizedDescription
+                showAlert.toggle()
+            }
+        }
+    }
+    
     
     
     
@@ -288,6 +345,7 @@ extension StreetPassViewModel {
         Task {
             try await DataService.shared.uploadStreetPass(imageUrl: profileUrl, username: username)
             success = true
+            isUploading = false
         }
         
     }
@@ -297,7 +355,7 @@ extension StreetPassViewModel {
             let data: [String: Any] = [
                 User.CodingKeys.username.rawValue: username
             ]
-            updateData(data: data)
+            updateSPData(data: data)
             UserDefaults.standard.set(username, forKey: AppUserDefaults.username)
             username = ""
         }
@@ -326,13 +384,13 @@ extension StreetPassViewModel {
         
         
         func submitProfileChanges() {
-            
+            isUploading.toggle()
             if !username.isEmpty {
                 UserDefaults.standard.set(username, forKey: AppUserDefaults.username)
                 let data: [String: Any] = [
                     User.CodingKeys.username.rawValue: username
                 ]
-                updateData(data: data)
+                updateSPData(data: data)
                 username = ""
             }
             if !bio.isEmpty {
@@ -340,7 +398,7 @@ extension StreetPassViewModel {
                 let data: [String: Any] = [
                     User.CodingKeys.bio.rawValue: bio
                 ]
-                updateData(data: data)
+                updateSPData(data: data)
                 bio = ""
             }
             
@@ -348,7 +406,7 @@ extension StreetPassViewModel {
                 let data: [String: Any] = [
                     "single": single
                 ]
-                updateData(data: data)
+                updateSPData(data: data)
                 changedStatus = false
             }
             
@@ -356,23 +414,23 @@ extension StreetPassViewModel {
                 let data: [String: Any] = [
                     "isMale": isMale
                 ]
-                updateData(data: data)
+                updateSPData(data: data)
                 changedGender = false
             }
             
             if changedAge {
                 UserDefaults.standard.set(age, forKey: AppUserDefaults.age)
                 let data: [String: Any] = [
-                    "Age": age
+                    "age": Int(age) ?? 0
                 ]
-                updateData(data: data)
-                age = 0
+                updateSPData(data: data)
+                age = "0"
                 changedAge = false
             }
-            
+            isUploading = false
         }
         
-        func updateData(data: [String: Any]) {
+        func updateSPData(data: [String: Any]) {
             Task {
                 do {
                     try await DataService.shared.updateStreetPass(data: data)

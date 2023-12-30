@@ -65,40 +65,43 @@ struct StreetReportCard: View {
                     .foregroundColor(.white)
             }
         }
+        .padding(.top, 10)
         .padding(.horizontal, 10)
     }
     
     @ViewBuilder
     func viewCount() -> some View {
         
-        ForEach(vm.uploads.sorted(by: {$0.viewCount > $1.viewCount})) { spot in
-            Button(action: {
-                vm.spotId = spot.id
-                vm.spotImageUrl = spot.imageUrl
-                vm.currentSpot = spot
-            }, label: {
-                HStack {
-                    PinView(height: 40, url: spot.imageUrl)
-                    Text(spot.name)
-                        .fontWeight(.thin)
-                        .foregroundColor(.white)
-                    Spacer()
-                    
-                    Text("\(spot.viewCount) views")
-                        .foregroundColor(.gray)
-                        .font(.caption)
-                        .fontWeight(.thin)
+        ScrollView {
+            ForEach(vm.uploads.sorted(by: {$0.viewCount > $1.viewCount})) { spot in
+                Button(action: {
+                    vm.spotId = spot.id
+                    vm.spotImageUrl = spot.imageUrl
+                    vm.currentSpot = spot
+                }, label: {
+                    HStack {
+                        PinView(height: 40, url: spot.imageUrl)
+                        Text(spot.name)
+                            .fontWeight(.thin)
+                            .foregroundColor(.white)
+                        Spacer()
+                        
+                        Text("\(spot.viewCount) views")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                            .fontWeight(.thin)
+                    }
+                })
+                .padding(.horizontal, 20)
+                .fullScreenCover(item: $vm.currentSpot) { spot in
+                    SpotAnalytics(spot: spot)
                 }
-            })
-            .padding(.horizontal, 20)
-            .fullScreenCover(item: $vm.currentSpot) { spot in
-                SpotAnalytics(spot: spot)
+                
+                Divider()
+                    .foregroundColor(.white)
+                    .frame(height: 0.5)
+               
             }
-            
-            Divider()
-                .foregroundColor(.white)
-                .frame(height: 0.5)
-           
         }
     }
     

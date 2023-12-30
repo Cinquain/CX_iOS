@@ -84,7 +84,7 @@ struct StampDetail: View {
             
             Text(stamp.spotName)
                 .font(.title3)
-                .fontWeight(.thin)
+                .fontWeight(.semibold)
                 .foregroundColor(.black)
             Spacer()
         }

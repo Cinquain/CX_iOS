@@ -52,33 +52,43 @@ struct LocationView: View {
                         })
                 )
                 .onAppear {
-                    vm.updateViewCount(id: spot.id)
-                    vm.getOwnerInfo(uid: spot.id)
+                    vm.extraImages.insert(spot.imageUrl, at: 0)
+                    vm.extraImages.append(contentsOf: spot.extraImages)
+                    vm.updateViewCount(spot: spot)
+                    vm.printImageName(spot: spot)
                 }
                 .onDisappear {
                     vm.showStamp = false
                     vm.statuses[2] = false
                     vm.user = nil
+                    vm.extraImages = []
+                    vm.showExtraImage = false
                 }
         
         
     }
     
+  
+    
     @ViewBuilder
     func MainImage() -> some View {
         GeometryReader {
             let size = $0.size
-            WebImage(url: URL(string: spot.imageUrl))
-                .resizable()
-                .scaledToFill()
-                .frame(width: size.width, height: size.height)
-                .overlay {
-                 CustomLayer(size: size)
+            ZStack {
+                Color.black
+                WebImage(url: URL(string: vm.showExtraImage ? vm.extraImages[vm.currentIndex]
+                                        : spot.imageUrl))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: size.width, height: size.height)
+                    .overlay {
+                     CustomLayer(size: size)
+                    }
+                    .sheet(isPresented: $vm.showBucketList) {
+                        BucketList(locations: vm.saves)
+                            .presentationDetents([.height(350)])
                 }
-                .sheet(isPresented: $vm.showBucketList) {
-                    BucketList(locations: vm.saves)
-                        .presentationDetents([.height(350)])
-                }
+            }
         }
         .edgesIgnoringSafeArea(.all)
     }
@@ -92,10 +102,10 @@ struct LocationView: View {
                 .padding(.top, 7)
             
                 ButtonRow()
-            
+                buttonRow2()
+
                
-            CheckInButton()
-            
+                CheckInButton()
             
             if vm.showDetails {
                 VStack(alignment: .leading, spacing: 10) {
@@ -121,6 +131,7 @@ struct LocationView: View {
                 .padding(20)
             }
             
+            
 
             
             Spacer()
@@ -138,16 +149,18 @@ struct LocationView: View {
                 .font(.system(size: 32))
                 .foregroundColor(.white)
                 .fontWeight(.thin)
+                .lineLimit(1)
             
             Spacer()
             
             Button {
-                vm.isCheckedIn ? vm.showCheckOutAlert() : dismiss()
-            } label: {
-                Image(systemName: "arrow.uturn.down.circle.fill")
-                    .font(.title)
-                    .foregroundColor(.white)
-            }
+                 dismiss()
+               } label: {
+                   Image(systemName: "arrow.uturn.down.circle.fill")
+                       .font(.title)
+                       .foregroundColor(.white)
+               }
+      
 
         }
         .padding(.horizontal, 20)
@@ -230,7 +243,7 @@ struct LocationView: View {
 
             }
             .alert(isPresented: $vm.showAlert) {
-                vm.normalAlert ? Alert(title: Text(vm.alertMessage)) :
+                vm.normalAlert ? Alert(title: Text(vm.alertMessage), dismissButton: .cancel(Text("OK"), action: {vm.normalAlert = false})) :
                 Alert(title: Text(vm.alertMessage), primaryButton: .default(Text("Ok")) {
                     vm.showSignUp.toggle()
                 }, secondaryButton: .cancel {
@@ -282,6 +295,70 @@ struct LocationView: View {
             
         }
         .padding(.top, 5)
+    }
+    
+    
+    @ViewBuilder
+    func buttonRow2() -> some View {
+        HStack {
+            Button {
+                vm.showDirections(spot: spot)
+            } label: {
+                Image(systemName: "car.fill")
+                    .font(.title2)
+                    .foregroundColor(vm.statuses[2] ? .white : .white)
+                    .particleEffect(
+                        systemName: "figure.walk",
+                        font: .title2,
+                        status: vm.statuses[2],
+                        activeTint: .white,
+                        inactiveTint: .gray)
+                    .frame(width: 55, height: 55)
+                    .background(vm.statuses[2] ? .cyan.opacity(0.25) : .green.opacity(1))
+                    .clipShape(Circle())
+                    .scaleEffect(vm.statuses[2] ? 0.9 : 1)
+
+            }
+            
+            Button {
+                vm.showImages()
+            } label: {
+                Image(systemName: "photo.fill")
+                    .font(.title2)
+                    .foregroundColor(vm.statuses[2] ? .white : .white)
+                    .particleEffect(
+                        systemName: "xmark",
+                        font: .title2,
+                        status: vm.statuses[2],
+                        activeTint: .white,
+                        inactiveTint: .gray)
+                    .frame(width: 55, height: 55)
+                    .background(vm.statuses[2] ? .purple.opacity(0.25) : .purple.opacity(1))
+                    .clipShape(Circle())
+                    .scaleEffect(vm.statuses[2] ? 0.9 : 1)
+
+            }
+            
+            Button {
+               dismiss()
+            } label: {
+                Image(systemName: "arrow.uturn.down.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(vm.statuses[2] ? .white : .white)
+                    .particleEffect(
+                        systemName: "xmark",
+                        font: .title2,
+                        status: vm.statuses[2],
+                        activeTint: .white,
+                        inactiveTint: .gray)
+                    .frame(width: 55, height: 55)
+                    .background(vm.statuses[2] ? .black.opacity(0.25) : .black.opacity(1))
+                    .clipShape(Circle())
+                    .scaleEffect(vm.statuses[2] ? 0.9 : 1)
+
+            }
+            
+        }
     }
     
     @ViewBuilder

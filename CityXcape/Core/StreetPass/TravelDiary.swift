@@ -14,18 +14,26 @@ struct TravelDiary: View {
     @State var stamps: [Stamp]
     @State var currentStamp: Stamp?
     @State var showstamp: Bool = false
+    
     let columns: [GridItem] = [
         GridItem(.adaptive(minimum: 180))
     ]
     var body: some View {
-        VStack {
-            header()
-            Spacer()
-                .frame(height: 40)
-            scrollView()
-
+        ZStack {
+            VStack {
+                header()
+                Spacer()
+                    .frame(height: 40)
+                scrollView()
+            }
+            
+            Color.black
+                .opacity(showstamp ? 0.95 : 0)
+                .edgesIgnoringSafeArea(.all)
+            
         }
         .background(background())
+
     }
     
     @ViewBuilder
@@ -80,10 +88,13 @@ struct TravelDiary: View {
                     Button {
                         currentStamp = stamp
                         vm.stampImageUrl = stamp.imageUrl
+                        showstamp.toggle()
                     } label: {
                         stampView(stamp: stamp)
                     }
-                    .sheet(item: $currentStamp) { stamp in
+                    .sheet(item: $currentStamp, onDismiss: {
+                        showstamp.toggle()
+                    }) { stamp in
                         StampDetail(stamp: stamp, imageUrl: stamp.imageUrl)
                             .presentationDetents([.medium])
                     }
@@ -96,7 +107,7 @@ struct TravelDiary: View {
     @ViewBuilder
     func stampView(stamp: Stamp) -> some View {
         VStack {
-            StampThumbnail(stamp: stamp, width: 120)
+            StampThumbnail(stamp: stamp, width: 140)
             HStack(spacing: 2) {
                 Image("pin_feed")
                     .renderingMode(.template)
@@ -107,9 +118,10 @@ struct TravelDiary: View {
                 Text(stamp.spotName)
                     .foregroundColor(.black)
                     .fontWeight(.semibold)
-                    .font(.caption)
+                    .font(.callout)
+                    .lineLimit(1)
             }
-            .frame(width: 180)
+            .frame(width: 140)
         }
     }
     

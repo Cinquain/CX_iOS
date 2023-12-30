@@ -49,6 +49,7 @@ struct SpotAnalytics: View {
             
             Spacer()
         }
+        .padding(.top, 10)
         .background(.black)
         .onAppear {
             createData()
@@ -85,10 +86,11 @@ struct SpotAnalytics: View {
     @ViewBuilder
     func imageThumb() -> some View {
         Button {
-            vm.showPicker.toggle()
+            vm.thumbcase = .one
+            vm.showImagePicker.toggle()
         } label: {
             ZStack {
-                if let image = vm.spotImage {
+                if let image = vm.imageSelection {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
@@ -133,7 +135,7 @@ struct SpotAnalytics: View {
                 .foregroundStyle(by: .value("Total", $0.name))
             }
             .frame(height: 300)
-        .colorScheme(.dark)
+            .colorScheme(.dark)
         }
     }
     @ViewBuilder
@@ -143,10 +145,23 @@ struct SpotAnalytics: View {
             TextField("Change Title", text: $vm.editTitle)
       
             TextField("Add Description", text: $vm.editDetails)
+                .sheet(isPresented: $vm.showImagePicker) {
+                    switch vm.thumbcase {
+                    case .one:
+                        ImagePicker(imageSelected: $vm.imageSelection, sourceType: $vm.sourceType)
+                    case .two:
+                        ImagePicker(imageSelected: $vm.extraImage, sourceType: $vm.sourceType)
+                    case .three:
+                        ImagePicker(imageSelected: $vm.extraImageII, sourceType: $vm.sourceType)
+                    }
+                }
             
-            TextField("Edit Longitude", text: $vm.longitude)
-               
-            TextField("Edit Latitude", text: $vm.latitude)
+            extraImages()
+            HStack {
+                TextField("Enter longitude", text: $vm.longitude)
+                   
+                TextField("Enter latitude", text: $vm.latitude)
+            }
             
             
             Section {
@@ -184,6 +199,57 @@ struct SpotAnalytics: View {
             .foregroundColor(.cx_blue)
         }
 
+    }
+    
+    @ViewBuilder
+    func PickerLabel(pickerImage: UIImage?) -> some View {
+        ZStack {
+            if let pickerImage {
+                Image(uiImage: pickerImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+                    .cornerRadius(12)
+                    .clipped()
+            } else {
+                    Image("spot_image")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: .infinity)
+                
+            }
+            ProgressView()
+                .opacity(vm.isUploading ? 1 : 0)
+                .scaleEffect(3)
+        }
+    }
+    
+    
+    @ViewBuilder
+    func extraImages() -> some View {
+        HStack {
+            Button {
+                vm.thumbcase = vm.extraImage == nil ? .two : .three
+                vm.showImagePicker.toggle()
+            } label: {
+                Image(systemName: "plus.square.fill.on.square.fill")
+                    .resizable()
+                    .foregroundColor(.gray)
+                    .scaledToFit()
+                    .frame(width: 60)
+            }
+            
+            Spacer()
+            
+                PickerLabel(pickerImage: vm.extraImage)
+            
+            Spacer()
+       
+                PickerLabel(pickerImage: vm.extraImageII)
+            
+           
+        }
+        .padding(.horizontal, 15)
     }
     
 }

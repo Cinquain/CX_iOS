@@ -58,7 +58,9 @@ struct StreetPass: View {
                     .tracking(4)
                     .opacity(0.7)
                     .alert(isPresented: $vm.showAlert) {
-                        return Alert(title: Text(vm.alertMessage))
+                        Alert(title: Text(vm.alertMessage), primaryButton: .default(Text("Ok")) {
+                            vm.showSignUp.toggle()
+                        }, secondaryButton: .cancel())
                     }
                 
                 Text("STC Balance: \(streetcred ?? 0)")
@@ -108,7 +110,7 @@ struct StreetPass: View {
              
                 } label: {
                     Image(systemName: "gearshape.fill")
-                        .font(.title2)
+                        .font(.title)
                         .foregroundColor(.white.opacity(0.5))
                 }
             
@@ -127,6 +129,12 @@ struct StreetPass: View {
         } label: {
             VStack(spacing: 3) {
                 BubbleView(width: 300, imageUrl: profileUrl ?? "", type: .personal)
+                    .overlay {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(.black)
+                            .opacity(profileUrl == nil ? 1 : 0)
+                    }
                   
             }
             .padding(.top, 20)
@@ -140,10 +148,15 @@ struct StreetPass: View {
     @ViewBuilder
     func usernameField() -> some View {
       
-        Text(username ?? "No Username")
+        Text(username ?? "Create a Username")
             .font(.title3)
             .foregroundColor(.white)
             .fontWeight(.thin)
+            .onTapGesture {
+                if username == nil {
+                    vm.editSP.toggle()
+                }
+            }
             
     }
     

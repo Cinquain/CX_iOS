@@ -15,6 +15,7 @@ struct Stamp: Identifiable, Equatable, Codable {
     let timestamp: Date
     let longitude: Double
     let latitude: Double
+    let city: String
     let imageUrl: String
     let ownerId: String
     let displayName: String
@@ -36,6 +37,7 @@ struct Stamp: Identifiable, Equatable, Codable {
         self.timestamp = timestamp?.dateValue() ?? Date()
         self.displayName = data[Stamp.CodingKeys.displayName.rawValue] as? String ?? ""
         self.ownerImageUrl = data[Stamp.CodingKeys.ownerImageUrl.rawValue] as? String ?? ""
+        self.city = data[Stamp.CodingKeys.city.rawValue] as? String ?? ""
     }
     
     enum CodingKeys: String, CodingKey {
@@ -46,6 +48,7 @@ struct Stamp: Identifiable, Equatable, Codable {
         case latitude
         case imageUrl = "stamp_imageUrl"
         case ownerId
+        case city
         case displayName
         case ownerImageUrl
     }
@@ -58,6 +61,7 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "The Magic Garden",
         Stamp.CodingKeys.ownerId.rawValue: "jhoihoiowioiwj",
+        Stamp.CodingKeys.city.rawValue: "Philadelphia"
     ]
     
     static let data2: [String: Any] = [
@@ -68,6 +72,7 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "The Vessel",
         Stamp.CodingKeys.ownerId.rawValue: "jhoihoiowioflfnlkflkiwj",
+        Stamp.CodingKeys.city.rawValue: "New York"
     ]
     
     
@@ -79,6 +84,7 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "Graffiti Pier",
         Stamp.CodingKeys.ownerId.rawValue: "jhoihoiowioflkfkljkflfnlkflkiwj",
+        Stamp.CodingKeys.city.rawValue: "Philadelphia"
     ]
     
     static let data4: [String: Any] = [
@@ -89,6 +95,7 @@ struct Stamp: Identifiable, Equatable, Codable {
         Stamp.CodingKeys.timestamp.rawValue: Date(),
         Stamp.CodingKeys.spotName.rawValue: "One57 Bar",
         Stamp.CodingKeys.ownerId.rawValue: "jhooidhihjkddihoiowioflfnlkflkiwj",
+        Stamp.CodingKeys.city.rawValue: "New York"
     ]
     
     static let demo = Stamp(data: data)

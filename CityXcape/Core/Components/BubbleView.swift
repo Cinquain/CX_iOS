@@ -20,31 +20,41 @@ struct BubbleView: View {
     var body: some View {
         
         ZStack {
-       
+            
             Circle()
-              .fill(type == .stranger ? .orange.opacity(0.45) :
-                    .blue.opacity(0.45))
-              .frame(width: width, height: width)
-              .scaleEffect(self.animate ? 1.08 : 0.5)
+              .fill(type == .stranger ? .orange.opacity(0.35) :
+                    .blue.opacity(0.35))
+              .frame(width: width + 20, height: width + 20)
+              .shadow(color: type == .stranger ? .orange.opacity(0.5) :
+                    .blue.opacity(0.5), radius: 10)
+              .scaleEffect(self.animate ? 1.10 : 1)
               .animation(Animation.linear(duration: 2.2)
                   .repeatForever(autoreverses: true), value: animate)
               .shadow(color: type == .stranger ? .orange.opacity(0.5) :
                     .blue.opacity(0.5), radius: 10)
-
-           
             
-            Image(type == .stranger ? "dot" : "dot_blue")
-                .resizable()
-                .scaledToFit()
-                .frame(width: width, height: width)
+            Circle()
+                .fill(type == .stranger ? .orange.opacity(0.65) :
+                        .blue.opacity(0.65))
+                .frame(width: width - 20, height: width - 20)
                 .overlay {
-                    WebImage(url: URL(string: imageUrl))
+                    Image(type == .stranger ? "dot" : "dot_blue")
                         .resizable()
-                        .frame(width: width * 3/4, height: width * 3/4)
-                        .clipShape(Circle())
+                        .scaledToFit()
+                        .frame(width: width, height: width)
+                        .overlay {
+                            WebImage(url: URL(string: imageUrl))
+                                .resizable()
+                                .frame(width: width * 3/4, height: width * 3/4)
+                                .clipShape(Circle())
+                        }
+                        .shadow(color:type == .stranger ? .orange.opacity(0.5) :
+                                .blue.opacity(0.5), radius: 10)
                 }
-                .shadow(color:type == .stranger ? .orange.opacity(0.5) :
-                        .blue.opacity(0.5), radius: 10)
+                
+
+            
+       
             
         }
         .onAppear {

@@ -11,7 +11,7 @@ struct PassPortStamp: View {
     
     let stamp: Stamp
     @State private var animate: Bool = true
-    let random: Color = Color.random
+    let random: Color = Color.stamp
     var body: some View {
         Image("Stamp")
             .renderingMode(.template)

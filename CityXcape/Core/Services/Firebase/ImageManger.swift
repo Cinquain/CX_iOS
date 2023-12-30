@@ -40,6 +40,16 @@ class ImageManager: NSObject {
         }
     }
     
+    func uploadLocationExtraImage(id: String, image: UIImage) async throws -> String {
+        let path = getExtraImagePath(spotId: id)
+        do {
+            let url = try await uploadImage(path: path, image: image)
+            return url
+        } catch {
+            throw error
+        }
+    }
+    
     //MARK: STAMP IMAGE FUNCTIONS
     func uploadStampImage(uid: String, spotId: String, image: UIImage) async throws -> String {
         let path = getStampImagePath(uid: uid, spotId: spotId)
@@ -65,6 +75,13 @@ class ImageManager: NSObject {
         return path
     }
     
+    fileprivate func getExtraImagePath(spotId: String) -> StorageReference {
+        let random = Int.random(in: 1..<100)
+        let extraImagePath = "Locations/\(spotId)/extraImage\(random)"
+        let path = storageRef.reference(withPath: extraImagePath)
+        return path
+    }
+    
     fileprivate func getStampImagePath(uid: String, spotId: String) -> StorageReference {
         let stampPath = "Stamps/\(uid)/\(spotId)/stampImage"
         let path = storageRef.reference(withPath: stampPath)
@@ -80,6 +97,12 @@ class ImageManager: NSObject {
     
     func deleteSpotImage(spotId: String) async throws {
         let locationPath = "Locations/\(spotId)/mainImage"
+        let path = storageRef.reference(withPath: locationPath)
+        try await path.delete()
+    }
+    
+    func deleteExtraImage(spotId: String, imageName: String) async throws {
+        let locationPath = "Locations/\(spotId)/\(imageName)"
         let path = storageRef.reference(withPath: locationPath)
         try await path.delete()
     }

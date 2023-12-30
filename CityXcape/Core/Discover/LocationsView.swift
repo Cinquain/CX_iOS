@@ -83,8 +83,8 @@ struct LocationsView: View {
                 .background(Color.white)
                 .frame(height: 0.5)
             
-            Text("\(Image("pin_feed")) Spots Nearby")
-            .font(.title2)
+            Text("Spots Near You")
+            .font(.callout)
             .foregroundColor(.white)
             .fontWeight(.thin)
             .padding(.leading, 10)

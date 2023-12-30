@@ -54,7 +54,13 @@ class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             setImage(from: imageSelection)
         }
     }
+    
+    @Published var thumbcase: ImageCase  = .one
     @Published var selectedImage: UIImage? = nil
+    @Published var extraImage: UIImage? = nil
+    @Published var extraImageII: UIImage? = nil
+    
+    
     @Published var showSignUp: Bool = false
     @Published var errorMessage: String = ""
     @Published var showCongrats: Bool = false
@@ -187,28 +193,34 @@ extension MapViewModel {
             return
         }
         
-        if selectedImage == nil {
+        guard let image = selectedImage else {
             alertMessage = "Please add an image to your location"
             showAlert.toggle()
             isPosting.toggle()
             return
         }
         
+        guard let mapItem = selectedMapItem else {
+            alertMessage = "Please choose an address for your location"
+            showAlert.toggle()
+            isPosting.toggle()
+            return
+        }
        
      
-        guard let image = selectedImage, let mapitem = selectedMapItem else {return}
-        let city = mapitem.getCity()
-        let address = mapitem.getAddress()
+        let city = mapItem.getCity()
+        let address = mapItem.getAddress()
         
         Task {
             do {
                 try await DataService.shared.createLocation(name: spotName, description: spotDescription,
                                                             longitude: longitude, latitude: latitude,
-                                                            address: address, city: city, image: image)
+                                                            address: address, city: city, image: image,
+                                                            extraI: extraImage, extraII: extraImageII)
                isPosting = false
                showForm = false
                showCongrats = true
-               spotName = ""; spotDescription = ""; selectedImage = nil;
+               spotName = ""; spotDescription = ""; selectedImage = nil; searchQuery = ""
                
             } catch {
                 errorMessage = error.localizedDescription
